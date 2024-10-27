@@ -1,0 +1,107 @@
+---
+title: "Resume/CV"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+# Professional Experience 
+
+## Program Research Specialist II/Data Analyst, July 2022-July 2024
+Office of Science, New York State Department of Health <img src="images/nysdoh_logo.png" style="width:25%">
+
+
+-   Queried, analyzed, and visualized childhood immunization data in support of state polio response
+
+-   Developed data strategy and training materials for program to encourage uptake of childhood immunizations
+
+-   Produced ad-hoc data reports and literature reviews for the health commissioner on emerging health topics
+
+-   Developed models of poliovirus transmission to estimate outbreak size and extent
+
+-   Coordinated website strategy and advise on design of public dashboards
+
+## Project Coordinator, August 2020-July 2022
+Medical Practice Evaluation Center, Massachusetts General Hospital <img src="images/MPEC_logo.jpg" style="width:25%">
+
+-   Performed simulation modeling analyses to answer health policy questions related to youth with HIV
+
+-   Analyzed data from cohort studies, clinical trials, and observational databases to inform model inputs
+
+-   Processed model output into useful tables and figures and communicate results to a broad audience
+
+-   Cleaned and analyzed COVID-19 contact tracing data from Massachusetts public schools 
+
+-   Developed a new webtool to forecast global antiretroviral drug needs for children with HIV for the WHO
+
+-   Promoted from role as a Research Assistant (August 2020-July 2021)
+
+## Undergraduate Researcher, January 2019 – July 2020
+Fang-Yen Lab, University of Pennsylvania Bioengineering
+
+-   Conducted independent research into the biomechanics of C. Elegans pharyngeal pumping
+
+-   Planned and carried out various assays and experiments to understand worm feeding behavior
+
+-   Collected high speed footage of the microscopic worms using DIC microscopy
+
+-   Analyzed video data and synthesized results into clear graphs and figures
+
+-   Presented results of research and contributed to writing of published journal article
+
+## Unit Head, June 2015 – August 2019
+Camp Yavneh, Northwood, NH					        
+
+-   Managed a staff of 11 counselors, including providing performance feedback and mediating disputes
+
+-   Organized and planned leadership, educational, and recreational activities for 60 adolescent campers
+
+-   Coordinated day-to-day logistics, planned daily programs and events, and led field trips out of camp
+
+-   Corresponded with senior camp staff to address camper and counselor issues
+
+# Education
+## Columbia Mailman School of Public Health, New York, NY
+<img src="images/CUIMC_Horizontal_Blue.png" style="width:25%">
+
+Expected graduation: May, 2026
+
+Masters of Science in Biostatistics
+
+Concentration: Public Health Data Science
+
+## University of Pennsylvania, Philadelphia, PA, May 2020
+<img src="images/penn_logo.png" style="width:25%">
+
+Bachelor of Arts | Magna Cum Laude | Benjamin Franklin Scholar (80/2,500 students)
+
+Major: Biological Physics (with Distinction) | Minor: Religious Studies
+
+
+# Publications and presentations
+-   Kalkowska DA, Badizadegan K, Routh JA, Burns CC, Rosenberg ES, Brenner IR, Zucker JR, Langdon-Embry M, Thompson KM. Modeling undetected poliovirus circulation following the 2022 outbreak in the United States. Expert Review of Vaccines. 2024;23(1):186-195. doi:10.1080/14760584.2023.2299401.
+
+-   Neilan AM, Ufio OL, Brenner IR, Flanagan CF, Shebl FM, Hyle EP, Freedberg KA, Ciaranello AL, Patel K. Projected Life Expectancy for Adolescents With HIV in the US. JAMA Health Forum. 2024;5(5):e240816. doi:10.1001/jamahealthforum.2024.0816.
+
+-   Mitchell EC, Nguyen T, Boulais M, Ravi Brenner I, Dorabawila V, Hoen R, Li Y, Cavazos M, Levine B, Anderson BJ, Battles H, Brissette I, Backenson B, Lutterloh E, Bauer UE, Rosenberg ES. Home testing for SARS-CoV-2 and impact on surveillance in New York State. Annals of Epidemiology. Published online November 22, 2023. doi:10.1016/j.annepidem.2023.11.009.
+
+-   Brenner IR, Simpson KN, Flanagan CF, Dark T, Dooley M, Agwu AL, Koay WLA, Freedberg KA, Ciaranello AL, Neilan AM. Projecting the clinical and economic impacts of changes to HIV care among adolescents and young adults in the US: lessons from the COVID-19 pandemic. J Pediatric Infect Dis Soc. Published online November 14, 2023:piad102. doi:10.1093/jpids/piad102.
+
+-   Thompson KM, Kalkowska DA, Routh JA, Brenner IR, Rosenberg ES, Zucker JR, Langdon-Embry M, Sugerman DE, Burns CC, Badizadegan K. Modeling poliovirus transmission and responses in New York State. J Infect Dis. 2023 Aug 19:jiad355. doi: 10.1093/infdis/jiad355. Epub ahead of print. PMID: 37596838.
+
+-   Nelson SB, Dugdale CM, Brenner IR, Crawford A, Bilinski A, Cosar D, Pollock NR, Ciaranello A. Prevalence and Risk Factors for School-Associated Transmission of SARS-CoV-2. JAMA Health Forum. 2023 Aug 4;4(8):e232310. doi: 10.1001/jamahealthforum.2023.2310. PMID: 37540523; PMCID: PMC10403780.
+
+-   Nelson SB, Brenner IR, Homan E, Lee SB, Bongiorno C, Pollock NR, Ciaranello A. Evaluation of "Test to Return" after COVID-19 Diagnosis in a Massachusetts Public School District. J Sch Health. 2023 Jun 4. doi: 10.1111/josh.13357. Epub ahead of print. PMID: 37272202.
+
+-   Brenner R, Flanagan C, Penazzato M, et al. Clinical impact and cost-effectiveness of viral load testing (VLT) to inform the transition to pediatric dolutegravir (DTG) in antiretroviral therapy (ART)-experienced children with HIV in South Africa. Presented at the: International Workshop on HIV Pediatrics 2021; July 17, 2021; Virtual.
+
+-   Brenner IR, Raizen DM, Fang-Yen C. Pharyngeal timing and particle transport defects in Caenorhabditis elegans feeding mutants. J Neurophysiol. 2022 Aug 1;128(2):302-309. doi: 10.1152/jn.00444.2021. Epub 2022 Jun 22. PMID: 35730757.
+
+# Skills and interests
+
+Technical skills: R/Rstudio, Python, SQL, SAS, MATLAB, Excel, Git/Github, Linear Algebra, Ordinary and Partial Differential Equations
+
+Language: Fluent in Hebrew
+
+Interests: Rock climbing, Guitar, Cooking, Running, Cycling

@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Resume/CV</title>
+
+<script src="site_libs/header-attrs-2.28/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Home</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="resume.html">Resume/CV</a>
+</li>
+<li>
+  <a href="dashboard.html">Dashboard</a>
+</li>
+<li>
+  <a href="mailto:&lt;irb2118@cumc.columbia.edu&gt;">
+    <span class="fa fa-envelope fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="http://github.com/ravibrenner/">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Resume/CV</h1>
+
+</div>
+
+
+<div id="professional-experience" class="section level1">
+<h1>Professional Experience</h1>
+<div id="program-research-specialist-iidata-analyst-july-2022-july-2024"
+class="section level2">
+<h2>Program Research Specialist II/Data Analyst, July 2022-July
+2024</h2>
+<p>Office of Science, New York State Department of Health
+<img src="images/nysdoh_logo.png" style="width:25%"></p>
+<ul>
+<li><p>Queried, analyzed, and visualized childhood immunization data in
+support of state polio response</p></li>
+<li><p>Developed data strategy and training materials for program to
+encourage uptake of childhood immunizations</p></li>
+<li><p>Produced ad-hoc data reports and literature reviews for the
+health commissioner on emerging health topics</p></li>
+<li><p>Developed models of poliovirus transmission to estimate outbreak
+size and extent</p></li>
+<li><p>Coordinated website strategy and advise on design of public
+dashboards</p></li>
+</ul>
+</div>
+<div id="project-coordinator-august-2020-july-2022"
+class="section level2">
+<h2>Project Coordinator, August 2020-July 2022</h2>
+<p>Medical Practice Evaluation Center, Massachusetts General Hospital
+<img src="images/MPEC_logo.jpg" style="width:25%"></p>
+<ul>
+<li><p>Performed simulation modeling analyses to answer health policy
+questions related to youth with HIV</p></li>
+<li><p>Analyzed data from cohort studies, clinical trials, and
+observational databases to inform model inputs</p></li>
+<li><p>Processed model output into useful tables and figures and
+communicate results to a broad audience</p></li>
+<li><p>Cleaned and analyzed COVID-19 contact tracing data from
+Massachusetts public schools</p></li>
+<li><p>Developed a new webtool to forecast global antiretroviral drug
+needs for children with HIV for the WHO</p></li>
+<li><p>Promoted from role as a Research Assistant (August 2020-July
+2021)</p></li>
+</ul>
+</div>
+<div id="undergraduate-researcher-january-2019-july-2020"
+class="section level2">
+<h2>Undergraduate Researcher, January 2019 – July 2020</h2>
+<p>Fang-Yen Lab, University of Pennsylvania Bioengineering</p>
+<ul>
+<li><p>Conducted independent research into the biomechanics of C.
+Elegans pharyngeal pumping</p></li>
+<li><p>Planned and carried out various assays and experiments to
+understand worm feeding behavior</p></li>
+<li><p>Collected high speed footage of the microscopic worms using DIC
+microscopy</p></li>
+<li><p>Analyzed video data and synthesized results into clear graphs and
+figures</p></li>
+<li><p>Presented results of research and contributed to writing of
+published journal article</p></li>
+</ul>
+</div>
+<div id="unit-head-june-2015-august-2019" class="section level2">
+<h2>Unit Head, June 2015 – August 2019</h2>
+<p>Camp Yavneh, Northwood, NH</p>
+<ul>
+<li><p>Managed a staff of 11 counselors, including providing performance
+feedback and mediating disputes</p></li>
+<li><p>Organized and planned leadership, educational, and recreational
+activities for 60 adolescent campers</p></li>
+<li><p>Coordinated day-to-day logistics, planned daily programs and
+events, and led field trips out of camp</p></li>
+<li><p>Corresponded with senior camp staff to address camper and
+counselor issues</p></li>
+</ul>
+</div>
+</div>
+<div id="education" class="section level1">
+<h1>Education</h1>
+<div id="columbia-mailman-school-of-public-health-new-york-ny"
+class="section level2">
+<h2>Columbia Mailman School of Public Health, New York, NY</h2>
+<p><img src="images/CUIMC_Horizontal_Blue.png" style="width:25%"></p>
+<p>Expected graduation: May, 2026</p>
+<p>Masters of Science in Biostatistics</p>
+<p>Concentration: Public Health Data Science</p>
+</div>
+<div id="university-of-pennsylvania-philadelphia-pa-may-2020"
+class="section level2">
+<h2>University of Pennsylvania, Philadelphia, PA, May 2020</h2>
+<p><img src="images/penn_logo.png" style="width:25%"></p>
+<p>Bachelor of Arts | Magna Cum Laude | Benjamin Franklin Scholar
+(80/2,500 students)</p>
+<p>Major: Biological Physics (with Distinction) | Minor: Religious
+Studies</p>
+</div>
+</div>
+<div id="publications-and-presentations" class="section level1">
+<h1>Publications and presentations</h1>
+<ul>
+<li><p>Kalkowska DA, Badizadegan K, Routh JA, Burns CC, Rosenberg ES,
+Brenner IR, Zucker JR, Langdon-Embry M, Thompson KM. Modeling undetected
+poliovirus circulation following the 2022 outbreak in the United States.
+Expert Review of Vaccines. 2024;23(1):186-195. <a
+href="doi:10.1080/14760584.2023.2299401"
+class="uri">doi:10.1080/14760584.2023.2299401</a>.</p></li>
+<li><p>Neilan AM, Ufio OL, Brenner IR, Flanagan CF, Shebl FM, Hyle EP,
+Freedberg KA, Ciaranello AL, Patel K. Projected Life Expectancy for
+Adolescents With HIV in the US. JAMA Health Forum. 2024;5(5):e240816. <a
+href="doi:10.1001/jamahealthforum.2024.0816"
+class="uri">doi:10.1001/jamahealthforum.2024.0816</a>.</p></li>
+<li><p>Mitchell EC, Nguyen T, Boulais M, Ravi Brenner I, Dorabawila V,
+Hoen R, Li Y, Cavazos M, Levine B, Anderson BJ, Battles H, Brissette I,
+Backenson B, Lutterloh E, Bauer UE, Rosenberg ES. Home testing for
+SARS-CoV-2 and impact on surveillance in New York State. Annals of
+Epidemiology. Published online November 22, 2023. <a
+href="doi:10.1016/j.annepidem.2023.11.009"
+class="uri">doi:10.1016/j.annepidem.2023.11.009</a>.</p></li>
+<li><p>Brenner IR, Simpson KN, Flanagan CF, Dark T, Dooley M, Agwu AL,
+Koay WLA, Freedberg KA, Ciaranello AL, Neilan AM. Projecting the
+clinical and economic impacts of changes to HIV care among adolescents
+and young adults in the US: lessons from the COVID-19 pandemic. J
+Pediatric Infect Dis Soc. Published online November 14, 2023:piad102. <a
+href="doi:10.1093/jpids/piad102"
+class="uri">doi:10.1093/jpids/piad102</a>.</p></li>
+<li><p>Thompson KM, Kalkowska DA, Routh JA, Brenner IR, Rosenberg ES,
+Zucker JR, Langdon-Embry M, Sugerman DE, Burns CC, Badizadegan K.
+Modeling poliovirus transmission and responses in New York State. J
+Infect Dis. 2023 Aug 19:jiad355. doi: 10.1093/infdis/jiad355. Epub ahead
+of print. PMID: 37596838.</p></li>
+<li><p>Nelson SB, Dugdale CM, Brenner IR, Crawford A, Bilinski A, Cosar
+D, Pollock NR, Ciaranello A. Prevalence and Risk Factors for
+School-Associated Transmission of SARS-CoV-2. JAMA Health Forum. 2023
+Aug 4;4(8):e232310. doi: 10.1001/jamahealthforum.2023.2310. PMID:
+37540523; PMCID: PMC10403780.</p></li>
+<li><p>Nelson SB, Brenner IR, Homan E, Lee SB, Bongiorno C, Pollock NR,
+Ciaranello A. Evaluation of “Test to Return” after COVID-19 Diagnosis in
+a Massachusetts Public School District. J Sch Health. 2023 Jun 4. doi:
+10.1111/josh.13357. Epub ahead of print. PMID: 37272202.</p></li>
+<li><p>Brenner R, Flanagan C, Penazzato M, et al. Clinical impact and
+cost-effectiveness of viral load testing (VLT) to inform the transition
+to pediatric dolutegravir (DTG) in antiretroviral therapy
+(ART)-experienced children with HIV in South Africa. Presented at the:
+International Workshop on HIV Pediatrics 2021; July 17, 2021;
+Virtual.</p></li>
+<li><p>Brenner IR, Raizen DM, Fang-Yen C. Pharyngeal timing and particle
+transport defects in Caenorhabditis elegans feeding mutants. J
+Neurophysiol. 2022 Aug 1;128(2):302-309. doi: 10.1152/jn.00444.2021.
+Epub 2022 Jun 22. PMID: 35730757.</p></li>
+</ul>
+</div>
+<div id="skills-and-interests" class="section level1">
+<h1>Skills and interests</h1>
+<p>Technical skills: R/Rstudio, Python, SQL, SAS, MATLAB, Excel,
+Git/Github, Linear Algebra, Ordinary and Partial Differential
+Equations</p>
+<p>Language: Fluent in Hebrew</p>
+<p>Interests: Rock climbing, Guitar, Cooking, Running, Cycling</p>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
