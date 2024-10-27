@@ -1,0 +1,13 @@
+---
+title: "Ravi Brenner"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+<img src="images/headshot.jpeg" style="width:50%">
+
+Masters in Biostatistics student at Columbia Mailman School of Public Health with a concentration in Public Health Data Science
+
+Data-driven public health professional with experience in infectious disease epidemiology, simulation modeling, and health policy.
