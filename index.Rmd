@@ -1,9 +1,7 @@
 ---
 title: "Ravi Brenner"
 output: 
-  html_document:
-    toc: true
-    toc_float: true
+  html_document
 ---
 
 <img src="images/headshot.jpeg" style="width:50%">
