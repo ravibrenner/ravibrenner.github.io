@@ -23,7 +23,9 @@ Office of Science, New York State Department of Health <img src="images/nysdoh_l
 -   Coordinated website strategy and advise on design of public dashboards
 
 ## Project Coordinator, August 2020-July 2022
-Medical Practice Evaluation Center, Massachusetts General Hospital <img src="images/MPEC_logo.jpg" style="width:25%">
+Medical Practice Evaluation Center, Massachusetts General Hospital
+
+<img src="images/MPEC_logo.jpg" style="width:75%">
 
 -   Performed simulation modeling analyses to answer health policy questions related to youth with HIV
 
@@ -63,7 +65,7 @@ Camp Yavneh, Northwood, NH
 
 # Education
 ## Columbia Mailman School of Public Health, New York, NY
-<img src="images/CUIMC_Horizontal_Blue.png" style="width:25%">
+<img src="images/CUIMC_Horizontal_Blue.png" style="width:50%">
 
 Expected graduation: May, 2026
 
