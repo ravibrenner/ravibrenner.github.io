@@ -6,6 +6,8 @@ output:
 
 <img src="images/headshot.jpeg" style="width:50%">
 
-Masters in Biostatistics student at Columbia Mailman School of Public Health with a concentration in Public Health Data Science
+Masters in Biostatistics student at Columbia University Mailman School of Public Health with a concentration in Public Health Data Science
 
 Data-driven public health professional with experience in infectious disease epidemiology, simulation modeling, and health policy.
+
+This website contains a bit about me, my work and educational [experiences](resume.html), and a [dashboard](dashboard.html) created for the Data Science I course at Mailman, which showcases some of my data visualization skills.
