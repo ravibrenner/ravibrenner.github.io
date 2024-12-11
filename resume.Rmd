@@ -87,7 +87,7 @@ Bachelor of Arts | Magna Cum Laude | Benjamin Franklin Scholar (80/2,500 student
 Major: Biological Physics (with Distinction) | Minor: Religious Studies
 
 
-# Publications and presentations
+# Publications
 -   **Brenner IR**, Flanagan CF, Penazzato M, Webb KA, Horsfall SB, Hyle EP, Abrams E, Bacha J, Neilan AM, Collins IJ, Desmonde S, Crichton S, Davies MA, Freedberg KA, Ciaranello AL. Cost-effectiveness of viral load testing for transitioning antiretroviral therapy-experienced children to dolutegravir in South Africa: a modelling analysis. The Lancet Global Health. 2024;12(12):e2068-e2079. doi:10.1016/S2214-109X(24)00381-4
 
 -   Kalkowska DA, Badizadegan K, Routh JA, Burns CC, Rosenberg ES, **Brenner IR**, Zucker JR, Langdon-Embry M, Thompson KM. Modeling undetected poliovirus circulation following the 2022 outbreak in the United States. Expert Review of Vaccines. 2024;23(1):186-195. doi:10.1080/14760584.2023.2299401.
