@@ -8,7 +8,7 @@ navbar:
     - icon: fa-envelope fa-lg
       href: mailto:<irb2118@cumc.columbia.edu>
     - icon: fa-brands fa-linkedin
-      href: https://www.linkedin.com/in/ravi-brenner-81b78219b/
+      href: https://www.linkedin.com/in/ravi-brenner/
     - icon: fa-github fa-lg
       href: http://github.com/ravibrenner/
 output:
