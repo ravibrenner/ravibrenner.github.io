@@ -12,32 +12,38 @@ output:
 Office of Science, New York State Department of Health <img src="images/nysdoh_logo.png" style="width:25%">
 
 
--   Queried, analyzed, and visualized childhood immunization data in support of state polio response
+-   Analyzed millions of childhood immunization records using SAS, SQL, and R in support of state polio response and measles preparedness
 
--   Developed data strategy and training materials for program to encourage uptake of childhood immunizations
+-   Designed data strategy and training for program for community health workers to encourage uptake of childhood immunizations
 
--   Produced ad-hoc data reports and literature reviews for the health commissioner on emerging health topics
+-   Produced ad-hoc data reports and literature reviews on emerging health topics shared with Health Commissioner
 
--   Developed models of poliovirus transmission to estimate outbreak size and extent
+-   Developed models of poliovirus and measles transmission to estimate outbreak size and potential using R and Excel, in collaboration with CDC
 
--   Coordinated website strategy and advise on design of public dashboards
+-   Coordinated website strategy and advised on design of public dashboards, coordinating among 15 internal teams and 57 local health departments
 
-## Project Coordinator, August 2020-July 2022
+-   Developed and analyzed surveys of New Yorkers attitudes toward seasonal vaccines using SAS and presented findings to internal stakeholders which resulted in journal publication
+
+## Project Coordinator, August 2021-July 2022
 Medical Practice Evaluation Center, Massachusetts General Hospital
 
 <img src="images/MPEC_logo.jpg" style="width:75%">
 
--   Performed simulation modeling analyses to answer health policy questions related to youth with HIV
+-   Led simulation modeling study of impact of COVID-19 on HIV care for youth with HIV resulting in first-author publication 
+
+-   Conducted additional modeling studies of life expectancy and optimal testing regimens for youth with HIV in the US and South Africa
+
+-   Executed data cleaning and analysis of COVID-19 contact tracing data for thousands of students from Massachusetts public schools using R
+
+-   Presented results at internal meetings and conferences, using engaging and insightful visualizations
+
+#### Research Assistant, August 2020-July 2021
+
+-   Performed agent-based simulation modeling analyses to answer health policy questions related to youth with HIV
+
+-   Developed a new webtool using R Shiny and python to forecast global antiretroviral drug needs for children with HIV for the WHO
 
 -   Analyzed data from cohort studies, clinical trials, and observational databases to inform model inputs
-
--   Processed model output into useful tables and figures and communicate results to a broad audience
-
--   Cleaned and analyzed COVID-19 contact tracing data from Massachusetts public schools 
-
--   Developed a new webtool to forecast global antiretroviral drug needs for children with HIV for the WHO
-
--   Promoted from role as a Research Assistant (August 2020-July 2021)
 
 ## Undergraduate Researcher, January 2019 – July 2020
 Fang-Yen Lab, University of Pennsylvania Bioengineering
