@@ -4,10 +4,18 @@ output:
   html_document
 ---
 
-<img src="images/headshot.jpeg" style="width:50%">
+:::: {.columns}
+::: {.column width="45%"}
+![](images/headshot.jpeg)
+:::
+::: {.column width="10%"}
+:::
+::: {.column width="45%"}
 
 Masters in Biostatistics student at Columbia University Mailman School of Public Health with a concentration in Public Health Data Science.
 
 Data-driven public health professional with experience in infectious disease epidemiology, simulation modeling, and health policy.
 
 This website contains a bit about me and my work and educational [experiences](resume.html).
+:::
+::::
