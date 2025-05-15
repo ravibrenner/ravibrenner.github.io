@@ -8,9 +8,15 @@ output:
 
 # Professional Experience 
 
+## Data Analyst/Biostatistician, May 2025-Present
+Meyers Lab, Aaron Diamond AIDS Research Center, Columbia University
+
+- Conduct data cleaning and analysis of injectable HIV treatment using real world data from 8 clinics as part of the ALAI UP project 
+
+- Create R Shiny dashboard to enhance monitoring, evaluation, and learning efforts
+
 ## Program Research Specialist II/Data Analyst, July 2022-July 2024
 Office of Science, New York State Department of Health <img src="images/nysdoh_logo.png" style="width:25%">
-
 
 -   Analyzed millions of childhood immunization records using SAS, SQL, and R in support of state polio response and measles preparedness
 
