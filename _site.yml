@@ -2,9 +2,12 @@ name: "Ravi's Website"
 output_dir: "."
 navbar:
   title: "Home"
-  right:
-    - text: "Resume/CV"
+  left:
+    - text: "Resume"
       href: resume.html
+    - text: "Publications"
+      href: publications.html
+  right:
     - icon: fa-envelope fa-lg
       href: mailto:<irb2118@cumc.columbia.edu>
     - icon: fa-brands fa-linkedin
