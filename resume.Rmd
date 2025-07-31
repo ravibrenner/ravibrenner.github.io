@@ -8,15 +8,19 @@ output:
 
 # Professional Experience 
 
-## Data Analyst/Biostatistician, May 2025-Present
-Meyers Lab, Aaron Diamond AIDS Research Center, Columbia University
+### Data Analyst/Biostatistician
+
+#### Meyers Lab, Aaron Diamond AIDS Research Center, Columbia University, May 2025-Present
 
 - Conduct data cleaning and analysis of injectable HIV treatment using real world data from 8 clinics as part of the ALAI UP project 
 
 - Create R Shiny dashboard to enhance monitoring, evaluation, and learning efforts
 
-## Program Research Specialist II/Data Analyst, July 2022-July 2024
-Office of Science, New York State Department of Health <img src="images/nysdoh_logo.png" style="width:25%">
+### Program Research Specialist II/Data Analyst
+
+#### Office of Science, New York State Department of Health, July 2022-July 2024
+
+<img src="images/nysdoh_logo.png" style="width:25%">
 
 -   Analyzed millions of childhood immunization records using SAS, SQL, and R in support of state polio response and measles preparedness
 
@@ -30,8 +34,9 @@ Office of Science, New York State Department of Health <img src="images/nysdoh_l
 
 -   Developed and analyzed surveys of New Yorkers attitudes toward seasonal vaccines using SAS and presented findings to internal stakeholders which resulted in journal publication
 
-## Project Coordinator, August 2021-July 2022
-Medical Practice Evaluation Center, Massachusetts General Hospital
+### Project Coordinator
+
+#### Medical Practice Evaluation Center, Massachusetts General Hospital, August 2021-July 2022
 
 <img src="images/MPEC_logo.jpg" style="width:75%">
 
@@ -51,8 +56,8 @@ Medical Practice Evaluation Center, Massachusetts General Hospital
 
 -   Analyzed data from cohort studies, clinical trials, and observational databases to inform model inputs
 
-## Undergraduate Researcher, January 2019 – July 2020
-Fang-Yen Lab, University of Pennsylvania Bioengineering
+### Undergraduate Researcher
+#### Fang-Yen Lab, University of Pennsylvania Bioengineering, , January 2019 – July 2020
 
 -   Conducted independent research into the biomechanics of C. Elegans pharyngeal pumping
 
@@ -64,8 +69,9 @@ Fang-Yen Lab, University of Pennsylvania Bioengineering
 
 -   Presented results of research and contributed to writing of published journal article
 
-## Unit Head, June 2015 – August 2019
-Camp Yavneh, Northwood, NH					        
+### Unit Head
+
+#### Camp Yavneh, Northwood, NH, , June 2015 – August 2019					        
 
 -   Managed a staff of 11 counselors, including providing performance feedback and mediating disputes
 
@@ -76,7 +82,7 @@ Camp Yavneh, Northwood, NH
 -   Corresponded with senior camp staff to address camper and counselor issues
 
 # Education
-## Columbia Mailman School of Public Health, New York, NY
+### Columbia Mailman School of Public Health, New York, NY
 <img src="images/CUIMC_Horizontal_Blue.png" style="width:50%">
 
 Expected graduation: May, 2026
@@ -85,7 +91,7 @@ Masters of Science in Biostatistics
 
 Concentration: Public Health Data Science
 
-## University of Pennsylvania, Philadelphia, PA, May 2020
+### University of Pennsylvania, Philadelphia, PA, May 2020
 <img src="images/penn_logo.png" style="width:25%">
 
 Bachelor of Arts | Magna Cum Laude | Benjamin Franklin Scholar (80/2,500 students)
