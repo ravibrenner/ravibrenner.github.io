@@ -1,8 +1,8 @@
 ---
 title: "Resume/CV"
-output: 
-  html_document
+format: html
 ---
+
 <br>
 <br>
 
@@ -106,3 +106,4 @@ Technical skills: R/Rstudio, Python, SQL, SAS, MATLAB, Excel, Git/Github, Linear
 Language: Fluent in Hebrew
 
 Interests: Rock climbing, Guitar, Cooking, Running, Cycling
+

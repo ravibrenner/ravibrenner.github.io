@@ -1,6 +1,6 @@
 ---
 title: "Publications"
-output: html_document
+format: html
 ---
 
 -   **Brenner IR**, Flanagan CF, Penazzato M, Webb KA, Horsfall SB, Hyle EP, Abrams E, Bacha J, Neilan AM, Collins IJ, Desmonde S, Crichton S, Davies MA, Freedberg KA, Ciaranello AL. Cost-effectiveness of viral load testing for transitioning antiretroviral therapy-experienced children to dolutegravir in South Africa: a modelling analysis. The Lancet Global Health. 2024;12(12):e2068-e2079. doi:10.1016/S2214-109X(24)00381-4
