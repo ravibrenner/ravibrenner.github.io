@@ -1,5 +1,5 @@
 ---
-title: "About"
+title: "Ravi Brenner"
 image: images/headshot.jpg
 about:
   template: trestles
