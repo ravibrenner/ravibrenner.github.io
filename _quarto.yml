@@ -12,6 +12,8 @@ website:
         href: resume.html
       - text: "Publications"
         href: publications.html
+      - text: "Blog"
+        href: blog.html
 format:
   html:
     theme:

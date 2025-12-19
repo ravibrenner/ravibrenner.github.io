@@ -9,9 +9,9 @@
   {
     "objectID": "posts/welcome/index.html",
     "href": "posts/welcome/index.html",
-    "title": "Welcome To My Blog",
+    "title": "First Blog Post",
     "section": "",
-    "text": "This is the first post in a Quarto blog. Welcome!\n\nSince this post doesn’t specify an explicit image, the first image in the post will be used in the listing page of posts."
+    "text": "This is the first post in my blog. Hopefully I will add more writing here soon."
   },
   {
     "objectID": "resume.html",
@@ -21,17 +21,24 @@
     "text": "Professional Experience\n\nData Analyst/Biostatistician\n\nMeyers Lab, Aaron Diamond AIDS Research Center, Columbia University, May 2025-Present\n\nConduct data cleaning and analysis of injectable HIV treatment using real world data from 8 clinics as part of the ALAI UP project\nCreate R Shiny dashboard to enhance monitoring, evaluation, and learning efforts\n\n\n\n\nProgram Research Specialist II/Data Analyst\n\nOffice of Science, New York State Department of Health, July 2022-July 2024\n\n\nAnalyzed millions of childhood immunization records using SAS, SQL, and R in support of state polio response and measles preparedness\nDesigned data strategy and training for program for community health workers to encourage uptake of childhood immunizations\nProduced ad-hoc data reports and literature reviews on emerging health topics shared with Health Commissioner\nDeveloped models of poliovirus and measles transmission to estimate outbreak size and potential using R and Excel, in collaboration with CDC\nCoordinated website strategy and advised on design of public dashboards, coordinating among 15 internal teams and 57 local health departments\nDeveloped and analyzed surveys of New Yorkers attitudes toward seasonal vaccines using SAS and presented findings to internal stakeholders which resulted in journal publication\n\n\n\n\nProject Coordinator\n\nMedical Practice Evaluation Center, Massachusetts General Hospital, August 2021-July 2022\n\n\nLed simulation modeling study of impact of COVID-19 on HIV care for youth with HIV resulting in first-author publication\nConducted additional modeling studies of life expectancy and optimal testing regimens for youth with HIV in the US and South Africa\nExecuted data cleaning and analysis of COVID-19 contact tracing data for thousands of students from Massachusetts public schools using R\nPresented results at internal meetings and conferences, using engaging and insightful visualizations\n\n\n\nResearch Assistant, August 2020-July 2021\n\nPerformed agent-based simulation modeling analyses to answer health policy questions related to youth with HIV\nDeveloped a new webtool using R Shiny and python to forecast global antiretroviral drug needs for children with HIV for the WHO\nAnalyzed data from cohort studies, clinical trials, and observational databases to inform model inputs\n\n\n\n\nUndergraduate Researcher\n\nFang-Yen Lab, University of Pennsylvania Bioengineering, , January 2019 – July 2020\n\nConducted independent research into the biomechanics of C. Elegans pharyngeal pumping\nPlanned and carried out various assays and experiments to understand worm feeding behavior\nCollected high speed footage of the microscopic worms using DIC microscopy\nAnalyzed video data and synthesized results into clear graphs and figures\nPresented results of research and contributed to writing of published journal article\n\n\n\n\nUnit Head\n\nCamp Yavneh, Northwood, NH, , June 2015 – August 2019\n\nManaged a staff of 11 counselors, including providing performance feedback and mediating disputes\nOrganized and planned leadership, educational, and recreational activities for 60 adolescent campers\nCoordinated day-to-day logistics, planned daily programs and events, and led field trips out of camp\nCorresponded with senior camp staff to address camper and counselor issues\n\n\n\n\n\nEducation\n\nColumbia Mailman School of Public Health, New York, NY\n\nExpected graduation: May, 2026\nMasters of Science in Biostatistics\nConcentration: Public Health Data Science\n\n\nUniversity of Pennsylvania, Philadelphia, PA, May 2020\n\nBachelor of Arts | Magna Cum Laude | Benjamin Franklin Scholar (80/2,500 students)\nMajor: Biological Physics (with Distinction) | Minor: Religious Studies\n\n\n\nSkills and interests\nTechnical skills: R/Rstudio, Python, SQL, SAS, MATLAB, Excel, Git/Github, Linear Algebra, Ordinary and Partial Differential Equations\nLanguage: Fluent in Hebrew\nInterests: Rock climbing, Guitar, Cooking, Running, Cycling"
   },
   {
-    "objectID": "posts/post-with-code/index.html",
-    "href": "posts/post-with-code/index.html",
-    "title": "Post With Code",
-    "section": "",
-    "text": "This is a post with executable code."
-  },
-  {
     "objectID": "index.html",
     "href": "index.html",
     "title": "About",
     "section": "",
     "text": "Masters in Biostatistics student at Columbia University Mailman School of Public Health with a concentration in Public Health Data Science.\nI am a biostatistician and epidemiologist with experience using mathematical modeling, data analysis, and data visualization to support better health outcomes. I enjoy applying technical tools like R, Python, and SQL alongside strong writing and communication skills to tackle real-world challenges in public health. My interests include infectious disease epidemiology, health policy, vaccine-preventable diseases, HIV care, health communication, and looking for ways that data can inform public health action.\nThis website contains a bit about me and my work and educational experiences."
+  },
+  {
+    "objectID": "blog.html",
+    "href": "blog.html",
+    "title": "Blog Posts",
+    "section": "",
+    "text": "Order By\n      Default\n      \n        Title\n      \n      \n        Date - Oldest\n      \n      \n        Date - Newest\n      \n    \n  \n    \n      \n      \n    \n\n\n\n\n\nFirst Blog Post\n\n\n\ngeneral\n\n\n\n\n\n\n\n\n\nDec 18, 2025\n\n1 min\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "posts/2025-12-18_first_blog_post/index.html",
+    "href": "posts/2025-12-18_first_blog_post/index.html",
+    "title": "First Blog Post",
+    "section": "",
+    "text": "This is the first post in my blog. Hopefully I will add more writing here soon."
   }
 ]
