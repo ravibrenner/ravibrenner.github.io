@@ -79,9 +79,9 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-date','listing-title','listing-reading-time','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      valueNames: ['listing-date','listing-title','listing-reading-time','listing-description','listing-categories','listing-image',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
+      searchColumns: ["listing-title","listing-author","listing-date","listing-image","listing-description","listing-categories"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -205,7 +205,7 @@ window.Quarto = {
 
 
 
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
+<div class="quarto-listing quarto-listing-container-grid" id="listing-listing">
 <div class="listing-actions-group">
    <div class="input-group input-group-sm quarto-listing-sort">
     <span class="input-group-text"><i class="bi bi-sort-down"></i></span>
@@ -228,29 +228,33 @@ window.Quarto = {
       <input type="text" class="search form-control" placeholder="Filter">
     </div>
 </div>
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="Z2VuZXJhbA==" data-listing-date-sort="1767589200000" data-listing-file-modified-sort="1767630365479" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="396">
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/2026-01-05_welcome_intro/index.html" class="no-external">About me and this blog</a>
-</h3>
+<div class="list grid quarto-listing-cols-3">
+<div class="g-col-1" data-index="0" data-categories="Z2VuZXJhbA==" data-listing-date-sort="1767589200000" data-listing-file-modified-sort="1767631529982" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="401">
+<a href="./posts/2026-01-05_welcome_intro/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="./posts/2026-01-05_welcome_intro/maggie_sunset.jpeg" class="thumbnail-image card-img" style="height: 200px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+About me and this blog
+</h5>
+<div class="listing-reading-time card-text text-muted">3 min</div>
 <div class="listing-categories">
 
 <div class="listing-category" onclick="window.quartoListingCategory('Z2VuZXJhbA=='); return false;">general</div>
 
 </div>
-<div class="delink listing-description"><a href="./posts/2026-01-05_welcome_intro/index.html" class="no-external">
+<div class="card-text listing-description delink">
 Welcome to the blog section of my website!
-</a></div>
 </div>
-<div class="metadata">
-<a href="./posts/2026-01-05_welcome_intro/index.html" class="no-external">
+<div class="card-attribution card-text-small end">
 <div class="listing-date">
 Jan 5, 2026
 </div>
-<div class="listing-reading-time">2 min</div>
-</a>
 </div>
+</div>
+</div></a>
 </div>
 </div>
 <div class="listing-no-matching d-none">No matching items</div>

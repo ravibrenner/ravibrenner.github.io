@@ -3,6 +3,7 @@ title: "About me and this blog"
 author: "Ravi Brenner"
 date: "2026-01-05"
 categories: [general]
+image: maggie_sunset.jpeg
 ---
 
 Welcome to the blog section of my website! 
@@ -16,3 +17,5 @@ More generally, I am interested in using data to inform public health action. I 
 In my non-work life I enjoy running, cycling, baking, and playing with our dog Maggie, a 2-year-old Australian Labradoodle (pictured).
 
 My goal with this blog is to showcase some of my past work in more detail, discuss interests of mine in the public health field, and explore topics I am learning in more detail. I also hope it will provide an avenue for me to improve my writing and communication skills.
+
+![Maggie with the sunsest behind her](maggie_sunset.jpeg){width=50%}

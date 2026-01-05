@@ -20,4 +20,4 @@ Masters in Biostatistics student at Columbia University Mailman School of Public
 
 I am a biostatistician and epidemiologist with experience using mathematical modeling, data analysis, and data visualization to support better health outcomes. I enjoy applying technical tools like R, Python, and SQL alongside strong writing and communication skills to tackle real-world challenges in public health. My interests include infectious disease epidemiology, health policy, vaccine-preventable diseases, HIV care, health communication, and looking for ways that data can inform public health action.
 
-This website contains a bit about me and my work and educational [experiences](resume.html).
+This website contains a bit about me and my work and educational [experiences](resume.html). You can also read a bit more about me in the [blog](blog.html) section.

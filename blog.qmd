@@ -3,12 +3,13 @@ title: "Blog Posts"
 listing:
   contents: posts/**/*.qmd
   sort: "date desc"
-  type: default
+  type: grid
   categories: true
   sort-ui: true
   filter-ui: true
-  fields: [date, title, reading-time, description, categories]
+  fields: [date, title, reading-time, description, categories, image]
   feed: true
+  image-height: 200px
 page-layout: full
 title-block-banner: false
 ---
