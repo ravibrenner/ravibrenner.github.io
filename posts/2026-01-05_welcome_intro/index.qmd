@@ -1,0 +1,18 @@
+---
+title: "About me and this blog"
+author: "Ravi Brenner"
+date: "2026-01-05"
+categories: [general]
+---
+
+Welcome to the blog section of my website! 
+
+My name is Ravi, and I am a data-driven public health professional, with training as a biostatistician and experience with epidemiology and health policy. I have mainly worked on infectious disease in various capacities, both in academic research and in government public health.
+
+I started my professional career working on agent-based modeling projects at the [Medical Practice Evaluation Center (MPEC)](https://mpec.massgeneral.org/) at Mass General Hospital. I primarily worked with Doctors Anne Neilan and Andrea Ciaranello on research related to youth with HIV in the US and South Africa. I also got the opportunity there to work on some primary data analysis projects related to COVID-19 in schools. After 2 years there, I began working in the [Office of Science](https://science.health.ny.gov/about-us) at the New York State Department of Health on emerging health science and outbreak response. I then took a break from working to learn some new skills in graduate school at the Columbia University Mailman School of Public Health. I am also currently working part time at the [Meyers lab](https://www.adarc.cuimc.columbia.edu/research/research-labs/meyers-lab) at the Aaron Diamond AIDS Research Center (ADARC), creating dashboards and doing data analysis to support clinics rolling out the next generation of injectable HIV treatment options.
+
+More generally, I am interested in using data to inform public health action. I really enjoy the simulation modeling approach to this, since it is a fantastic way to understand the potential impact of different decisions. It can be complex and intellectually stimulating, and you can execute it when data is plentiful and when it is scarce. That said, I am also a big believer that sometimes the most important analysis needed is the simple one that can be executed quickly and disseminated effectively. Because of this, I also have a strong interest in communicating my analysis work to a broad audience. I enjoy creating different kinds of data visualizations and helping others to understand them, and am always interested in opportunities to teach to others.
+
+In my non-work life I enjoy running, cycling, baking, and playing with our dog Maggie, a 2-year-old Australian Labradoodle (pictured).
+
+My goal with this blog is to showcase some of my past work in more detail, discuss interests of mine in the public health field, and explore topics I am learning in more detail. I also hope it will provide an avenue for me to improve my writing and communication skills.

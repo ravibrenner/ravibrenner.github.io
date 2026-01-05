@@ -6,7 +6,7 @@ about:
   links:
     - icon: fa-envelope fa-lg
       text: Email
-      href: mailto:<irb2118@cumc.columbia.edu>
+      href: mailto:<ravibrenner@gmail.com>
     - icon: fa-brands fa-linkedin
       text: LinkedIn
       href: https://www.linkedin.com/in/ravi-brenner/
