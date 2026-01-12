@@ -3,6 +3,7 @@ title: "Grad School Project Highlights"
 author: "Ravi Brenner"
 date: "2026-01-012"
 categories: [projects]
+image: lane_dist.png
 ---
 
 These are 3 projects I have completed for classes as part of my masters degree. There are links to the final presentation, poster, and reports I wrote for each of these, as well as a github repo with the accompanying code.
