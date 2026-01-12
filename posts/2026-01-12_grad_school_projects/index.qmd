@@ -1,0 +1,35 @@
+---
+title: "Grad School Project Highlights"
+author: "Ravi Brenner"
+date: "2026-01-012"
+categories: [projects]
+---
+
+These are 3 projects I have completed for classes as part of my masters degree. There are links to the final presentation, poster, and reports I wrote for each of these, as well as a github repo with the accompanying code.
+
+# Infectious disease transmission trees
+
+This was the final project for my network science class, taught by Dr. Sen Pei. It was heavilty inspired by this [paper](https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3001685), and the data are from [here](https://outbreaktrees.ecology.uga.edu/#section-home). I worked on it with a partner in the class, and the final presentation can be found [here](https://docs.google.com/presentation/d/1zfchYDgNm9qVmgjLRXjLc0ni7o-PgWMY6gjWYc2BMwY/edit?usp=drive_link). There is also a [github repo](https://github.com/ravibrenner/netsci_final_project) containing some of the work I did on this project. 
+
+![A sample outbreak tree showing different types of nodes](outbreak_tree_example.png){width=50%}
+
+We chose to look at infectious disease transmission trees because they  provide an interesting was of understanding outbreak dynamics. You can calculate the basic reproductive number $R_0$ from a transmission tree by calculating the average out-degree of a node in the network (the out-degree is just the number of arrows pointing out of the node). However once an outbreak is completed, this will be <1, so you have to exclude some share of the nodes to calculate the "true" $R_0$. It's a good reminder that basic reproductive numbers are probabilistic and influenced by the specific dynamics of an outbreak and the qualities of the disease. For example, the number of clusters influences the average $R_0$, and identifies superspreaders at the same time, but these two things may have a somewhat inverse relationship. Diseases that spread quickly (like measles) may actually have fewer "superspreaders" in a strict sense, because basically everyone is transmitting at a high rate. We also categorized the different diseases based on the number of nodes (the size of the outbreak) and the number of clusters (superspreaders) and some interesting patterns emerged.
+
+# Bike Lanes and Bike Collisions in New York City
+
+This was the final project for my public health GIS class, taught by Dr. Joel Capellan. The final poster I produced with my findings is available as a [powerpoint file](https://github.com/ravibrenner/bike_nyc_gis/blob/main/bike_nyc_gis.pptx) in [this](https://github.com/ravibrenner/bike_nyc_gis) github repo with all my other work. This subject was personally interesting for me because I bike for exercise and occasionally for commuting in New York City. I had wanted to undertake an analysis of bike safety in New York but felt daunted by the sheer size of the data shared by NYC on their Open Data portal. The vehicle collision [data](https://data.cityofnewyork.us/Public-Safety/Motor-Vehicle-Collisions-Crashes/h9gi-nx95/about_data) is very large, and wrangling that data was a challenge. On top of that, for this analysis I was dealing with points (where crashes occurred), line segments (where bike lanes were present), and polygons (where different community districts are located). So connecting all those geometries took some thought and decision making. 
+
+![One map I produced for this project](lane_dist.png){width=50%}
+
+This project also illuminated for me how challenging this type of research can be. The data NYC provides is very good and detailed, but still not enough to make any definitive conclusions about safety, because traffic volumes on each line segments are unknown. There are some traffic volumes provided by NYC at specific locations, but it's hard to extrapolate from that to the whole city. Still, it was a fun data visualization project, and our professor kindly printed out our posters in full size for our presentation day.
+
+
+# Simulation of Bias-Variance Tradeoff with Tree-Based Models
+
+This last project is a more technical and theoretical machine learning project, for the course "Topics in Statistical Learning & Data Mining" taught by Dr. Min Qian. I still think it was very interesting to work on, and even those who are not data scientists, statisticians, or machine learning engineers can benefit from learning about this. The final report I produced is available as a [PDF](https://github.com/ravibrenner/p9120_final_project/blob/master/p9120_final_project_writeup.pdf) in [this](https://github.com/ravibrenner/p9120_final_project) github repo for the project.
+
+Very briefly, the project attempts to explore and understand the bias-variance tradeoff in machine learning. The basic idea is that when you create a model to try to predict some outcome, the goal is to minimize some kind of error. You can show with some math that the error can be broken down into 2 components, called the bias and the variance. The bias tells you how far your predictions are from the truth, and the variance tells you how varied your predictions are. It turns out that these 2 things are somewhat in conflict, such that decreasing the bias means increasing the variance, and vice versa. 
+
+![Photo from [wikipedia](https://en.wikipedia.org/wiki/Bias%E2%80%93variance_tradeoff)](Bias_and_variance_contributing_to_total_error.svg.png){width=50%}
+
+It's the sort of thing that is often glossed over quickly at the beginning of a data science class, but its very important to understand, especially as AI becomes more ubiquitous. Today's generative large language models are far more complicated than the models I explored in this paper, but they too suffer from the bias-variance tradeoff. This project was a cool way to explore how I could bridge theoretical constructs and actual data analysis, and I came away feeling like I understood this concept in a way I really hadn't before.
