@@ -3,10 +3,10 @@ title: "Past Projects and Publications"
 author: "Ravi Brenner"
 date: "2026-01-22"
 categories: [projects]
-draft: true
+image: COVID_care_plot.png
 ---
 
-These are a few of the projects I have worked on in some of my past public health jobs. This is a sampling of final products, since there were plenty of other interesting projects that I worked on that didn't turn into publications.
+These are a few of the projects I have worked on in some of my past public health jobs. This is a sampling of final products, since there were plenty of other interesting projects that I worked on that didn't turn into publications. More on those in another post in the future!
 
 # HIV and COVID-19
 
@@ -18,9 +18,9 @@ In many ways, this was a speculative and exploratory paper. We were able to leve
 
 # COVID-19 in Schools
 
-Another set of analyses I was involved in related to COVID-19 contact tracing in Massachusetts schools. The first paper was [Evaluation of “Test to Return” after COVID-19 Diagnosis in a Massachusetts Public School District](https://onlinelibrary.wiley.com/doi/10.1111/josh.13357) and the second paper was [Prevalence and Risk Factors for School-Associated Transmission of SARS-CoV-2](https://jamanetwork.com/journals/jama-health-forum/fullarticle/2807905). For both papers, we relied on data meticulously collected by school nurses and administrators in 2020 and 2021 on all cases and close contacts in their schools. I wasn't involved in designing the studies or collecting the data, but I was heavily involved in the data cleaning, analysis, and visualization for both studies.
+Another set of analyses I was involved in related to COVID-19 contact tracing in Massachusetts schools. The first paper was [Evaluation of “Test to Return” after COVID-19 Diagnosis in a Massachusetts Public School District](https://onlinelibrary.wiley.com/doi/10.1111/josh.13357) and the second paper was [Prevalence and Risk Factors for School-Associated Transmission of SARS-CoV-2](https://jamanetwork.com/journals/jama-health-forum/fullarticle/2807905). For both papers, we relied on data meticulously collected by school nurses and administrators in 2020 and 2021 on all cases and close contacts in their schools. I was not involved in designing the studies or collecting the data, but I was heavily involved in the data cleaning, analysis, and visualization for both studies.
 
-For the test-to-return analysis, we wanted to know whether having students test before returning to school vs. waiting for a set number of days was better in terms of preventing infection and maximizing days spend in school. Ultimately we couldn't answer these questions with certainty, but we did find that a substantial proportion of students were still testing positive and may still be contagious 6 days after the onset of infection. Therefore if schools forgo testing to return to school, they should know that there may be some infectious students returning (PDF [here](Nelson et al. - 2023 - test to return.pdf)).
+For the test-to-return analysis, we wanted to know whether having students test before returning to school vs. waiting for a set number of days was better in terms of preventing infection and maximizing days spend in school. Ultimately we could not answer these questions with certainty, but we did find that a substantial proportion of students were still testing positive and may still be contagious 6 days after the onset of infection. Therefore if schools forgo testing to return to school, they should know that there may be some infectious students returning (PDF [here](Nelson et al. - 2023 - test to return.pdf)).
 
 For the school-associated transmission analysis, we were working with very complicated and messy data from a larger number of schools, so data cleaning was a substantial challenge. There was also a relatively small number of "events," so the statistical analysis also proved an interesting challenge. The goal of the paper was simply to measure the secondary attack rate and factors associated with transmission in schools. Masking (prior to vaccine introduction) and full vaccination proved to be the strongest protectors against in-school transmission. The good news from this study was that secondary attack rates were relatively low, indicating that the preventative measures used were fairly effective and in-school learning could be resumed relatively safely (PDF [here](Nelson et al. - 2023 - Prevalence and Risk Factors.pdf)).
 
@@ -34,5 +34,5 @@ The first paper provided an overview of the potential number of polio infections
 
 The second paper was a bit more technical. We had been seeing wastewater samples positive for poliovirus, but no cases showing up with paralysis. Eventually we stopped seeing these detections, but it wasn't clear that a negative sample meant that no one had polio. We wanted to know how confident we could be in no circulation based on the timing of the last positive wasterwater sample. We found that depending on the assumptions of population mixing and wastewater sampling quality, public health officials could assume 95% confidence of no ongoing circulation of the outbreak poliovirus within approximately 3–10 months since the last positive wastewater sample (PDF [here](Kalkowska et al. - 2024.pdf). 
 
-These projects were a great experience for me, to see how modeling is used in a real outbreak setting. I also worked on some (unpublished) models internally for NYSDOH and in collaboration with CDC. The modeling was useful information to help us contextualize the risk: polio was probably not going to become endemic in New York, at least not in 2022-2023. Still, it didn't solve the problem of how to increase on-time childhood vaccination (a topic for another day).
+These projects were a great experience for me, to see how modeling is used in a real outbreak setting. I also worked on some (unpublished) models internally for NYSDOH and in collaboration with CDC. The modeling was useful information to help us contextualize the risk: polio was probably not going to become endemic in New York, at least not in 2022-2023. Still, it did not solve the problem of how to increase on-time childhood vaccination (a topic for another day).
 
