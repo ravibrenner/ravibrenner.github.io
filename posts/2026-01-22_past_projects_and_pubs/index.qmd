@@ -1,0 +1,38 @@
+---
+title: "Past Projects and Publications"
+author: "Ravi Brenner"
+date: "2026-01-22"
+categories: [projects]
+draft: true
+---
+
+These are a few of the projects I have worked on in some of my past public health jobs. This is a sampling of final products, since there were plenty of other interesting projects that I worked on that didn't turn into publications.
+
+# HIV and COVID-19
+
+This paper, [Projecting the Clinical and Economic Impacts of Changes to HIV Care Among Adolescents and Young Adults in the United States: Lessons From the COVID-19 Pandemic](https://academic.oup.com/jpids/article/13/1/60/7420271) was the first modeling paper that I got to work on from start to finish, under the supervision of Dr. Anne Neilan and a great team of collborators through the Adolescent Medicine Trials Network for HIV/AIDS Interventions (ATN). We wanted to understand what impact disruptions in HIV care due to COVID-19 would have on youth with HIV in the United States. We chose to focus specifically on the treatment side (rather than HIV prevention), and found that even short interruptions to HIV care may have negative long-term clinical implications (PDF is [here](Brenner et al. - 2024.pdf)).
+
+For my part, I did literature reviews to understand the (early) state of research on the impact of COVID-19 on HIV care. I paid special attention to metrics like treatment adherence, loss to follow-up, and treatment failure among youth with HIV. I also helped to derive new youth-specific HIV care cost inputs for the model. Then we settled on a few strategies that we wanted to test, and I set up all the corresponding model runs and analyzed and visualized the data. Finally I helped with drafting and editing the paper, with much help from Dr. Neilan and the other co-authors.
+
+In many ways, this was a speculative and exploratory paper. We were able to leverage some ATN data on youth with and without perinatal HIV to develop new model inputs unique to each population, which was a cool innovation. While not specifically what we modeled, I do think that in some ways we are now seeing the impact of these COVID care interruptions, nearly 6 years later. Data released by [NYC](https://www.nyc.gov/site/doh/about/press/pr2025/nyc-health-department-releases-2024-hiv-surveillance-data.page) this year show an uptick in new HIV diagnoses. That probably relates more to the prevention side of things than the treatment side, but its an unfortunate development nonetheless.
+
+# COVID-19 in Schools
+
+Another set of analyses I was involved in related to COVID-19 contact tracing in Massachusetts schools. The first paper was [Evaluation of “Test to Return” after COVID-19 Diagnosis in a Massachusetts Public School District](https://onlinelibrary.wiley.com/doi/10.1111/josh.13357) and the second paper was [Prevalence and Risk Factors for School-Associated Transmission of SARS-CoV-2](https://jamanetwork.com/journals/jama-health-forum/fullarticle/2807905). For both papers, we relied on data meticulously collected by school nurses and administrators in 2020 and 2021 on all cases and close contacts in their schools. I wasn't involved in designing the studies or collecting the data, but I was heavily involved in the data cleaning, analysis, and visualization for both studies.
+
+For the test-to-return analysis, we wanted to know whether having students test before returning to school vs. waiting for a set number of days was better in terms of preventing infection and maximizing days spend in school. Ultimately we couldn't answer these questions with certainty, but we did find that a substantial proportion of students were still testing positive and may still be contagious 6 days after the onset of infection. Therefore if schools forgo testing to return to school, they should know that there may be some infectious students returning (PDF [here](Nelson et al. - 2023 - test to return.pdf)).
+
+For the school-associated transmission analysis, we were working with very complicated and messy data from a larger number of schools, so data cleaning was a substantial challenge. There was also a relatively small number of "events," so the statistical analysis also proved an interesting challenge. The goal of the paper was simply to measure the secondary attack rate and factors associated with transmission in schools. Masking (prior to vaccine introduction) and full vaccination proved to be the strongest protectors against in-school transmission. The good news from this study was that secondary attack rates were relatively low, indicating that the preventative measures used were fairly effective and in-school learning could be resumed relatively safely (PDF [here](Nelson et al. - 2023 - Prevalence and Risk Factors.pdf)).
+
+Dr. Nelson, Dr. Ciaranello, and other co-authors were involved in school COVID-19 policies in Massachusetts and nationally, and these studies were just part of the research base they were contributing to and drawing on. It was a challenging area of research, both from a data perspective and politically, and I hope that the work they did will prove useful the next time there is a disruptive pandemic.
+
+# Polio in New York State
+
+I worked a lot on Polio while working at NYSDOH, but these were two papers that were actually published, led by the nonprofit modeling group Kid Risk. The papers were [Modeling Poliovirus Transmission and Responses in New York State](https://pmc.ncbi.nlm.nih.gov/articles/PMC11284859/) and [Modeling undetected poliovirus circulation following the 2022 outbreak in the United States](https://pmc.ncbi.nlm.nih.gov/articles/PMC11284832/). My role in both of these was to provide a lot of the data on vaccination rates and the population at risk, and to help develop the modeling scenarios and visualizations.
+
+The first paper provided an overview of the potential number of polio infections and paralytic cases under different mixing scenarios. We found that even when average IPV immunization rates are high, clusters of undervaccinated populations mean that imported polioviruses may circulate and pose a small but nonzero risk of causing paralysis in nonimmune individuals (PDF [here](Thompson et al. - 2023.pdf)). 
+
+The second paper was a bit more technical. We had been seeing wastewater samples positive for poliovirus, but no cases showing up with paralysis. Eventually we stopped seeing these detections, but it wasn't clear that a negative sample meant that no one had polio. We wanted to know how confident we could be in no circulation based on the timing of the last positive wasterwater sample. We found that depending on the assumptions of population mixing and wastewater sampling quality, public health officials could assume 95% confidence of no ongoing circulation of the outbreak poliovirus within approximately 3–10 months since the last positive wastewater sample (PDF [here](Kalkowska et al. - 2024.pdf). 
+
+These projects were a great experience for me, to see how modeling is used in a real outbreak setting. I also worked on some (unpublished) models internally for NYSDOH and in collaboration with CDC. The modeling was useful information to help us contextualize the risk: polio was probably not going to become endemic in New York, at least not in 2022-2023. Still, it didn't solve the problem of how to increase on-time childhood vaccination (a topic for another day).
+

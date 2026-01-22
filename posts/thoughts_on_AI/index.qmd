@@ -1,0 +1,27 @@
+---
+title: "Some Thoughts About generative AI"
+author: "Ravi Brenner"
+date: "2026-01-15"
+categories: [general]
+draft: true
+---
+
+- I don't consider myself a luddite. I recognize that current AI tools can make some tasks easier or downright trivial. it's a great place to get started learning about a topic or getting a specific question answered. a great drop in replacement for a typical google search or reading some strangers travel/recipe blog. i have used it a bunch for travel planning for instance, not as an end-to-end travel agent, but to help me familiarize myself with some of the options and logistics.
+
+- personally, i do not like to use AI for any type of communication I am doing with another human being. Any writing, emails, conversations i want to have, i believe should be done by me and me alone. That said, if I was trying to communicate in a foreign language i might not feel this way. i do not judge those who use AI to write emails or papers--there is some evidence that humans subjectively like the writing AI does better than human writing (cite something to this effect). arguably code is another way of communicating with people, so perhaps i am a bit hypocritical.
+
+- from a professional standpoint, i have used chatgpt and gemini to speed up quick coding questions. usually not writing whole chunks of code for me, just helping to remind me how to do something or show me some different options. sometimes the AI is wrong, but I'm an experienced enough R programmer to find my way from there. the one time I tried to "vibe code" something more complicated that I was not familiar with, I couldn't get the AI to do what I wanted, and I also couldn't figure out how to do what I wanted. I would have had to spend a lot more time learning and teaching myself before I could accomplish anything.
+
+- in some ways I'm totally fine with that. For me, I enjoy learning how to do things myself. There is joy and pleasure for me in the process. To take one example, I want to be able to code up my own machine learning model for some data I have, and understand how it works, and do it. I could probably ask an AI to do it for me, but that would not accomplish the same thing for me personally.
+
+And in this way, I acknowledge that AI is a tool just like a programming language is a tool. Take R as an exapmle. I program in R, but I do not understand the compiled C++ code, or the assembly code underneath all that--i don't care to. what's important to me is to use the R code to accomplish some task that I want
+
+And for people who don't know how to program, AI can now basically do this. I haven't used claude code yet (not worht the subscription money for me right now), but from reading about it (link) my sense is that it is basically a natural language task monkey. ask it what you want to do and it can basically do it. there might be hiccups along the way, and figuring out what to ask is itself a skill, and having knowledge in what your doing helps too. but people are successfully deploying this left and right, including the creator of claude code himself (cite). this is the real deal.
+
+And yet. for me personally this feels like a bit of a loss in some ways. there are now whole areas of knowledge that people won't bother learning because there is no need to. and frankly that makes perfect sense. but as someonw who enjoys the learning and growing aspect of things it feels liimiting. why invest time in learning something that an AI can already do better than me?
+
+So far, my feeling with using AI tools is that they can usually do things faster and slightly worse than I can. in other words, i can usually do a better job if i just invest the time. what happens when that stops being true? i'm not the first one to struggle with this obviously, and i'm not even thinking about the macroenomic impact, jsut the individual impact. how will it make me feel? So far i am apprehensive to say the least. i'm scared.
+
+i don't know that I worry aobut my personal job security that much just yet. I am in a field that is certainly ripe for improvement by AI. But i also think there is a substantial human element that won't go away. in my current role for example, even if an AI can do the individual tasks i can do, keeping track of everything and understanding the nuances at play with the actual humans involved is very complicated.
+
+should really organize all of this into a more coherent outline/essay. maybe with a good hook and running theme and a thesis statement.
