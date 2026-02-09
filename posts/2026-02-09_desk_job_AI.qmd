@@ -4,7 +4,6 @@ author: "Ravi Brenner"
 date: "2026-02-09"
 categories: [general]
 image: images/adarc_office.jpeg
-draft: true
 ---
 
 When I was a kid, I wanted to be an astronomer. Not an astronaut to be clear; I did not want to go to space. I wanted to be the one behind the telescope, exploring the universe from the earth.
