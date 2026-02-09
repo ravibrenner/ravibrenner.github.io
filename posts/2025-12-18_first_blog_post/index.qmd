@@ -1,9 +1,0 @@
----
-title: "First Blog Post"
-author: "Ravi Brenner"
-date: "2025-12-18"
-categories: [general]
-draft: true
----
-
-This is the first post in my blog. Hopefully I will add more writing here soon. 

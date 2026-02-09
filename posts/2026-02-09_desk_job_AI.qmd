@@ -1,0 +1,39 @@
+---
+title: "On Desk Jobs and AI"
+author: "Ravi Brenner"
+date: "2026-02-09"
+categories: [general]
+image: images/adarc_office.jpeg
+draft: true
+---
+
+When I was a kid, I wanted to be an astronomer. Not an astronaut to be clear; I did not want to go to space. I wanted to be the one behind the telescope, exploring the universe from the earth.
+
+As I grew my interests changed. In college I thought maybe I would become a teacher, or work in experiential education of some kind. Its still something I think about pursuing one day, if the circumstances were right. My first paying job was as a camp counselor and unit head, which I loved.
+
+Later in college, convinced I had to get a "real" job, I worked in a research lab, staring down a microscope at *C. Elegans*, microscopic worms. I enjoyed this job a lot too. It was much more solitary, but I would put in some headphones and tend to my worms, prepare my slides for the microscope, and spend hours recording their movements. I decided I wanted to pursue a career that was closer to human health and wellbeing, rather than being purely research-based. But I liked all the activities that came with working in a lab.
+
+![A plate of my *C. Elegans* worms](images/worms.jpeg){width=50%}
+
+What I did not want to do, what I dreaded and avoided, was work behind a desk in an office, staring at a computer all day. It sounded boring and monotonous, and what could you accomplish from behind a desk? I knew lots of people had such jobs, but I also knew there were many other options. When I graduated college I applied to work at a science-based summer camp, at an environmental education center, and in science labs. But the job that I landed was as a Research Assistant at MGH, working (from home initially) behind a computer. Editing excel sheets and slide decks all day. It wasn't what I had in mind.
+
+But it turns out I liked it, and I was good at it. 
+
+My first week at my current role, one of my new co-workers commented that they "couldn't believe you just sit their quietly and work for so long," but that's exactly what I do. The time flies by, and I can get a lot done just sitting at my computer. There are articles to read, code to be written, papers to write, files to be organized. And I have found across all of the desk jobs that I have had that the work can be very rewarding. Its not the immediate reward of being a camp counselor and getting to see kids enjoy the activities you put together. But other public health professionals, doctors, clinic staff, and patients have benefited from my work behind a desk. 
+
+![The view of NYC from the ADARC office](images/adarc_office.jpeg){width=50%}
+
+I am a fairly agreeable person. I tend to like, or at least tolerate, a lot of circumstances. Which is to say I'm sure I would enjoy other work settings too, maybe even more so then working at a desk. I still think about teaching or working outdoors somehow, or making my baking hobby into a job. But for now, I have lucked into a career path where I can thrive.
+
+# AI and me
+
+So far, my experience with AI tools is that they can usually do things faster, if slightly worse, than I can do on my own. This can be empowering in many ways, because anyone can go from having nothing to having something in just a few seconds. From what I have read, AI agents are even a step better than this, and experienced software engineers are apparently writing little of their own code now. In some ways this is great.
+
+An obvious concern is that the adoption of AI will automate away many workers like me. My work is largely done at a computer, so a super advanced computer could probably do it.
+
+On one level, I still think I have a lot to add. Generative AI models often wrong, but you need to know enough to know when they are wrong. I frequently work with patient data, which can't simply be put into LLMs without substantial safeguards. And much of the work I do is very nuanced and complex, and even if an AI model could do a version of it, getting everything exactly right is hard. Certainly I am a biased observer about this, but I think I'm still better than the machines. 
+
+I use AI when I can, for helping with code, speeding up the question-answer debugging process, and helping me search for and learn new tools and techniques. I think all of that is useful and I'll continue to use it in my work.
+
+On another level though, the rise of AI is a bit of a personal bummer. I find I can usually do things better than an AI model, just more slowly. Investing hours, days, or months at learning a new skill or technique is rarely worthwhile from an efficiency point of view, so AI has a use in those situations. But I enjoy learning new things, puzzling through difficult tasks, and plugging away behind my computer. It's great if AI automates some of that and frees me up to do the more mentally stimulating things, but if my job is automated away I'll be left with nothing. That's a sad future to contemplate.
+

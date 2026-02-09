@@ -3,7 +3,7 @@ title: "About me and this blog"
 author: "Ravi Brenner"
 date: "2026-01-05"
 categories: [general]
-image: maggie_sunset.jpeg
+image: images/maggie_sunset.jpeg
 ---
 
 Welcome to the blog section of my website! 
@@ -18,4 +18,4 @@ In my non-work life I enjoy running, cycling, baking, and playing with our dog M
 
 My goal with this blog is to showcase some of my past work in more detail, discuss interests of mine in the public health field, and explore topics I am learning in more detail. I also hope it will provide an avenue for me to improve my writing and communication skills.
 
-![Maggie with the sunsest behind her](maggie_sunset.jpeg){width=50%}
+![Maggie with the sunsest behind her](images/maggie_sunset.jpeg){width=50%}
