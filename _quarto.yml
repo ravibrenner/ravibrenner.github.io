@@ -20,6 +20,6 @@ format:
       - flatly
       - brand
     css: styles.css
-
-
+filters:
+  - shinylive
 
