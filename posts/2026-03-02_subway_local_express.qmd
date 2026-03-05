@@ -53,13 +53,14 @@ adjacent_stops <-
   filter(service_id == "Weekday") |>
   # Join with the stop times for these trips
   inner_join(mta$stop_times, by = join_by("trip_id")) |>
-  filter(arrival_time >= hms("08:00:00") & arrival_time <= hms("09:00:00")) |>
+  filter(arrival_time >= hms("08:00:00") & arrival_time <= hms("12:00:00")) |>
   # For each trip, get the stops and stop sequence
   select(route_id,trip_id, stop_id, stop_sequence) |>
   group_by(trip_id) |>
   arrange(stop_sequence) |>
   mutate(next_stop_id = lead(stop_id)) |>
   filter(!is.na(next_stop_id)) |>
+  ungroup() |>
   distinct(route_id,stop_id, next_stop_id)
 ```
 
@@ -78,9 +79,6 @@ adj_stops_loc <- adjacent_stops |>
 
 # Turn the origin-destination pairs into lines
 network_lines <- adj_stops_loc |>
-  ungroup() |>
-  select(-trip_id) |>
-  distinct() |>
   rowwise() |>
   mutate(geometry = st_sfc(
     st_linestring(
@@ -105,7 +103,7 @@ ggplot() +
   geom_sf(data = network_points, size = 0.2, color = "black") +
   theme_void() +
   labs(title = "NYC Subway System",
-       subtitle = "Weekdays 9am-12pm") +
+       subtitle = "Weekdays 8am-12pm") +
   scale_color_identity()
 ```
 
@@ -117,40 +115,51 @@ Next, we can identify express stops. An express stop should have several charact
 
 - There should be multiple routes that stop at the station (so that you could have the option to choose)
 
+  - A destination station should have multiple origins, at least 1 of which should be an express origin
+
+  - A destination station should also have multiple routes that stop at the station
+
 - There should be at least 2 trains at the origin station that are also at the destination station. We can do this by looking at the intersection of the routes that stop at each origin-destination station pair.
 
 ```{r}
-stop_route_dests <- adj_stops_loc |>
+orig_stops_routes <- adj_stops_loc |>
   group_by(stop_id) |>
   summarize(num_destinations = n_distinct(next_stop_id),
             dest_list = list(unique(next_stop_id)),
-            num_routes = n_distinct(route_id),
-            route_list = list(unique(route_id))) 
+            num_routes_orig = n_distinct(route_id),
+            route_list_orig = list(unique(route_id))) |>
+  filter(num_destinations > 1,
+         num_routes_orig > 1)
 
-temp <- adj_stops_loc |>
-  group_by(stop_id, next_stop_id, 
-           parent_station_orig,parent_station_dest,
-           stop_name_orig,stop_name_dest) |>
-  summarize(num_trips = n()) |>
-  inner_join(stop_route_dests,
-             by = c("stop_id" = "stop_id")) |>
-  inner_join(stop_route_dests,
-             by = c("next_stop_id" = "stop_id"),
-             suffix = c("_orig","_dest")) |>
-  mutate(routes_intersect = map2(route_list_orig, route_list_dest,intersect),
-         num_intersect_routes = map_dbl(routes_intersect,length))  |>
-  filter(num_intersect_routes > 1,
-         num_destinations_orig > 1) 
+dest_stops_routes <- adj_stops_loc |>
+  group_by(next_stop_id) |>
+  summarize(num_origins = n_distinct(stop_id),
+            orig_list = list(unique(stop_id)),
+            num_routes_dest = n_distinct(route_id),
+            route_list_dest= list(unique(route_id))) |>
+  filter(num_origins > 1,
+         num_routes_dest > 1)
 
-express_stations_full <- temp |>
-  mutate(removal_candidate = 
-           if_else(parent_station_dest %in% temp$parent_station_orig,0,1),
-         mismatch_route_num = if_else(num_routes_dest != num_routes_orig,1,0),
-         remove = if_else(removal_candidate == 1 & mismatch_route_num == 1,1,0)) |>
-  filter(remove == 0) |>
-  select(stop_name_orig, stop_name_dest,routes_intersect)  |>
-  inner_join(mta$stops,
-             by = "stop_id")
+express_stations_full <- adj_stops_loc |>
+  select(-route_color) |>
+  group_by(stop_id) |>
+  mutate(num_destination = n_distinct(next_stop_id),
+         dest_list = list(unique(next_stop_id)),
+         num_routes_orig = n_distinct(route_id),
+         route_list_orig = map(list(unique(route_id)),sort)) |>
+  group_by(next_stop_id) |>
+  mutate(num_origins = n_distinct(stop_id),
+         orig_list = list(unique(stop_id)),
+         num_routes_dest = n_distinct(route_id),
+         route_list_dest= map(list(unique(route_id)),sort)) |>
+  ungroup() |>
+  filter(stop_id %in% orig_stops_routes$stop_id,
+         next_stop_id %in% dest_stops_routes$next_stop_id) |>
+  mutate(routes_intersect = map2(route_list_orig, route_list_dest, intersect),
+         num_routes_intersect = map_dbl(routes_intersect, length)) |>
+  filter(num_routes_intersect > 1) |>
+  select(-route_id) |>
+  distinct()
 
 express_stations <-
   express_stations_full |>
@@ -177,7 +186,7 @@ ggplot() +
           size = 2, color = "black") +
   theme_void() +
   labs(title = "NYC Subway System",
-       subtitle = "Weekdays 9am-10am") +
+       subtitle = "Weekdays 8am-12pm") +
   scale_color_identity()
 ```
 
@@ -191,7 +200,7 @@ travel_times <- mta$stop_times |>
                select(trip_id,route_id, service_id, direction_id)) |>
   filter(service_id == "Weekday",
          # some extra time to get a larger sample of times
-         arrival_time >= hms("09:00:00") & arrival_time <= hms("12:00:00") 
+         arrival_time >= hms("08:00:00") & arrival_time <= hms("12:00:00") 
          ) |>
   group_by(trip_id) |>
   filter(any(stop_sequence == 1)) |>
@@ -199,59 +208,48 @@ travel_times <- mta$stop_times |>
          station_time = arrival_time - start_time) |> 
   group_by(route_id, direction_id, stop_id) |>
   summarize(avg_station_time = mean(station_time),
-            num_trips = n()) 
-
-# GOOD THROUGH HERE
-  # then filter the express stops
-express_travel_times <- travel_times |>
-  filter(stop_id %in% express_stations_full$stop_id) |>
-  inner_join(mta$stops) |>
+            num_trips = n()) |>
   mutate(direction_letter = str_sub(stop_id,-1,-1)) |>
-  ungroup()
+  inner_join(mta$stops)
 ```
 
 Get the station descriptions we need
 ```{r}
-station_desc <- express_travel_times |>
-  select(stop_id, route_id, direction_letter, stop_name) |>
-  group_by(stop_name, stop_id,direction_letter) |>
-  summarize(route_string = list(unique(route_id))) |>
+station_desc <- express_stations_full |>
   ungroup() |>
-  mutate(route_string = map(route_string, sort)) |>
+  mutate(direction_letter = str_sub(stop_id,-1,-1)) |>
+  select(stop_id, direction_letter, stop_name_orig, routes_intersect) |>
+  mutate(routes_intersect = map(routes_intersect, sort)) |>
   rowwise() |>
-  mutate(route_string = str_c(route_string,collapse = "/")) |>
+  mutate(routes_intersect = str_c(routes_intersect,collapse = "/")) |>
   distinct()
 ```
 
 Now, join each express travel time to every other stop with the same route and direction
 ```{r}
-travel_time_grid <- express_travel_times |>
+travel_time_grid <- travel_times |>
   select(route_id, direction_letter, stop_id, stop_name, avg_station_time) |>
-  full_join(express_travel_times |>
-              select(route_id, direction_letter, stop_id, stop_name, avg_station_time),
+  full_join(travel_times |>
+              select(route_id, direction_letter, stop_id, stop_name, avg_station_time) ,
             by = c("route_id", "direction_letter"),
             relationship = "many-to-many",
             suffix = c("_orig","_dest")) |>
   filter(avg_station_time_dest > avg_station_time_orig) |>
-  inner_join(station_desc |> 
-               select(stop_id, route_string),
-             by = c("stop_id_orig" = "stop_id"),
-             suffix = c("","_orig")) |>
-  inner_join(station_desc |> 
-               select(stop_id, route_string),
-             by = c("stop_id_dest" = "stop_id"),
-             suffix = c("","_dest")) |>
-  mutate(lag_time = hms::hms(as.numeric(avg_station_time_dest - avg_station_time_orig)),
-         full_name_orig = str_c(stop_name_orig," ", route_string),
-         full_name_dest = str_c(stop_name_dest," ", route_string_dest)) |>
-  filter(str_length(route_string) > 1,
-         str_length(route_string_dest) > 1)
+  filter(stop_id_orig %in% express_stations_full$stop_id,
+         stop_id_dest %in% express_stations_full$next_stop_id) |>
+  mutate(lag_time = hms::hms(as.numeric(avg_station_time_dest - avg_station_time_orig))) |>
+  group_by(stop_id_orig,stop_id_dest) |>
+  mutate(route_list = list(unique(route_id)), # this is not working quite right...
+         route_list = map_chr(route_list, \(x) str_c(sort(x),collapse = "/")),
+         full_name_orig = str_c(stop_name_orig," ",route_list)) |>
+  filter(str_length(route_list) > 1)
+
 ```
 
 
 Need origin, destination, direction. get the lines. 
 ```{r}
-orig <- "137N"
+orig <- "132N"
 dest <- "123N"
 
 travel_time_grid |>
@@ -262,23 +260,22 @@ travel_time_grid |>
 ```
 
 ```{r}
-
 origin_station_list <- travel_time_grid |>
-  pull(full_name_orig) |> 
+  pull(stop_name_orig) |> 
   unique()
 
-orig <- "Atlantic Av-Barclays Ctr D/N/R/W"
+orig <- "Atlantic Av-Barclays Ctr"
 
 dest_station_list <- travel_time_grid |>
-  filter(full_name_orig == orig) |>
-  pull(full_name_dest) |>
+  filter(stop_name_orig == orig) |>
+  pull(stop_name_dest) |>
   unique()
 
-dest <- "36 St D/N/R/W"
+dest <- "59 St"
 
 travel_time_grid |>
-  filter(full_name_orig == orig,
-         full_name_dest == dest) |>
+  filter(stop_name_orig == orig,
+         stop_name_dest == dest) |>
   select(route_id, direction_letter, lag_time)
 ```
 
@@ -292,6 +289,7 @@ library(bslib)
 ui <- page_sidebar(
   sidebar = sidebar(open = "open",
     uiOutput("orig_select"),
+    uiOutput("train_select"),
     uiOutput("dest_select")
   ),
   card(tableOutput("table"))
@@ -300,7 +298,7 @@ ui <- page_sidebar(
 server <- function(input, output, session) {
   output$orig_select <- renderUI({
     origin_station_list <- travel_time_grid |>
-      pull(full_name_orig) |> 
+      pull(stop_name_orig) |> 
       unique() |>
       sort()
     
@@ -308,10 +306,26 @@ server <- function(input, output, session) {
                 choices = origin_station_list)
   })
   
+  output$train_select <- renderUI({
+    req(input$orig_select_input)
+    
+    train_options <- travel_time_grid |>
+      filter(stop_name_orig == input$orig_select_input) |>
+      pull(route_list) |>
+      unique() |>
+      sort() 
+    
+    selectInput("train_select_input","Select trains",
+                choices = train_options)
+  })
+  
   output$dest_select <- renderUI({
+    req(input$orig_select_input, input$train_select_input)
+    
     dest_station_list <- travel_time_grid |>
-      filter(full_name_orig == input$orig_select_input) |>
-      pull(full_name_dest) |>
+      filter(stop_name_orig == input$orig_select_input,
+             route_list == input$train_select_input) |>
+      pull(stop_name_dest) |>
       unique() |>
       sort()
     
@@ -320,9 +334,12 @@ server <- function(input, output, session) {
   })
   
   output$table <- renderTable({
+    req(input$orig_select_input, input$dest_select_input)
     travel_time_grid |>
-      filter(full_name_orig == input$orig_select_input,
-             full_name_dest == input$dest_select_input,) |>
+      ungroup() |>
+      filter(stop_name_orig == input$orig_select_input,
+             route_list == input$train_select_input,
+             stop_name_dest == input$dest_select_input,) |>
       select(route_id, direction_letter, lag_time) |>
       mutate(lag_time_minutes = as.numeric(lag_time)/60) |>
       select(-lag_time)
