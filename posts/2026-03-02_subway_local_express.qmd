@@ -1,0 +1,342 @@
+---
+title: "Should You Wait? Solving a Niche NYC Problem"
+format: html
+author: "Ravi Brenner"
+date: "2026-03-02"
+categories: [projects]
+execute: 
+  warning: false
+  message: false
+format:
+  html:
+    resources: 
+      - shinylive-sw.js
+draft: true
+---
+
+Here is a common problem I face: I live near a subway stop in New York City that has both express and local trains. If they arrive at the same time, it's much faster to take the express train, which stops less frequently, than the local train, which makes every single stop.
+
+The Metropolitan Transit Authority (MTA) helpfully displays the estimated time until the next train arrives at the station. Sometimes, I am trying to get from my stop at 96th Street to 34th Street. The local #1 train is waiting at the platform, about to leave, and the express #3 train is 3 minutes away. Should I wait?
+
+Fortunately, the MTA [publishes some data](https://www.mta.info/developers) that can help with this. Their exact transit schedule is published and available as a [GTFS (General Transit Feed Specification)](https://gtfs.org/) feed. Basically, this is an easily accessible set of data tables that specifies the normal operating schedule of the entire NYC transit system. 
+
+So I figured I would solve my problem once and for all. Should you wait for the express train or just get on the local? Of course it depends on your start and end points. I also am assuming that everything is operating as normal, so I will not be taking into account construction or real-time delays. Finally, I am restricting this analysis to express stops where there are two possible trains. Of course in real life you might have a more complicated route, and it could even pay to switch on and off the express train between local endpoints if the timing is right. But ultimately it boils down to whether the fastest route between two express stations involves waiting for an express train, or taking a sooner-to-arrive local train.
+
+I will be walking through the R code I used to do this. If you just want answers, skip down below. 
+
+# Getting the data
+
+Getting the data from MTA is fairly straightforward using the [tidytransit](https://r-transit.github.io/tidytransit/) R package.
+
+```{r}
+library(tidyverse)
+library(tidytransit)
+library(gtfsrouter)
+library(sf)
+library(ggspatial)
+
+mta <- read_gtfs("https://rrgtfsfeeds.s3.amazonaws.com/gtfs_subway.zip")
+```
+
+The MTA subway data is a list of tables, containing various data on all the train routes and stops.
+
+```{r}
+names(mta)
+```
+
+The first thing we need to do is identify which stops are express stops. This can be quite complicated, especially since sometimes express trains run at specific times of day, and routes can change on the weekend. To start, let's find, for each subway stop, what the next stop is for that trip. We will also filter for weekday, morning (9am-12pm) services.
+
+```{r}
+adjacent_stops <- 
+  # Get weekday trips
+  mta$trips |>
+  filter(service_id == "Weekday") |>
+  # Join with the stop times for these trips
+  inner_join(mta$stop_times, by = join_by("trip_id")) |>
+  filter(arrival_time >= hms("08:00:00") & arrival_time <= hms("09:00:00")) |>
+  # For each trip, get the stops and stop sequence
+  select(route_id,trip_id, stop_id, stop_sequence) |>
+  group_by(trip_id) |>
+  arrange(stop_sequence) |>
+  mutate(next_stop_id = lead(stop_id)) |>
+  filter(!is.na(next_stop_id)) |>
+  distinct(route_id,stop_id, next_stop_id)
+```
+
+We now have a table of adjacent weekday stops, forming the subway network. What does this look like? We can join these adjacent stops with the `stops` table to get their geographic locations, and then map it.
+
+```{r}
+# Get the lattitude and longitude for each stop
+adj_stops_loc <- adjacent_stops |>
+  inner_join(mta$stops, by = join_by("stop_id" == "stop_id")) |>
+  inner_join(mta$stops, by = join_by("next_stop_id" == "stop_id"),
+             suffix = c("_orig","_dest")) |>
+  # add the route color
+  inner_join(mta$routes |>
+               select(route_id, route_color), by = "route_id") |>
+  mutate(route_color = str_c("#",route_color))
+
+# Turn the origin-destination pairs into lines
+network_lines <- adj_stops_loc |>
+  ungroup() |>
+  select(-trip_id) |>
+  distinct() |>
+  rowwise() |>
+  mutate(geometry = st_sfc(
+    st_linestring(
+      matrix(c(
+        stop_lon_orig, stop_lat_orig,
+        stop_lon_dest, stop_lat_dest
+      ), ncol = 2, byrow = TRUE)), 
+    crs = 4326)) |>
+  st_as_sf()
+
+# Create a separate object for the stops (points)
+network_points <- mta$stops |>
+  st_as_sf(coords = c("stop_lon", "stop_lat"), crs = 4326)
+
+ggplot() +
+  annotation_map_tile("cartolight",zoom = 11) +
+  # Draw the subway lines
+  geom_sf(data = network_lines, 
+          aes(color = route_color),
+          size = 0.5, alpha = 0.7) +
+  # Draw the stations
+  geom_sf(data = network_points, size = 0.2, color = "black") +
+  theme_void() +
+  labs(title = "NYC Subway System",
+       subtitle = "Weekdays 9am-12pm") +
+  scale_color_identity()
+```
+
+Great! We have successfully generated a map that looks a  lot like the [NYC subway map](https://www.mta.info/map/5256). It's not an exact match, but its close.
+
+Next, we can identify express stops. An express stop should have several characteristics:
+
+- The origin station should have multiple destinations (a local and an express destination)
+
+- There should be multiple routes that stop at the station (so that you could have the option to choose)
+
+- There should be at least 2 trains at the origin station that are also at the destination station. We can do this by looking at the intersection of the routes that stop at each origin-destination station pair.
+
+```{r}
+stop_route_dests <- adj_stops_loc |>
+  group_by(stop_id) |>
+  summarize(num_destinations = n_distinct(next_stop_id),
+            dest_list = list(unique(next_stop_id)),
+            num_routes = n_distinct(route_id),
+            route_list = list(unique(route_id))) 
+
+prelim_express <- stop_route_dests |>
+  filter(num_destinations > 1 & num_routes > 1) |>
+  inner_join(mta$stops) 
+
+express_stations_full <- prelim_express |>
+  unnest(dest_list) |>
+  inner_join(
+    adj_stops_loc |>
+      group_by(stop_id) |>
+      summarize(num_routes = n_distinct(route_id),
+                route_list = list(unique(route_id))),
+    by = c("dest_list" = "stop_id"),
+    suffix = c("_orig","_dest")) |>
+  inner_join(mta$stops) |>
+  mutate(stops_intersect = map2(route_list_orig, route_list_dest,intersect),
+         num_intersect_stops = map(stops_intersect,length)) |>
+  filter(num_intersect_stops > 1) 
+
+express_stations_full <- adj_stops_loc |>
+  group_by(stop_id, next_stop_id, 
+           parent_station_orig,parent_station_dest,
+           stop_name_orig,stop_name_dest) |>
+  summarize(num_trips = n()) |>
+  inner_join(stop_route_dests,
+             by = c("stop_id" = "stop_id")) |>
+  inner_join(stop_route_dests,
+             by = c("next_stop_id" = "stop_id"),
+             suffix = c("_orig","_dest")) |>
+  mutate(routes_intersect = map2(route_list_orig, route_list_dest,intersect),
+         num_intersect_routes = map_dbl(routes_intersect,length))  |>
+  filter(num_intersect_routes > 1,
+         num_destinations_orig > 1) 
+
+temp |>
+  filter(parent_station_dest %in% temp$parent_station_orig) |>  view()
+
+express_stations <-
+  express_stations_full |>
+  select(parent_station) |>
+  distinct()
+```
+
+Now that we have our express stations we can take a quick look at them on a map again
+
+```{r}
+# Create a separate object for the stops (points)
+express_points <- express_stations_full |>
+  st_as_sf(coords = c("stop_lon", "stop_lat"), crs = 4326)
+
+ggplot() +
+  annotation_map_tile("cartolight",zoom = 11) +
+  # Draw the subway lines
+  geom_sf(data = network_lines, 
+          aes(color = route_color),
+          size = 0.5, alpha = 0.7) +
+  # Draw the stations
+  geom_sf(data = express_points,
+          size = 2, color = "black") +
+  theme_void() +
+  labs(title = "NYC Subway System",
+       subtitle = "Weekdays 9am-10am") +
+  scale_color_identity()
+```
+
+Now bad! This probably isn't a perfect list of express stops, but I think it's a pretty good list. I tried to verify it manually by referring to the real subway map, although I may have accidentally included some stops or missed others.
+
+Finally, we can calculate a time between stations on the same lines. 
+```{r}
+# First get the general arrival times of stations relative to the origin stop
+express_travel_times <- mta$stop_times |>
+  inner_join(mta$trips |>
+               select(trip_id,route_id, service_id, direction_id)) |>
+  filter(service_id == "Weekday",
+         # some extra time to get a larger sample of times
+         arrival_time >= hms("09:00:00") & arrival_time <= hms("12:00:00") 
+         ) |>
+  group_by(trip_id) |>
+  filter(any(stop_sequence == 1)) |>
+  mutate(start_time = min(departure_time),
+         station_time = arrival_time - start_time) |> 
+  group_by(route_id, direction_id, stop_id) |>
+  summarize(avg_station_time = mean(station_time),
+            num_trips = n()) |>
+  # then filter the express stops
+  filter(str_sub(stop_id,1,-2) %in% express_stations$parent_station) |>
+  inner_join(mta$stops) |>
+  mutate(direction_letter = str_sub(stop_id,-1,-1)) |>
+  ungroup()
+```
+
+Get the station descriptions we need
+```{r}
+station_desc <- express_travel_times |>
+  select(stop_id, route_id, direction_letter, stop_name) |>
+  group_by(stop_name, stop_id,direction_letter) |>
+  summarize(route_string = list(unique(route_id))) |>
+  ungroup() |>
+  mutate(route_string = map(route_string, sort)) |>
+  rowwise() |>
+  mutate(route_string = str_c(route_string,collapse = "/")) |>
+  distinct()
+```
+
+Now, join each express travel time to every other stop with the same route and direction
+```{r}
+travel_time_grid <- express_travel_times |>
+  select(route_id, direction_letter, stop_id, stop_name, avg_station_time) |>
+  full_join(express_travel_times |>
+              select(route_id, direction_letter, stop_id, stop_name, avg_station_time),
+            by = c("route_id", "direction_letter"),
+            relationship = "many-to-many",
+            suffix = c("_orig","_dest")) |>
+  filter(avg_station_time_dest > avg_station_time_orig) |>
+  inner_join(station_desc |> 
+               select(stop_id, route_string),
+             by = c("stop_id_orig" = "stop_id"),
+             suffix = c("","_orig")) |>
+  inner_join(station_desc |> 
+               select(stop_id, route_string),
+             by = c("stop_id_dest" = "stop_id"),
+             suffix = c("","_dest")) |>
+  mutate(lag_time = hms::hms(as.numeric(avg_station_time_dest - avg_station_time_orig)),
+         full_name_orig = str_c(stop_name_orig," ", route_string),
+         full_name_dest = str_c(stop_name_dest," ", route_string_dest)) |>
+  filter(str_length(route_string) > 1,
+         str_length(route_string_dest) > 1)
+```
+
+
+Need origin, destination, direction. get the lines. 
+```{r}
+orig <- "621S"
+dest <- "640S"
+
+travel_time_grid |>
+  filter(stop_id_orig == orig,
+         stop_id_dest == dest) |>
+  select(route_id, lag_time)
+
+```
+
+```{r}
+
+origin_station_list <- travel_time_grid |>
+  pull(full_name_orig) |> 
+  unique()
+
+orig <- "Atlantic Av-Barclays Ctr D/N/R/W"
+
+dest_station_list <- travel_time_grid |>
+  filter(full_name_orig == orig) |>
+  pull(full_name_dest) |>
+  unique()
+
+dest <- "59 St D/N/R/W"
+
+travel_time_grid |>
+  filter(full_name_orig == orig,
+         full_name_dest == dest) |>
+  select(route_id, direction_letter, lag_time)
+```
+
+```{shinylive-r}
+#| standalone: true
+#| viewerHeight: 600
+
+library(shiny)
+library(bslib)
+
+ui <- page_sidebar(
+  sidebar = sidebar(open = "open",
+    uiOutput("orig_select"),
+    uiOutput("dest_select")
+  ),
+  card(tableOutput("table"))
+)
+
+server <- function(input, output, session) {
+  output$orig_select <- renderUI({
+    origin_station_list <- travel_time_grid |>
+      pull(full_name_orig) |> 
+      unique()
+    
+    selectInput("orig_select_input","Select Origin",
+                choices = origin_station_list)
+  })
+  
+  output$dest_select <- renderUI({
+    dest_station_list <- travel_time_grid |>
+      filter(full_name_orig == input$orig_select_input) |>
+      pull(full_name_dest) |>
+      unique()
+    
+    selectInput("dest_select_input","Select Destination",
+                choices = dest_station_list)
+  })
+  
+  output$table <- renderTable({
+    travel_time_grid |>
+      filter(full_name_orig == input$orig_select_input,
+             full_name_dest == input$dest_select_input,) |>
+      select(route_id, direction_letter, lag_time) |>
+      mutate(lag_time_minutes = as.numeric(lag_time)/60) |>
+      select(-lag_time)
+  })
+}
+
+shinyApp(ui = ui, server = server)
+```
+
+
+
+# Should you wait?
