@@ -127,25 +127,7 @@ stop_route_dests <- adj_stops_loc |>
             num_routes = n_distinct(route_id),
             route_list = list(unique(route_id))) 
 
-prelim_express <- stop_route_dests |>
-  filter(num_destinations > 1 & num_routes > 1) |>
-  inner_join(mta$stops) 
-
-express_stations_full <- prelim_express |>
-  unnest(dest_list) |>
-  inner_join(
-    adj_stops_loc |>
-      group_by(stop_id) |>
-      summarize(num_routes = n_distinct(route_id),
-                route_list = list(unique(route_id))),
-    by = c("dest_list" = "stop_id"),
-    suffix = c("_orig","_dest")) |>
-  inner_join(mta$stops) |>
-  mutate(stops_intersect = map2(route_list_orig, route_list_dest,intersect),
-         num_intersect_stops = map(stops_intersect,length)) |>
-  filter(num_intersect_stops > 1) 
-
-express_stations_full <- adj_stops_loc |>
+temp <- adj_stops_loc |>
   group_by(stop_id, next_stop_id, 
            parent_station_orig,parent_station_dest,
            stop_name_orig,stop_name_dest) |>
@@ -160,12 +142,20 @@ express_stations_full <- adj_stops_loc |>
   filter(num_intersect_routes > 1,
          num_destinations_orig > 1) 
 
-temp |>
-  filter(parent_station_dest %in% temp$parent_station_orig) |>  view()
+express_stations_full <- temp |>
+  mutate(removal_candidate = 
+           if_else(parent_station_dest %in% temp$parent_station_orig,0,1),
+         mismatch_route_num = if_else(num_routes_dest != num_routes_orig,1,0),
+         remove = if_else(removal_candidate == 1 & mismatch_route_num == 1,1,0)) |>
+  filter(remove == 0) |>
+  select(stop_name_orig, stop_name_dest,routes_intersect)  |>
+  inner_join(mta$stops,
+             by = "stop_id")
 
 express_stations <-
   express_stations_full |>
-  select(parent_station) |>
+  ungroup() |>
+  select(parent_station_orig) |>
   distinct()
 ```
 
@@ -196,7 +186,7 @@ Now bad! This probably isn't a perfect list of express stops, but I think it's a
 Finally, we can calculate a time between stations on the same lines. 
 ```{r}
 # First get the general arrival times of stations relative to the origin stop
-express_travel_times <- mta$stop_times |>
+travel_times <- mta$stop_times |>
   inner_join(mta$trips |>
                select(trip_id,route_id, service_id, direction_id)) |>
   filter(service_id == "Weekday",
@@ -209,9 +199,12 @@ express_travel_times <- mta$stop_times |>
          station_time = arrival_time - start_time) |> 
   group_by(route_id, direction_id, stop_id) |>
   summarize(avg_station_time = mean(station_time),
-            num_trips = n()) |>
+            num_trips = n()) 
+
+# GOOD THROUGH HERE
   # then filter the express stops
-  filter(str_sub(stop_id,1,-2) %in% express_stations$parent_station) |>
+express_travel_times <- travel_times |>
+  filter(stop_id %in% express_stations_full$stop_id) |>
   inner_join(mta$stops) |>
   mutate(direction_letter = str_sub(stop_id,-1,-1)) |>
   ungroup()
@@ -258,8 +251,8 @@ travel_time_grid <- express_travel_times |>
 
 Need origin, destination, direction. get the lines. 
 ```{r}
-orig <- "621S"
-dest <- "640S"
+orig <- "137N"
+dest <- "123N"
 
 travel_time_grid |>
   filter(stop_id_orig == orig,
@@ -281,7 +274,7 @@ dest_station_list <- travel_time_grid |>
   pull(full_name_dest) |>
   unique()
 
-dest <- "59 St D/N/R/W"
+dest <- "36 St D/N/R/W"
 
 travel_time_grid |>
   filter(full_name_orig == orig,
@@ -308,7 +301,8 @@ server <- function(input, output, session) {
   output$orig_select <- renderUI({
     origin_station_list <- travel_time_grid |>
       pull(full_name_orig) |> 
-      unique()
+      unique() |>
+      sort()
     
     selectInput("orig_select_input","Select Origin",
                 choices = origin_station_list)
@@ -318,7 +312,8 @@ server <- function(input, output, session) {
     dest_station_list <- travel_time_grid |>
       filter(full_name_orig == input$orig_select_input) |>
       pull(full_name_dest) |>
-      unique()
+      unique() |>
+      sort()
     
     selectInput("dest_select_input","Select Destination",
                 choices = dest_station_list)
