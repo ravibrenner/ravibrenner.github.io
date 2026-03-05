@@ -213,22 +213,11 @@ travel_times <- mta$stop_times |>
   inner_join(mta$stops)
 ```
 
-Get the station descriptions we need
-```{r}
-station_desc <- express_stations_full |>
-  ungroup() |>
-  mutate(direction_letter = str_sub(stop_id,-1,-1)) |>
-  select(stop_id, direction_letter, stop_name_orig, routes_intersect) |>
-  mutate(routes_intersect = map(routes_intersect, sort)) |>
-  rowwise() |>
-  mutate(routes_intersect = str_c(routes_intersect,collapse = "/")) |>
-  distinct()
-```
 
 Now, join each express travel time to every other stop with the same route and direction
 ```{r}
 travel_time_grid <- travel_times |>
-  select(route_id, direction_letter, stop_id, stop_name, avg_station_time) |>
+  select(route_id, direction_letter, stop_id, stop_name, avg_station_time, num_trips) |>
   full_join(travel_times |>
               select(route_id, direction_letter, stop_id, stop_name, avg_station_time) ,
             by = c("route_id", "direction_letter"),
@@ -242,8 +231,8 @@ travel_time_grid <- travel_times |>
   mutate(route_list = list(unique(route_id)), # this is not working quite right...
          route_list = map_chr(route_list, \(x) str_c(sort(x),collapse = "/")),
          full_name_orig = str_c(stop_name_orig," ",route_list)) |>
-  filter(str_length(route_list) > 1)
-
+  filter(str_length(route_list) > 1,
+         num_trips > 3)
 ```
 
 
