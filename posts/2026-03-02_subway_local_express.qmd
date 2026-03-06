@@ -173,7 +173,7 @@ Now that we have our express stations we can take a quick look at them on a map 
 ```{r}
 # Create a separate object for the stops (points)
 express_points <- express_stations_full |>
-  st_as_sf(coords = c("stop_lon", "stop_lat"), crs = 4326)
+  st_as_sf(coords = c("stop_lon_orig", "stop_lat_orig"), crs = 4326)
 
 ggplot() +
   annotation_map_tile("cartolight",zoom = 11) +
@@ -228,11 +228,11 @@ travel_time_grid <- travel_times |>
          stop_id_dest %in% express_stations_full$next_stop_id) |>
   mutate(lag_time = hms::hms(as.numeric(avg_station_time_dest - avg_station_time_orig))) |>
   group_by(stop_id_orig,stop_id_dest) |>
+  filter(num_trips > 3) |>
   mutate(route_list = list(unique(route_id)), # this is not working quite right...
          route_list = map_chr(route_list, \(x) str_c(sort(x),collapse = "/")),
          full_name_orig = str_c(stop_name_orig," ",route_list)) |>
-  filter(str_length(route_list) > 1,
-         num_trips > 3)
+  filter(str_length(route_list) > 1)
 ```
 
 
