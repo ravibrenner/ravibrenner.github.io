@@ -268,15 +268,24 @@ travel_time_grid <- travel_times |>
                             abs(lag_time - lead(lag_time)) < hms("00:00:59") ~ 0,
                           .default = 1
                           ))
+
+write_csv(travel_time_grid,"travel_time_grid.csv")
+
 ```
 
+# Should you wait?
 ```{shinylive-r}
 #| standalone: true
 #| viewerHeight: 600
+#| resources: 
+#|   - travel_time_grid.csv
 
 library(shiny)
 library(bslib)
 library(dplyr)
+library(ggplot2)
+
+travel_time_grid <- readr::read_csv("travel_time_grid.csv")
 
 ui <- page_sidebar(
   sidebar = sidebar(open = "open",
@@ -284,7 +293,8 @@ ui <- page_sidebar(
     uiOutput("train_select"),
     uiOutput("dest_select")
   ),
-  card(plotOutput("plot"))
+  card(plotOutput("plot"),
+       max_height = "400px")
 )
 
 server <- function(input, output, session) {
@@ -336,23 +346,27 @@ server <- function(input, output, session) {
       select(route_id, direction_letter, lag_time, route_color) |>
       arrange(lag_time) |>
       mutate(wait_time = last(lag_time) - lag_time) |>
-      mutate(wait_time_minutes = round(as.numeric(wait_time)/60))  |>
-      select(-lag_time,-wait_time)
+      mutate(wait_time_minutes = round(as.numeric(wait_time)/60),
+             wait_time_minutes = case_when(wait_time_minutes == 0 ~ "If this local train is at the station...",
+                                           .default = paste0("Wait no more than ", wait_time_minutes," minutes"))) 
     
     df |>
-      ggplot(aes(x = 1, y = reorder(route_id, -wait_time_minutes))) +
+      ggplot(aes(x = 1, y = reorder(route_id, -wait_time))) +
       geom_point(aes(color = I(route_color)), size = 30) +
       geom_text(aes(label = route_id),
                 color = "white", 
                 fontface = "bold", size = 15) +
-      geom_text(aes(x = 2, label = paste(wait_time_minutes, "min")), 
-                hjust = 0, size = 12, fontface = "bold", family = "sans") +
-      scale_x_continuous(limits = c(1, 2)) +
-      theme_void() 
+      geom_text(aes(x = 1.7, label = wait_time_minutes), 
+                hjust = 1, size = 5, fontface = "bold", family = "sans") +
+      scale_x_continuous(limits = c(0.8, 2)) +
+      theme_void()
   })
 }
 
 shinyApp(ui = ui, server = server)
+
+## file: travel_time_grid.csv
+{{< include travel_time_grid.csv >}}
 ```
 
-# Should you wait?
+# Reflection
