@@ -10,7 +10,6 @@ format:
   html:
     resources: 
       - shinylive-sw.js
-drafts: true
 ---
 
 Here is a common problem I face: I live near a subway stop in New York City that has both express and local trains. If they arrive at the same time, it's much faster to take the express train, which stops less frequently, than the local train, which makes every single stop.
@@ -232,48 +231,148 @@ Now, join each express travel time to every other stop with the same route and d
 ```{r}
 travel_time_grid <- travel_times |>
   # Select columns and join to itself so that we get all origin and destination pairs
-  select(route_id, direction_letter, stop_id, stop_name, avg_station_time, num_trips) |>
-  full_join(travel_times |>
-              select(route_id, direction_letter, stop_id, stop_name, avg_station_time) ,
-            by = c("route_id", "direction_letter"),
-            relationship = "many-to-many",
-            suffix = c("_orig","_dest")) |>
+  select(
+    route_id,
+    direction_letter,
+    stop_id,
+    stop_name,
+    avg_station_time,
+    num_trips
+  ) |>
+  full_join(
+    travel_times |>
+      select(route_id, direction_letter, stop_id, stop_name, avg_station_time),
+    by = c("route_id", "direction_letter"),
+    relationship = "many-to-many",
+    suffix = c("_orig", "_dest")
+  ) |>
   # make sure destination is after origin
   filter(avg_station_time_dest > avg_station_time_orig) |>
-    # filter so that we only get express stops
-  filter(stop_id_orig %in% express_stations_full$stop_id,
-         stop_id_dest %in% express_stations_full$next_stop_id) |>
+  # filter so that we only get express stops
+  filter(
+    stop_id_orig %in% express_stations_full$stop_id,
+    stop_id_dest %in% express_stations_full$next_stop_id
+  ) |>
   # calculate lag times
-  mutate(lag_time = hms::hms(as.numeric(avg_station_time_dest - avg_station_time_orig))) |>
-  group_by(stop_id_orig,stop_id_dest) |>
+  mutate(
+    lag_time = hms::hms(as.numeric(
+      avg_station_time_dest - avg_station_time_orig
+    ))
+  ) |>
+  group_by(stop_id_orig, stop_id_dest) |>
   # enforce minimum number of trips for quality
   filter(num_trips > 3) |>
   # some better route list formatting
-  mutate(route_list = list(unique(route_id)),
-         route_list = map_chr(route_list, \(x) str_c(sort(x),collapse = "/")),
-         full_name_orig = str_c(stop_name_orig," ",route_list)) |>
+  mutate(
+    route_list = list(unique(route_id)),
+    route_list = map_chr(route_list, \(x) str_c(sort(x), collapse = "/")),
+    full_name_orig = str_c(stop_name_orig, " ", route_list)
+  ) |>
   # ensure that there is >1 route stopping
   filter(str_length(route_list) > 1) |>
   # get route colors
-  inner_join(mta$routes |>
+  inner_join(
+    mta$routes |>
+      select(route_id, route_color),
+    by = "route_id"
+  ) |>
+  mutate(route_color = str_c("#", route_color)) |>
+  ungroup() |>
+  # cut stops where the absolute time difference is less than a minute and there are only 2 trains
+  mutate(
+    .by = c(stop_id_orig, stop_id_dest, route_list),
+    keep = case_when(
+      str_length(route_list) == 3 &
+        abs(lag_time - lag(lag_time)) < hms("00:00:59") ~ 0,
+      str_length(route_list) == 3 &
+        abs(lag_time - lead(lag_time)) < hms("00:00:59") ~ 0,
+      .default = 1
+    )
+  ) |>
+  group_by(stop_name_orig, route_list, stop_name_dest) |>
+  arrange(lag_time) |>
+  mutate(wait_time = round(as.numeric(last(lag_time) - lag_time) / 60)) |>
+  filter(any(wait_time > 0))
+
+write_csv(travel_time_grid, "travel_time_grid.csv")
+```
+
+Finally, can we visualize these results at all? To keep things simple, we will focus on a single train line and group of stops, the 1/2/3 going southbound.
+
+```{r}
+travel_times |>
+   inner_join(mta$routes |>
                select(route_id, route_color),
              by = "route_id") |>
   mutate(route_color = str_c("#",route_color)) |>
   ungroup() |>
-  # cut stops where the absolute time difference is less than a minute and there are only 2 trains
-  mutate(.by = c(stop_id_orig,stop_id_dest,route_list),
-         keep = case_when(str_length(route_list) == 3 & 
-                            abs(lag_time - lag(lag_time)) < hms("00:00:59") ~ 0,
-                          str_length(route_list) == 3 & 
-                            abs(lag_time - lead(lag_time)) < hms("00:00:59") ~ 0,
-                          .default = 1
-                          ))
-
-write_csv(travel_time_grid,"travel_time_grid.csv")
-
+  filter(
+    stop_id %in%
+      travel_time_grid$stop_id_orig |
+      stop_id %in% travel_time_grid$stop_id_dest
+  ) |>
+  group_by(stop_id) |>
+  mutate(
+    route_list = list(unique(route_id)),
+    route_list = map_chr(route_list, \(x) str_c(sort(x), collapse = "/"))
+  ) |>
+  filter(direction_letter == "S", route_list == "1/2/3") |>
+  select(route_id, stop_id,direction_letter, route_list, stop_name, avg_station_time,route_color) |>
+  group_by(route_list,route_id) |>
+  arrange(avg_station_time) |>
+  mutate(
+    wait_time = as.numeric(avg_station_time - first(avg_station_time)) / 60
+  ) |> 
+  ungroup() |>
+  ggplot(aes(
+    x = reorder(stop_name, wait_time),
+    y = wait_time,
+    color = I(route_color),
+    shape = route_id,
+    group = route_id
+  )) +
+  geom_point(alpha = 0.5) +
+  geom_line(alpha = 0.5) +
+  labs(x = "Stop",
+  y = "Average time from first stop",
+  shape = "Train line",
+  title = "1/2/3 Trains going south") +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
+You can see that, starting from the northmost station at 96 St, the gap gets wider and wider as you go south. The 2 and 3 trains are both express and are nearly overlapping. If you are traveling between intermediate stations, you would really be interested in the *difference between those gaps*, not the gaps themselves.
+
+Here's another way of looking at the same data:
+
+```{r}
+travel_time_grid |>
+  filter(direction_letter == "S", route_list == "1/2/3") |>
+  mutate(lag_time = as.numeric(lag_time) / 60) |>
+  ggplot(aes(
+    x = reorder(stop_name_orig, -lag_time),
+    y = reorder(stop_name_dest, -lag_time),
+    fill = lag_time,
+    label = str_c(round(lag_time), " min")
+  )) +
+  geom_tile() +
+  geom_text(color = "white") +
+  facet_wrap(~route_id) +
+  theme_minimal() +
+  labs(
+    x = "Origin station",
+    y = "Destination station",
+    title = "Travel times for 1/2/3 Trains going south",
+    fill = "Travel time"
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+You can see here how the travel times between pairs of stations vary. Stating from 72 St and going to 14 St for example, the 1 train takes 12 minutes while the 2 and 3 trains take 8 minutes.
+
 # Should you wait?
+
+I have compiled the data here into a convenient tool so that you can look at a given stop, the train line, and destination, and see how long you should wait for the express. Rather than give you the travel time, the tool simply tells you, if the local train is already at the station, what is the maximum amount of time you should wait for the express train in order to arrive at your destination sooner.
 ```{shinylive-r}
 #| standalone: true
 #| viewerHeight: 600
@@ -342,12 +441,12 @@ server <- function(input, output, session) {
       ungroup() |>
       filter(stop_name_orig == input$orig_select_input,
              route_list == input$train_select_input,
-             stop_name_dest == input$dest_select_input,) |>
+             stop_name_dest == input$dest_select_input) |>
       select(route_id, direction_letter, lag_time, route_color) |>
       arrange(lag_time) |>
       mutate(wait_time = last(lag_time) - lag_time) |>
       mutate(wait_time_minutes = round(as.numeric(wait_time)/60),
-             wait_time_minutes = case_when(wait_time_minutes == 0 ~ "If this local train is at the station...",
+             wait_time_minutes = case_when(wait_time_minutes == 0 ~ "If this train is at the station...",
                                            .default = paste0("Wait no more than ", wait_time_minutes," minutes"))) 
     
     df |>
@@ -369,4 +468,12 @@ shinyApp(ui = ui, server = server)
 {{< include travel_time_grid.csv >}}
 ```
 
+Note that this does not take into account any more complicated routing, like switching train lines entirely. This also implicitly assumes that, for any truly adjacent stops (like 42 St and 34 St), you should always just take the next arriving train no matter what.
+
 # Reflection
+
+I had the idea for this analysis a while ago, but I was intimidated by the GTFS data format. It is tricky to work with but I've learned a lot by doing so. Kudos to the authors of the [`tidytransit`](https://r-transit.github.io/tidytransit/) package for making it relatively painless.
+
+A major challenge here was just defining what an express station even is. It is not defined clearly in the GTFS specification from what I could tell. Moreover, I could not find any resources on the internet that took any sort of similar approach (if you know of one, please reach out!). Because of that, I found that AI models did a very poor job when I tried to ask them for help. They would give approximate solutions, or suggest fixes that would sort of work for some stations but not others. Being able to think clearly about a problem like that is still important, as AI models will always be somewhat limited by their training data.
+
+I considered using a network analysis approach to solving this problem. The subway system is a network after all: nodes (stations) connected via directed edges (train routes). I think that would be a viable and interesting approach here too. You might need a slightly different definition of an express station, and you would have to make significant use of edge weights/values (for travel times). 
