@@ -356,7 +356,7 @@ travel_time_grid |>
     label = str_c(round(lag_time), " min")
   )) +
   geom_tile() +
-  geom_text(color = "white") +
+  geom_text(color = "white", size =3) +
   facet_wrap(~route_id) +
   theme_minimal() +
   labs(
