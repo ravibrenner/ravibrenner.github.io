@@ -1,0 +1,35 @@
+---
+title: "Learning about embedding matrices using stock prices"
+author: "Ravi Brenner"
+format: html
+engine: jupyter
+---
+
+# 1. Introduction and setup
+
+The goal of this project is to understand a little bit about how deep learning models work, and to learn about embedding matrices. To do this, we will develop a deep learning model to predict daily stock closing prices. We will use a Gated Recurrent Unit (GRU), a type of recurrent neural network (RNN) for sequence data, implemented in PyTorch. We will also explore the embedding matrix that the model learns during training, and see how it captures relationships between different stocks.
+
+## Libraries
+
+```{python}
+#| label: setup
+import numpy as np
+import pandas as pd
+import torch
+import torch.nn as nn
+from torch.utils.data import Dataset, DataLoader
+from sklearn.preprocessing import MinMaxScaler
+import matplotlib.pyplot as plt
+import seaborn as sns
+```
+
+## Data
+
+The data we will use is [DJIA 30 Stock Time Series](https://www.kaggle.com/datasets/szrlee/stock-time-series-20050101-to-20171231) from Kaggle, which contains daily stock prices for the 30 companies in the Dow Jones Industrial Average (DJIA) from January 1, 2005 to December 31, 2017. We will focus on the closing prices of these stocks in 2017.
+
+
+```{python}
+# Load the data
+df = pd.read_csv("all_stocks_2017-01-01_to_2018-01-01.csv")
+df.info()
+```
