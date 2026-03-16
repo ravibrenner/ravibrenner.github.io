@@ -27,8 +27,19 @@ import torch
 import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
 from sklearn.preprocessing import MinMaxScaler
+from sklearn.neighbors import NearestNeighbors
+from sklearn.manifold import TSNE
 import matplotlib.pyplot as plt
 import seaborn as sns
+import random
+
+# for reproducibility
+def set_seed(seed):
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+
+set_seed(42)
 ```
 
 ## Data
@@ -528,8 +539,6 @@ Great, still a bunch of numbers! We'll use a technique called t-SNE to visualize
 
 
 ```{python}
-from sklearn.manifold import TSNE
-
 # Apply t-SNE
 tsne = TSNE(n_components=2, random_state=42)
 tsne_results = tsne.fit_transform(embedding_matrix)
@@ -553,8 +562,6 @@ We could also look at similarity based on K nearest neighbors in the embedding m
 
 
 ```{python}
-from sklearn.neighbors import NearestNeighbors
-
 # We want to find the 5 nearest neighbors, so we set n_neighbors=6 to include the item itself
 nn = NearestNeighbors(n_neighbors=6, metric='cosine')
 nn.fit(embedding_matrix)
