@@ -7,7 +7,13 @@ drafts: true
 engine: jupyter
 ---
 
-# 1. Introduction and setup
+When you send a message to an AI model, how does it "know" what your words "mean"? It should go without saying that it is quite complicated, and the specific layers within a particular large language model (LLM) can vary a bit. I am not an expert on large language models, but I know they are a specific type of neural network. They use an architecture called a transformer and a technique called attention (this super [cool graphic](https://poloclub.github.io/transformer-explainer/) walks through some of the details).
+
+The first step in this kind of neural network is called embedding. An embedding layer or embedding matrix allows the model to convert categorical or text-like inputs into numbers. For example, with an LLM, there may be hundreds of thousands of possible input words. With the embedding layer, the model convert each word to a list of 200 numbers (for example). Each word can then be [compared to another](https://youtu.be/wjZofJX0v4M?t=747&si=4w36iWRWXraYx7rF), so similar words will have similar lists (called vectors) in this high dimensional space.
+
+If you're already feeling lost, don't worry. We are going to learn about embedding matrices using a simpler type of neural network called a recurrent neural network, or RNN. This is used to predict sequences of things, like stock prices over time or words in a sentence, and leverages an embedding layer to help accomplish that. If you're not interested in all the details, skip down to here to take a look at some of the results.
+
+# Introduction and setup
 
 The goal of this project is to understand a little bit about how deep learning models work, and to learn about embedding matrices. To do this, we will develop a deep learning model to predict daily stock closing prices. We will use a Gated Recurrent Unit (GRU), a type of recurrent neural network (RNN) for sequence data, implemented in PyTorch. We will also explore the embedding matrix that the model learns during training, and see how it captures relationships between different stocks.
 
@@ -34,4 +40,475 @@ The data we will use is [DJIA 30 Stock Time Series](https://www.kaggle.com/datas
 # Load the data
 df = pd.read_csv("all_stocks_2017-01-01_to_2018-01-01.csv")
 df.info()
+```
+
+Convert the date column to datetime, and check for missing values.
+
+```{python}
+# Convert the date column to datetime
+df["Date"] = pd.to_datetime(df["Date"])
+
+# Check for missing values
+df.isnull().sum()
+
+# Fill missing values
+# It's safer to sort by ticker and date before filling to prevent data leakage across stocks
+df.sort_values(by=["Name", "Date"], inplace=True)
+df.ffill(inplace=True)
+```
+
+# Data Preparation
+
+Now that we have the data, we can prepare it for the RNN model. First we will visualize the data for one stock. Then we will get the stock tickers do the training and testing splits needed for model training. Finally we will scale the data to make it usable for the model.
+
+## Visualize the data
+
+Look at the data for just a few stocks
+
+```{python}
+plt.clf()
+sns.set_theme(style="whitegrid")
+stocks_to_plot = ["AAPL", "MSFT", "GOOGL"]
+sns.lineplot(x="Date", y="Close", hue = "Name", data=df[df["Name"].isin(stocks_to_plot)])
+plt.title("Stock Prices for AAPL, MSFT, and GOOGL")
+plt.show()
+```
+
+One problem right off the bat is that the prices are on completely different scales. So we will need to scale the data to be able to compare them.
+
+Let's look at some distributions of the features too:
+
+```{python}
+ticker = "GOOGL"
+df_temp = df[df["Name"] == ticker]
+features_to_examine = ["Open", "High", "Low", "Close", "Volume"]
+fig, axes = plt.subplots(len(features_to_examine), 2, figsize=(12, 16))
+fig.suptitle('Original vs. Log-Transformed Distributions', fontsize=16)
+
+for i, feature in enumerate(features_to_examine):
+    # Original Data
+    sns.histplot(df_temp[feature], ax=axes[i, 0], kde=True)
+    axes[i, 0].set_title(f'Original {feature}')
+    
+    # Log-Transformed Data
+    sns.histplot(np.log1p(df_temp[feature]), ax=axes[i, 1], kde=True, color='orange')
+    axes[i, 1].set_title(f'Log-Transformed {feature}')
+
+plt.tight_layout(rect=[0, 0.03, 1, 0.96])
+plt.show()
+```
+
+I would say the log transformation helps with volume, but doesn't make much of a difference for the open/high/low/close featuers.
+
+```{python}
+df["LogVolume"] = np.log1p(df["Volume"])
+```
+
+## Getting Stock tickers
+
+We will simply map each stock ticker to a number. The number is totally arbitrary.
+
+```{python}
+stock_tickers = df["Name"].unique()
+
+ticker_to_int = {ticker: i for i, ticker in enumerate(stock_tickers)}
+df["TickerInt"] = df["Name"].map(ticker_to_int)
+```
+
+## Splitting the data
+
+Splitting the data into training, validation, and testing sets is standard for most machine learning pipelines. We will use the first 70% as training, the next 15% as validation, and the last 15% as testing.
+
+```{python}
+# Split the data into training, validation, and testing sets for each stock
+train_df, val_df, test_df = [], [], []
+for ticker in stock_tickers:
+    ticker_df = df[df["Name"] == ticker]
+
+    n_days = len(ticker_df)
+    train_end = int(n_days*0.7)
+    val_end = int(n_days*0.85)
+
+    train_df.append(ticker_df[:train_end])
+    val_df.append(ticker_df[train_end:val_end])
+    test_df.append(ticker_df[val_end:])
+
+train_df = pd.concat(train_df)
+val_df = pd.concat(val_df)
+test_df = pd.concat(test_df)
+```
+
+## Scaling the data
+
+We will rescale all the numerical values (Open, High, Low, Close, and Volume). This is a critical step. We will perform the scaling *within each stock ticker group* to a range of `(-1, 1)`. This ensures the model learns from the relative price movements of each stock, and the `(-1, 1)` range is generally better for the GRU's internal `tanh` activation functions.
+
+The code below rebuilds the `train_df`, `val_df`, and `test_df` dataframes with the correctly scaled values, keeping the three-dataframe structure intact.
+
+```{python}
+# Dictionary to store a scaler for each stock, needed for inverse transform later
+scalers = {}
+features_to_scale = ["Open", "High", "Low", "Close", "Volume"]
+
+# Create empty lists to hold the scaled dataframes for each split
+scaled_train_list = []
+scaled_val_list = []
+scaled_test_list = []
+
+for ticker in stock_tickers:
+    # We'll use a (-1, 1) range, which is often better for GRU/LSTM models
+    scaler = MinMaxScaler(feature_range=(-1, 1))
+
+    # Isolate the data for the current ticker from each split
+    train_ticker_df = train_df[train_df["Name"] == ticker].copy()
+    val_ticker_df = val_df[val_df["Name"] == ticker].copy()
+    test_ticker_df = test_df[test_df["Name"] == ticker].copy()
+
+    # Fit the scaler ONLY on the training data for this specific stock
+    scaler.fit(train_ticker_df[features_to_scale])
+    scalers[ticker] = scaler # Save the scaler
+
+    # Transform the data for the current ticker across all splits
+    train_ticker_df[features_to_scale] = scaler.transform(train_ticker_df[features_to_scale])
+    val_ticker_df[features_to_scale] = scaler.transform(val_ticker_df[features_to_scale])
+    test_ticker_df[features_to_scale] = scaler.transform(test_ticker_df[features_to_scale])
+
+    # Add the scaled dataframes to our lists
+    scaled_train_list.append(train_ticker_df)
+    scaled_val_list.append(val_ticker_df)
+    scaled_test_list.append(test_ticker_df)
+
+# Recombine the lists of dataframes back into our three main dataframes
+train_df = pd.concat(scaled_train_list)
+val_df = pd.concat(scaled_val_list)
+test_df = pd.concat(scaled_test_list)
+```
+
+Now plot that same data again:
+
+```{python}
+plt.clf()
+sns.set_theme(style="whitegrid")
+stocks_to_plot = ["AAPL", "MSFT", "GOOGL"]
+sns.lineplot(x="Date", y="Close", hue = "Name", data=train_df[train_df["Name"].isin(stocks_to_plot)])
+plt.title("Stock Prices for AAPL, MSFT, and GOOGL")
+plt.show()
+```
+
+You can now more reasonably compare the performance of those stocks, on a one-to-one basis.
+
+## Sequence creation
+
+Now we will create 20 day (about 1 month of trading days) sequences of data for each stock.
+
+```{python}
+def create_sequences(data, sequence_length, feature_cols, ticker_col, target_col):
+    xs, ys, ticker_idx = [], [], []
+    
+    # Group by the stock name to process each individually
+    for _, ticker_df in data.groupby("Name"):
+        features = ticker_df[feature_cols].values
+        target = ticker_df[target_col].values
+        ticker_int = ticker_df[ticker_col].iloc[0]
+
+        # Create sequences for the current stock
+        for i in range(len(features)-sequence_length):
+            xs.append(features[i:(i+sequence_length)])
+            ys.append(target[i+sequence_length])
+            ticker_idx.append(ticker_int)
+    
+    return np.array(xs), np.array(ys), np.array(ticker_idx)
+
+sequence_length = 20
+feature_cols = ["Open", "High", "Low", "Close", "LogVolume"]
+ticker_col = "TickerInt"
+target_col = "Close"
+
+X_train, y_train, train_ticker_idx = create_sequences(train_df, sequence_length, feature_cols, ticker_col, target_col)
+X_val, y_val, val_ticker_idx = create_sequences(val_df, sequence_length, feature_cols, ticker_col, target_col)
+X_test, y_test, test_ticker_idx = create_sequences(test_df, sequence_length, feature_cols, ticker_col, target_col)
+```
+
+Let's quickly understand the dimensions of this data.
+
+```{python}
+print(f"X_train shape: {X_train.shape}")
+print(f"y_train shape: {y_train.shape}")
+print(f"train_ticker_idx shape: {train_ticker_idx.shape}")
+print(f"Unique tickers count: {len(set(train_ticker_idx))}")
+
+```
+
+So the training data has dimension [4805, 20, 5], which means that there are 4805 days, each with 20 preceding window days, and 5 features. Then there are 4805 close prices, all corresponding to a list of 4805 tickers. But that list of tickers is repeptitive; there are 31 tickers in total, as we would expect.
+
+# Data loading with pytorch
+
+Pytorch uses a specialized data architecture. We will first create the `Dataset` and then the `DataLoader`.
+
+```{python}
+class StockDataset(Dataset):
+    def __init__(self, X, y, tickers):
+        self.X = torch.tensor(X, dtype=torch.float32)
+        self.y = torch.tensor(y, dtype=torch.float32)
+        self.tickers = torch.tensor(tickers, dtype=torch.long)
+
+    def __len__(self):
+        return len(self.X)
+
+    def __getitem__(self, idx):
+        return self.X[idx], self.y[idx], self.tickers[idx]
+
+# Create datasets
+train_dataset = StockDataset(X_train, y_train, train_ticker_idx)
+val_dataset = StockDataset(X_val, y_val, val_ticker_idx)
+test_dataset = StockDataset(X_test, y_test, test_ticker_idx)
+
+# Create DataLoaders
+BATCH_SIZE = 64 # A common batch size, can be tuned
+train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True)
+val_loader = DataLoader(val_dataset, batch_size=BATCH_SIZE, shuffle=False)
+test_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE, shuffle=False)
+
+# Let's inspect one batch to see what it looks like
+data_features, data_target, data_ticker = next(iter(train_loader))
+print(f"Feature batch shape: {data_features.size()}")
+print(f"Target batch shape: {data_target.size()}")
+print(f"Ticker batch shape: {data_ticker.size()}")
+
+```
+
+# GRU model setup
+
+The GRU model is a modern RNN setup. I won't get into all the details here, but basically there are special learned parameters for whether the 'cell' should reset or update at any given point. It gives the model some semblance of 'memory' that we would not otherwise have.
+
+```{python}
+class StockGRU(nn.Module):
+    def __init__(self, num_stocks, embedding_dim, input_features, hidden_size, num_layers, dropout_prob=0.0):
+        # Create the model layers
+        super(StockGRU, self).__init__()
+
+        # Embedding layer
+        self.embedding = nn.Embedding(num_embeddings=num_stocks,  embedding_dim=embedding_dim)
+
+        # GRU layer
+        self.gru = nn.GRU(
+            input_size = input_features + embedding_dim,
+            hidden_size = hidden_size,
+            num_layers = num_layers,
+            batch_first = True,
+            dropout = dropout_prob if num_layers > 1 else 0
+        )
+
+        # Map from GRU to a single predicted value
+        self.fc = nn.Linear(hidden_size, 1)
+    
+    def forward(self, x_seq, stock_indices):
+        # Define forward pass
+        
+        # Get embedding vector for each stock. shape (batch_size, embredding_dim)
+        embeddings = self.embedding(stock_indices)
+        
+        # Unsqueeze and repeat the embeddings to match the sequence length of the features
+        seq_len = x_seq.shape[1]
+        embeddings = embeddings.unsqueeze(1).repeat(1, seq_len, 1)
+
+        # Combine with original features. shape (batch_size, seq_len, num_features+embedding_dim)
+        combined_seq = torch.cat((x_seq, embeddings), dim=2)
+
+        # pass to the GRU model. shape (batch_size, seq_len, hidden_size)
+        gru_out, _ = self.gru(combined_seq)
+
+        # Get output from last step. shape (batch_size, hidden_size)
+        last_time_step_out = gru_out[:, -1, :]
+
+        # Get final prediction. shape (batch_size, 1)
+        prediction = self.fc(last_time_step_out)
+
+        return prediction
+```
+
+And now we can actually set up the model with our inputs:
+
+```{python}
+device = torch.device("cpu")
+
+model = StockGRU(num_stocks=len(stock_tickers),
+                 embedding_dim=10,
+                 input_features=len(feature_cols),
+                 hidden_size=64,
+                 num_layers=2,
+                 dropout_prob=0.2).to(device)
+```
+
+# Training the model
+
+Now we will train the model using backpropagation. Note that we have not actually set many values--the model is mostly learning the best parameter values based on the data we are giving it.
+
+
+```{python}
+# Loss function and optimizer
+criterion = nn.MSELoss()
+optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+
+# Training setup
+num_epochs = 50
+best_val_loss = float('inf')
+train_losses = []
+val_losses = []
+
+print("Starting model training...")
+for epoch in range(num_epochs):
+    model.train()
+    train_loss = 0.0
+
+    for features, targets, stock_ids in train_loader:
+        features, targets, stock_ids = features.to(device), targets.to(device), stock_ids.to(device)
+
+        # Zero the gradients to start
+        optimizer.zero_grad()
+
+        # Forward pass
+        outputs = model(features, stock_ids)
+
+        # Ensure target col has same shape as outputs
+        targets = targets.unsqueeze(1)
+
+        # Calculate loss
+        loss = criterion(outputs, targets)
+
+        # Backward pass and optimization
+        loss.backward()
+        optimizer.step()
+
+        train_loss += loss.item()
+
+    epoch_train_loss = train_loss / len(train_loader)
+    train_losses.append(epoch_train_loss)
+
+    # Validation
+    model.eval()
+    val_loss = 0.0
+    with torch.no_grad():
+        for features, targets, stock_ids in val_loader:
+            features, targets, stock_ids = features.to(device), targets.to(device), stock_ids.to(device)
+
+            outputs = model(features, stock_ids)
+            targets = targets.unsqueeze(1)
+            loss = criterion(outputs, targets)
+            val_loss += loss.item()
+
+    epoch_val_loss = val_loss / len(val_loader)
+    val_losses.append(epoch_val_loss)
+
+    print(f"Epoch {epoch+1}/{num_epochs}, Train Loss: {epoch_train_loss:.4f}, Val Loss: {epoch_val_loss:.4f}")
+
+    # Check for early stopping
+    if epoch_val_loss < best_val_loss:
+        best_val_loss = epoch_val_loss
+        torch.save(model.state_dict(), "best_model.pth")
+        print(f"  -> Validation loss decreased. Saving best model.")
+    
+print("\n Training Complete")
+
+```
+
+Now we can plot the training and validation loss over time
+
+```{python}
+plt.clf()
+plt.plot(train_losses, label="Train Loss")
+plt.plot(val_losses, label="Validation Loss")
+plt.xlabel("Epoch")
+plt.ylabel("Loss")
+plt.legend()
+plt.show()
+```
+
+
+Finally, we can run the final trained model on the test set, calculate the root mean square error (RMSE), and plot the predictions against actual values for a few stocks
+
+First the test predictions:
+
+```{python}
+# Load the best model
+model.load_state_dict(torch.load("best_model.pth"))
+model.to(device)
+model.eval()
+
+# Predict on test set
+test_predictions = []
+test_truth = []
+all_stock_indices = []
+
+with torch.no_grad():
+    for features, targets, stock_ids in test_loader:
+        features = features.to(device)
+        targets = targets.to(device)
+        stock_ids = stock_ids.to(device)
+
+        # Get predictions
+        outputs = model(features, stock_ids)
+
+        # Store results
+        test_predictions.append(outputs.cpu().numpy())
+        test_truth.append(targets.cpu().numpy())
+        all_stock_indices.append(stock_ids.cpu().numpy())
+
+predictions_scaled = np.concatenate(test_predictions).flatten()
+truth_scaled = np.concatenate(test_truth).flatten()
+stock_indices_flat = np.concatenate(all_stock_indices).flatten()
+```
+
+Now the RMSE:
+
+```{python}
+id_to_stock = {v: k for k, v in ticker_to_int.items()}
+
+predictions_unscaled = []
+truth_unscaled = []
+
+# Find the index of the 'Close' column, which is our target variable
+close_feature_index = features_to_scale.index("Close")
+num_features = len(features_to_scale)
+
+for i in range(len(predictions_scaled)):
+    stock_id = stock_indices_flat[i]
+    stock_name = id_to_stock[stock_id]
+
+    scaler = scalers[stock_name]
+
+    # Create dummy arrays with the shape the scaler expects (1, num_features)
+    dummy_pred = np.zeros((1, num_features))
+    dummy_truth = np.zeros((1, num_features))
+
+    # Place the single predicted and true values into the 'Close' column
+    dummy_pred[0, close_feature_index] = predictions_scaled[i]
+    dummy_truth[0, close_feature_index] = truth_scaled[i]
+
+    # Now, inverse transform the full arrays
+    pred_unscaled_full = scaler.inverse_transform(dummy_pred)
+    truth_unscaled_full = scaler.inverse_transform(dummy_truth)
+
+    # Extract just the unscaled 'Close' price
+    predictions_unscaled.append(pred_unscaled_full[0, close_feature_index])
+    truth_unscaled.append(truth_unscaled_full[0, close_feature_index])
+
+rmse = np.sqrt(np.mean((np.array(predictions_unscaled) - np.array(truth_unscaled))**2))
+print(f"RMSE: {rmse}")
+
+```
+
+Finally, we can plot the predictions and truth for a single stock:
+
+
+```{python}
+# filter for just "AAPL"
+curr_id = ticker_to_int["AAPL"]
+curr_pred = np.array(predictions_unscaled)[stock_indices_flat == curr_id]
+curr_truth = np.array(truth_unscaled)[stock_indices_flat == curr_id]
+plt.clf()
+plt.plot(curr_truth, label="Truth")
+plt.plot(curr_pred, label="Predictions")
+plt.title("AAPL Predictions and truth")
+plt.legend()
+plt.show()
 ```
