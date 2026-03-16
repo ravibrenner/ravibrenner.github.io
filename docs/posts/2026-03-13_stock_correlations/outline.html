@@ -6,8 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Ravi Brenner">
 
-<title>Blog Posts – Ravi Brenner</title>
+<title>outline – Ravi Brenner</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -26,25 +27,23 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-listing/list.min.js"></script>
-<script src="site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-b6a8276bf55561bdbc268162d41bd1f7.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-6033a600180109c3731f6a886c29932c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-b6a8276bf55561bdbc268162d41bd1f7.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-6033a600180109c3731f6a886c29932c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -72,77 +71,19 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
 
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
 
-    const options = {
-      valueNames: ['listing-date','listing-title','listing-reading-time','listing-description','listing-categories','listing-image',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-title","listing-author","listing-date","listing-image","listing-description","listing-categories"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
-
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
-
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../../styles.css">
 </head>
 
-<body class="nav-fixed quarto-light">
+<body class="nav-fixed fullcontent quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Ravi Brenner</span>
     </a>
   </div>
@@ -153,19 +94,19 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./index.html"> 
+    <a class="nav-link" href="../../index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./resume.html"> 
+    <a class="nav-link" href="../../resume.html"> 
 <span class="menu-text">Resume</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./publications.html"> 
+    <a class="nav-link" href="../../publications.html"> 
 <span class="menu-text">Publications</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./blog.html" aria-current="page"> 
+    <a class="nav-link" href="../../blog.html"> 
 <span class="menu-text">Blog</span></a>
   </li>  
 </ul>
@@ -176,299 +117,196 @@ window.Quarto = {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Ravi Brenner </p>
+            </div>
+    </div>
+      
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(9)</span></div><div class="category" data-category="Z2VuZXJhbA==">general <span class="quarto-category-count">(5)</span></div><div class="category" data-category="cHJvamVjdHM=">projects <span class="quarto-category-count">(4)</span></div><div class="category" data-category="c3RhdGlzdGljcw==">statistics <span class="quarto-category-count">(1)</span></div></div></div>
+    
 <!-- main -->
-<main class="content column-page-left" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Blog Posts</h1>
-</div>
-
-
-
-<div class="quarto-title-meta column-page-left">
-
-    
-  
-    
-  </div>
-  
-
-
-</header>
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
 
 
+<section id="stock-price-prediction-and-embedding-analysis-plan" class="level1">
+<h1>Stock Price Prediction and Embedding Analysis Plan</h1>
+<p>This document outlines a plan to perform a deep learning analysis on stock market data. The primary goals are to predict future stock prices using a Gated Recurrent Unit (GRU) model and to explore the relationships between different stocks by analyzing the learned embedding matrix.</p>
+<p>This project will be executed within a Quarto (<code>.qmd</code>) document, making it a self-contained, reproducible report with code, visualizations, and narrative explanations.</p>
+<hr>
+<section id="introduction-setup" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-setup">1. Introduction &amp; Setup</h2>
+<ul>
+<li><strong>Objective</strong>: Briefly introduce the project’s goal: to build a GRU-based neural network in PyTorch to predict the next day’s stock price and to analyze the learned stock embeddings to uncover relationships between different companies.</li>
+<li><strong>Dataset</strong>: Describe the provided <code>all_stocks_2017-01-01_to_2018-01-01.csv</code> dataset, noting its columns (<code>Date</code>, <code>Open</code>, <code>High</code>, <code>Low</code>, <code>Close</code>, <code>Volume</code>, <code>Name</code>). Mention the one-year time frame.</li>
+<li><strong>Tools</strong>: List the primary Python libraries: <code>quarto</code>, <code>pandas</code>, <code>numpy</code>, <code>scikit-learn</code>, <code>pytorch</code>, <code>matplotlib</code>, and <code>seaborn</code>.</li>
+<li><strong>Quarto Setup</strong>: Create the initial <code>.qmd</code> file and set up the YAML header to execute Python code.</li>
+</ul>
+</section>
+<section id="data-loading-and-preprocessing" class="level2">
+<h2 class="anchored" data-anchor-id="data-loading-and-preprocessing">2. Data Loading and Preprocessing</h2>
+<p>This section will focus on getting the data ready for the model.</p>
+<ul>
+<li><strong>Load Data</strong>: Use <code>pandas</code> to load the CSV into a DataFrame.</li>
+<li><strong>Data Cleaning</strong>:
+<ul>
+<li>Parse the <code>Date</code> column into datetime objects.</li>
+<li>Check for and handle missing values. The data preview shows some missing values; a forward-fill (<code>fillna(method='ffill')</code>) strategy is a reasonable approach for time-series data.</li>
+</ul></li>
+<li><strong>Exploratory Data Analysis (EDA)</strong>:
+<ul>
+<li>Plot histograms of the price and volume features to assess their distribution. Decide if a log transformation is necessary to reduce skewness.</li>
+<li>Plot the ‘Close’ price over time for a few sample stocks (e.g., <code>AAPL</code>, <code>GOOGL</code>, <code>XOM</code>) to visualize their trends.</li>
+<li>Create a list of all unique stock tickers (<code>Name</code>) present in the dataset.</li>
+</ul></li>
+<li><strong>Feature Engineering</strong>:
+<ul>
+<li><strong>Log Transformation</strong>: Apply a log transformation (e.g., <code>numpy.log1p</code>) to the price and volume features (<code>Open</code>, <code>High</code>, <code>Low</code>, <code>Close</code>, <code>Volume</code>) to normalize their distributions. This should be done before scaling.</li>
+<li><strong>Stock Ticker Mapping</strong>: Create a dictionary to map each unique stock <code>Name</code> to an integer index (e.g., <code>{'MMM': 0, 'AXP': 1, ...}</code>). This is essential for the embedding layer.</li>
+</ul></li>
+<li><strong>Data Splitting (Chronological)</strong>:</li>
+<li><strong>Feature Scaling</strong>:
+<ul>
+<li>Neural networks perform best with normalized data. Use <code>scikit-learn</code>’s <code>MinMaxScaler</code>.</li>
+<li><strong>Important</strong>: For each stock, fit a scaler <em>only</em> on its training data. Then, use that <em>same fitted scaler</em> to transform the validation and test sets for that stock. This prevents information from the future (validation/test sets) from leaking into the training process.</li>
+</ul></li>
+<li><strong>Sequence Creation (Sliding Window)</strong>:
+<ul>
+<li>Define a <code>sequence_length</code> (e.g., 30 days).</li>
+<li>Write a function that takes the scaled data and creates input/output pairs. For each stock, it will iterate through the data, creating sequences.</li>
+<li>An input <code>X</code> will be the data from day <code>t</code> to <code>t + 29</code>.</li>
+<li>The corresponding output <code>y</code> will be the ‘Close’ price on day <code>t + 30</code>.</li>
+<li>This process should be applied to the training, validation, and test sets.</li>
+</ul></li>
+</ul>
+</section>
+<section id="pytorch-dataset-and-dataloader" class="level2">
+<h2 class="anchored" data-anchor-id="pytorch-dataset-and-dataloader">3. PyTorch Dataset and DataLoader</h2>
+<p>This section bridges the gap between <code>numpy</code> arrays and what PyTorch expects.</p>
+<ul>
+<li><strong>Create a Custom <code>Dataset</code></strong>:
+<ul>
+<li>Define a Python class that inherits from <code>torch.utils.data.Dataset</code>.</li>
+<li>The <code>__init__</code> method will store the sequences of features, the stock ticker indices, and the target labels.</li>
+<li>The <code>__len__</code> method will return the total number of samples.</li>
+<li>The <code>__getitem__</code> method will return one sample: a tuple containing the feature sequence, the stock index, and the target price.</li>
+</ul></li>
+<li><strong>Create <code>DataLoaders</code></strong>:
+<ul>
+<li>Instantiate the custom <code>Dataset</code> for the training, validation, and test sets.</li>
+<li>Wrap each dataset in a <code>torch.utils.data.DataLoader</code>. This will handle batching, shuffling (for the training set), and parallel data loading.</li>
+</ul></li>
+</ul>
+</section>
+<section id="gru-model-architecture" class="level2">
+<h2 class="anchored" data-anchor-id="gru-model-architecture">4. GRU Model Architecture</h2>
+<p>Here, we’ll define the neural network using PyTorch’s <code>nn.Module</code>.</p>
+<ul>
+<li><strong>Model Class</strong>: Define a class <code>StockPredictor(nn.Module)</code>.</li>
+<li><strong>Layers in <code>__init__</code></strong>:
+<ul>
+<li><code>nn.Embedding</code>: This layer will take the stock’s integer index and output a dense vector (the embedding). We need to decide on the <code>embedding_dim</code> (e.g., 10 or 20).</li>
+<li><code>nn.GRU</code>: The core recurrent layer. It will process the sequence of scaled price/volume data. We’ll need to define <code>hidden_size</code> and <code>num_layers</code>.</li>
+<li><code>nn.Linear</code>: A final fully connected layer to map the GRU’s output to a single predicted price.</li>
+</ul></li>
+<li><strong><code>forward</code> Method</strong>:
+<ul>
+<li>Define the data flow:
+<ol type="1">
+<li>The stock index is passed through the embedding layer.</li>
+<li>The resulting stock embedding is concatenated with each time step of the input feature sequence.</li>
+<li>This combined sequence is fed into the GRU.</li>
+<li>The final hidden state from the GRU is passed to the linear layer to get the prediction.</li>
+</ol></li>
+</ul></li>
+</ul>
+</section>
+<section id="model-training-and-evaluation" class="level2">
+<h2 class="anchored" data-anchor-id="model-training-and-evaluation">5. Model Training and Evaluation</h2>
+<p>This section covers the training loop and assessing the model’s performance.</p>
+<ul>
+<li><strong>Instantiate Model</strong>: Create an instance of the <code>StockPredictor</code> model.</li>
+<li><strong>Loss Function and Optimizer</strong>:
+<ul>
+<li><strong>Loss</strong>: Since this is a regression problem (predicting a price), <code>nn.MSELoss()</code> (Mean Squared Error) is a suitable choice.</li>
+<li><strong>Optimizer</strong>: <code>torch.optim.Adam</code> is a robust and popular choice.</li>
+</ul></li>
+<li><strong>Training Loop</strong>:
+<ul>
+<li>Write a loop that iterates for a fixed number of <code>epochs</code>.</li>
+<li>Inside, have a loop that iterates over the training <code>DataLoader</code>.</li>
+<li>For each batch: perform the forward pass, calculate the loss, perform backpropagation (<code>loss.backward()</code>), and update the weights (<code>optimizer.step()</code>).</li>
+</ul></li>
+<li><strong>Validation Loop</strong>:
+<ul>
+<li>After each epoch, run a loop over the validation <code>DataLoader</code> to calculate the validation loss. This is crucial for monitoring overfitting. Use <code>with torch.no_grad():</code> to ensure gradients aren’t calculated.</li>
+<li>Keep track of the best model based on validation loss and save its state (<code>torch.save(model.state_dict(), 'best_model.pth')</code>).</li>
+</ul></li>
+<li><strong>Visualization</strong>: Plot the training and validation loss curves over epochs to visualize the learning process.</li>
+<li><strong>Final Evaluation</strong>:
+<ul>
+<li>Load the best model weights.</li>
+<li>Run the model on the test set.</li>
+<li>Calculate the final RMSE (Root Mean Squared Error) to get an interpretable error metric.</li>
+<li>Plot the model’s predictions against the actual values for a few stocks in the test set.</li>
+</ul></li>
+</ul>
+</section>
+<section id="embedding-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="embedding-analysis">6. Embedding Analysis</h2>
+<p>Now for the fun part: exploring what the model has learned about the stocks.</p>
+<ul>
+<li><strong>Extract Embeddings</strong>: Retrieve the learned weight matrix from the <code>nn.Embedding</code> layer. This matrix will have a shape of <code>(num_stocks, embedding_dim)</code>.</li>
+<li><strong>Gather Sector Information</strong>:
+<ul>
+<li>Create a mapping of the stock tickers in your dataset to their respective industry sectors (e.g., ‘AAPL’ -&gt; ‘Information Technology’, ‘XOM’ -&gt; ‘Energy’). This can be done with a quick web search or by referencing a public financial data source. [12, 13, 14, 16]</li>
+</ul></li>
+<li><strong>Dimensionality Reduction and Visualization</strong>:
+<ul>
+<li>The embeddings are high-dimensional. To visualize them, we’ll reduce them to 2D using a technique like <strong>t-SNE</strong> (t-Distributed Stochastic Neighbor Embedding) from <code>scikit-learn</code>. [1, 7, 11]</li>
+<li>Create a scatter plot of the 2D embeddings.</li>
+<li>Color-code each point by its sector and add text labels for the stock tickers. This will visually reveal if the model has learned to group stocks from the same industry together.</li>
+</ul></li>
+<li><strong>Nearest Neighbors Analysis</strong>:
+<ul>
+<li>Calculate the cosine similarity between the embedding vector of a chosen stock (e.g., ‘JPM’) and all other stock vectors.</li>
+<li>Find and list the top 5 stocks with the highest similarity. This shows which companies the model considers most “alike” based on their price dynamics.</li>
+</ul></li>
+</ul>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">7. Conclusion</h2>
+<ul>
+<li><strong>Summary</strong>: Briefly summarize the model’s predictive performance (e.g., final test RMSE) and the key findings from the embedding analysis (e.g., “The model successfully clustered most technology stocks together…”).</li>
+<li><strong>Limitations &amp; Next Steps</strong>: Discuss the project’s limitations (e.g., only one year of data, simple feature set). Propose future work, such as using more historical data, incorporating sentiment analysis from news, or trying more advanced architectures like LSTMs or Transformers.</li>
+</ul>
 
-<div class="quarto-listing quarto-listing-container-grid" id="listing-listing">
-<div class="listing-actions-group">
-   <div class="input-group input-group-sm quarto-listing-sort">
-    <span class="input-group-text"><i class="bi bi-sort-down"></i></span>
-    <select id="listing-listing-sort" class="form-select" aria-label="Order By" onchange="window['quarto-listings']['listing-listing'].sort(this.options[this.selectedIndex].value, { order: this.options[this.selectedIndex].getAttribute('data-direction')})">
-      <option value="" disabled="" selected="" hidden="">Order By</option>
-      <option value="index" data-direction="asc">Default</option>
-      <option value="listing-title" data-direction="asc">
-        Title
-      </option>
-      <option value="listing-date-sort" data-direction="asc">
-        Date - Oldest
-      </option>
-      <option value="listing-date-sort" data-direction="desc">
-        Date - Newest
-      </option>
-    </select>
-  </div>
-    <div class="input-group input-group-sm quarto-listing-filter">
-      <span class="input-group-text"><i class="bi bi-search"></i></span>
-      <input type="text" class="search form-control" placeholder="Filter">
-    </div>
-</div>
-<div class="list grid quarto-listing-cols-3">
-<div class="g-col-1" data-index="0" data-categories="cHJvamVjdHM=" data-listing-file-modified-sort="1773690711419" data-listing-reading-time-sort="16" data-listing-word-count-sort="3087">
-<a href="./posts/2026-03-13_stock_correlations/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top"><img loading='lazy' src="posts/2026-03-13_stock_correlations/index_files/figure-html/cell-5-output-1.png" style="height: 200px;"  class="thumbnail-image card-img"/></p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Learning about embedding matrices using stock prices
-</h5>
-<div class="listing-reading-time card-text text-muted">16 min</div>
-<div class="listing-categories">
 
-<div class="listing-category" onclick="window.quartoListingCategory('cHJvamVjdHM='); return false;">projects</div>
+</section>
+</section>
 
-</div>
-<div class="card-text listing-description delink">
-When you send a message to an AI model, how does it “know” what your words “mean”? It should go without saying that it is quite complicated, and the specific layers within a…
-</div>
-</div>
-</div></a>
-</div>
-<div class="g-col-1" data-index="1" data-categories="cHJvamVjdHM=" data-listing-date-sort="1772427600000" data-listing-file-modified-sort="1773070552110" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="17" data-listing-word-count-sort="3387">
-<a href="./posts/2026-03-02_subway_local_express/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top"><img loading='lazy' src="posts/2026-03-02_subway_local_express/index_files/figure-html/unnamed-chunk-4-1.png" style="height: 200px;"  class="thumbnail-image card-img"/></p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Should You Wait? Solving a Niche NYC Problem
-</h5>
-<div class="listing-reading-time card-text text-muted">17 min</div>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('cHJvamVjdHM='); return false;">projects</div>
-
-</div>
-<div class="card-text listing-description delink">
-Here is a common problem I face: I live near a subway stop in New York City that has both express and local trains. If they arrive at the same time, it’s much faster to take…
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Mar 2, 2026
-</div>
-</div>
-</div>
-</div></a>
-</div>
-<div class="g-col-1" data-index="2" data-categories="Z2VuZXJhbCUyQ3N0YXRpc3RpY3M=" data-listing-date-sort="1771477200000" data-listing-file-modified-sort="1771520777348" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="21" data-listing-word-count-sort="4045">
-<a href="./posts/2026-02-16_reviews_of_reviews.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img loading="lazy" src="./posts/images/mamas_too_slice.jpg" class="thumbnail-image card-img" style="height: 200px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-⭐️⭐️⭐️⭐️⭐️ 5 Stars: Reviewing Online Reviews
-</h5>
-<div class="listing-reading-time card-text text-muted">21 min</div>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('Z2VuZXJhbA=='); return false;">general</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('c3RhdGlzdGljcw=='); return false;">statistics</div>
-
-</div>
-<div class="card-text listing-description delink">
-“Mama’s Too” is an amazing pizza restaurant, not far from where I live in New York City. It was recently listed as one of the best slices in the world, and I seriously…
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Feb 19, 2026
-</div>
-</div>
-</div>
-</div></a>
-</div>
-<div class="g-col-1" data-index="3" data-categories="Z2VuZXJhbA==" data-listing-date-sort="1770613200000" data-listing-file-modified-sort="1770665027591" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="877">
-<a href="./posts/2026-02-09_desk_job_AI.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img loading="lazy" src="./posts/images/adarc_office.jpeg" class="thumbnail-image card-img" style="height: 200px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-On Desk Jobs and AI
-</h5>
-<div class="listing-reading-time card-text text-muted">5 min</div>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('Z2VuZXJhbA=='); return false;">general</div>
-
-</div>
-<div class="card-text listing-description delink">
-When I was a kid, I wanted to be an astronomer. Not an astronaut to be clear; I did not want to go to space. I wanted to be the one behind the telescope, exploring the…
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Feb 9, 2026
-</div>
-</div>
-</div>
-</div></a>
-</div>
-<div class="g-col-1" data-index="4" data-categories="Z2VuZXJhbA==" data-listing-date-sort="1769576400000" data-listing-file-modified-sort="1769629825285" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1389">
-<a href="./posts/2026-01-26_my_antivax_story/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img loading="lazy" src="./posts/2026-01-26_my_antivax_story/covid_vaccine_pic.jpg" class="thumbnail-image card-img" style="height: 200px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-My Vaccine Story
-</h5>
-<div class="listing-reading-time card-text text-muted">7 min</div>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('Z2VuZXJhbA=='); return false;">general</div>
-
-</div>
-<div class="card-text listing-description delink">
-When I was 17, I drove myself to the pediatrician for the first time, without my parents. After most of the physical exam had concluded, my doctor asked me if I wanted to…
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Jan 28, 2026
-</div>
-</div>
-</div>
-</div></a>
-</div>
-<div class="g-col-1" data-index="5" data-categories="cHJvamVjdHM=" data-listing-date-sort="1769058000000" data-listing-file-modified-sort="1769099432366" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1104">
-<a href="./posts/2026-01-22_past_projects_and_pubs/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img loading="lazy" src="./posts/2026-01-22_past_projects_and_pubs/COVID_care_plot.png" class="thumbnail-image card-img" style="height: 200px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Past Projects and Publications
-</h5>
-<div class="listing-reading-time card-text text-muted">6 min</div>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('cHJvamVjdHM='); return false;">projects</div>
-
-</div>
-<div class="card-text listing-description delink">
-These are a few of the projects I have worked on in some of my past public health jobs. This is a sampling of final products, since there were plenty of other interesting…
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Jan 22, 2026
-</div>
-</div>
-</div>
-</div></a>
-</div>
-<div class="g-col-1" data-index="6" data-categories="Z2VuZXJhbA==" data-listing-date-sort="1768453200000" data-listing-file-modified-sort="1768495322973" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="808">
-<a href="./posts/thoughts_on_AI_draft.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<div class="listing-item-img-placeholder card-img-top" style="height: 200px;">&nbsp;</div>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Some Thoughts About generative AI
-</h5>
-<div class="listing-reading-time card-text text-muted">5 min</div>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('Z2VuZXJhbA=='); return false;">general</div>
-
-</div>
-<div class="card-text listing-description delink">
-
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Jan 15, 2026
-</div>
-</div>
-</div>
-</div></a>
-</div>
-<div class="g-col-1" data-index="7" data-categories="cHJvamVjdHM=" data-listing-date-sort="1768194000000" data-listing-file-modified-sort="1768247310203" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="820">
-<a href="./posts/2026-01-12_grad_school_projects/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img loading="lazy" src="./posts/2026-01-12_grad_school_projects/lane_dist.png" class="thumbnail-image card-img" style="height: 200px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Grad School Project Highlights
-</h5>
-<div class="listing-reading-time card-text text-muted">5 min</div>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('cHJvamVjdHM='); return false;">projects</div>
-
-</div>
-<div class="card-text listing-description delink">
-These are 3 projects I have completed for classes as part of my masters degree. There are links to the final presentation, poster, and reports I wrote for each of these, as…
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Jan 12, 2026
-</div>
-</div>
-</div>
-</div></a>
-</div>
-<div class="g-col-1" data-index="8" data-categories="Z2VuZXJhbA==" data-listing-date-sort="1767589200000" data-listing-file-modified-sort="1770652577950" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="401">
-<a href="./posts/2026-01-05_welcome_intro.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img loading="lazy" src="./posts/images/maggie_sunset.jpeg" class="thumbnail-image card-img" style="height: 200px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-About me and this blog
-</h5>
-<div class="listing-reading-time card-text text-muted">3 min</div>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('Z2VuZXJhbA=='); return false;">general</div>
-
-</div>
-<div class="card-text listing-description delink">
-Welcome to the blog section of my website!
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Jan 5, 2026
-</div>
-</div>
-</div>
-</div></a>
-</div>
-</div>
-<div class="listing-no-matching d-none">No matching items</div>
-</div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";

@@ -1,0 +1,1688 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.30">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Ravi Brenner">
+
+<title>Learning about embedding matrices using stock prices – Ravi Brenner</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-b6a8276bf55561bdbc268162d41bd1f7.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-6033a600180109c3731f6a886c29932c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+<meta name="quarto:status" content="draft">
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner"><div id="quarto-draft-alert" class="alert alert-warning"><i class="bi bi-pencil-square"></i>Draft</div>
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Ravi Brenner</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../resume.html"> 
+<span class="menu-text">Resume</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../publications.html"> 
+<span class="menu-text">Publications</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Learning about embedding matrices using stock prices</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">projects</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Ravi Brenner </p>
+            </div>
+    </div>
+      
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<p>When you send a message to an AI model, how does it “know” what your words “mean”? It should go without saying that it is quite complicated, and the specific layers within a particular large language model (LLM) can vary a bit. I am not an expert on large language models, but I know they are a specific type of neural network. They use an architecture called a transformer and a technique called attention (this super <a href="https://poloclub.github.io/transformer-explainer/">cool graphic</a> walks through some of the details).</p>
+<p>The first step in this kind of neural network is called embedding. An embedding layer or embedding matrix allows the model to convert categorical or text-like inputs into numbers. For example, with an LLM, there may be hundreds of thousands of possible input words. With the embedding layer, the model convert each word to a list of 200 numbers (for example). Each word can then be <a href="https://youtu.be/wjZofJX0v4M?t=747&amp;si=4w36iWRWXraYx7rF">compared to another</a>, so similar words will have similar lists (called vectors) in this high dimensional space.</p>
+<p>If you’re already feeling lost, don’t worry. We are going to learn about embedding matrices using a simpler type of neural network called a recurrent neural network, or RNN. This is used to predict sequences of things, like stock prices over time or words in a sentence, and leverages an embedding layer to help accomplish that. If you’re not interested in all the details, skip down to here to take a look at some of the results.</p>
+<section id="introduction-and-setup" class="level1">
+<h1>Introduction and setup</h1>
+<p>The goal of this project is to understand a little bit about how deep learning models work, and to learn about embedding matrices. To do this, we will develop a deep learning model to predict daily stock closing prices. We will use a Gated Recurrent Unit (GRU), a type of recurrent neural network (RNN) for sequence data, implemented in PyTorch. We will also explore the embedding matrix that the model learns during training, and see how it captures relationships between different stocks.</p>
+<section id="libraries" class="level2">
+<h2 class="anchored" data-anchor-id="libraries">Libraries</h2>
+<div id="setup" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torch.utils.data <span class="im">import</span> Dataset, DataLoader</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> MinMaxScaler</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.neighbors <span class="im">import</span> NearestNeighbors</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.manifold <span class="im">import</span> TSNE</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> random</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co"># for reproducibility</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> set_seed(seed):</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    random.seed(seed)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    np.random.seed(seed)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    torch.manual_seed(seed)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>set_seed(<span class="dv">42</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="data" class="level2">
+<h2 class="anchored" data-anchor-id="data">Data</h2>
+<p>The data we will use is <a href="https://www.kaggle.com/datasets/szrlee/stock-time-series-20050101-to-20171231">DJIA 30 Stock Time Series</a> from Kaggle, which contains daily stock prices for the 30 companies in the Dow Jones Industrial Average (DJIA) from January 1, 2005 to December 31, 2017. We will focus on the closing prices of these stocks in 2017.</p>
+<div id="e61f6bbe" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the data</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">"all_stocks_2017-01-01_to_2018-01-01.csv"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>df.info()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
+RangeIndex: 7781 entries, 0 to 7780
+Data columns (total 7 columns):
+ #   Column  Non-Null Count  Dtype  
+---  ------  --------------  -----  
+ 0   Date    7781 non-null   object 
+ 1   Open    7757 non-null   float64
+ 2   High    7772 non-null   float64
+ 3   Low     7762 non-null   float64
+ 4   Close   7781 non-null   float64
+ 5   Volume  7781 non-null   int64  
+ 6   Name    7781 non-null   object 
+dtypes: float64(4), int64(1), object(2)
+memory usage: 425.7+ KB</code></pre>
+</div>
+</div>
+<p>Convert the date column to datetime, and check for missing values.</p>
+<div id="6569289f" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert the date column to datetime</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"Date"</span>] <span class="op">=</span> pd.to_datetime(df[<span class="st">"Date"</span>])</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Check for missing values</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>df.isnull().<span class="bu">sum</span>()</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Fill missing values</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co"># It's safer to sort by ticker and date before filling to prevent data leakage across stocks</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>df.sort_values(by<span class="op">=</span>[<span class="st">"Name"</span>, <span class="st">"Date"</span>], inplace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>df.ffill(inplace<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+</section>
+<section id="data-preparation" class="level1">
+<h1>Data Preparation</h1>
+<p>Now that we have the data, we can prepare it for the RNN model. First we will visualize the data for one stock. Then we will get the stock tickers do the training and testing splits needed for model training. Finally we will scale the data to make it usable for the model.</p>
+<section id="visualize-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="visualize-the-data">Visualize the data</h2>
+<p>Look at the data for just a few stocks</p>
+<div id="f1141c66" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>plt.clf()</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>sns.set_theme(style<span class="op">=</span><span class="st">"whitegrid"</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>stocks_to_plot <span class="op">=</span> [<span class="st">"AAPL"</span>, <span class="st">"MSFT"</span>, <span class="st">"GOOGL"</span>]</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>sns.lineplot(x<span class="op">=</span><span class="st">"Date"</span>, y<span class="op">=</span><span class="st">"Close"</span>, hue <span class="op">=</span> <span class="st">"Name"</span>, data<span class="op">=</span>df[df[<span class="st">"Name"</span>].isin(stocks_to_plot)])</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Stock Prices for AAPL, MSFT, and GOOGL"</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-5-output-1.png" width="612" height="455" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>One problem right off the bat is that the prices are on completely different scales. So we will need to scale the data to be able to compare them.</p>
+<p>Let’s look at some distributions of the features too:</p>
+<div id="0a611977" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>ticker <span class="op">=</span> <span class="st">"GOOGL"</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>df_temp <span class="op">=</span> df[df[<span class="st">"Name"</span>] <span class="op">==</span> ticker]</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>features_to_examine <span class="op">=</span> [<span class="st">"Open"</span>, <span class="st">"High"</span>, <span class="st">"Low"</span>, <span class="st">"Close"</span>, <span class="st">"Volume"</span>]</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="bu">len</span>(features_to_examine), <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">16</span>))</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>fig.suptitle(<span class="st">'Original vs. Log-Transformed Distributions'</span>, fontsize<span class="op">=</span><span class="dv">16</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, feature <span class="kw">in</span> <span class="bu">enumerate</span>(features_to_examine):</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Original Data</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    sns.histplot(df_temp[feature], ax<span class="op">=</span>axes[i, <span class="dv">0</span>], kde<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    axes[i, <span class="dv">0</span>].set_title(<span class="ss">f'Original </span><span class="sc">{</span>feature<span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Log-Transformed Data</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    sns.histplot(np.log1p(df_temp[feature]), ax<span class="op">=</span>axes[i, <span class="dv">1</span>], kde<span class="op">=</span><span class="va">True</span>, color<span class="op">=</span><span class="st">'orange'</span>)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    axes[i, <span class="dv">1</span>].set_title(<span class="ss">f'Log-Transformed </span><span class="sc">{</span>feature<span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>plt.tight_layout(rect<span class="op">=</span>[<span class="dv">0</span>, <span class="fl">0.03</span>, <span class="dv">1</span>, <span class="fl">0.96</span>])</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-6-output-1.png" width="1135" height="1461" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>I would say the log transformation helps with volume, but doesn’t make much of a difference for the open/high/low/close featuers.</p>
+<div id="f2cced20" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"LogVolume"</span>] <span class="op">=</span> np.log1p(df[<span class="st">"Volume"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="getting-stock-tickers" class="level2">
+<h2 class="anchored" data-anchor-id="getting-stock-tickers">Getting Stock tickers</h2>
+<p>We will simply map each stock ticker to a number. The number is totally arbitrary.</p>
+<div id="8b54b495" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>stock_tickers <span class="op">=</span> df[<span class="st">"Name"</span>].unique()</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>ticker_to_int <span class="op">=</span> {ticker: i <span class="cf">for</span> i, ticker <span class="kw">in</span> <span class="bu">enumerate</span>(stock_tickers)}</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"TickerInt"</span>] <span class="op">=</span> df[<span class="st">"Name"</span>].<span class="bu">map</span>(ticker_to_int)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="splitting-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="splitting-the-data">Splitting the data</h2>
+<p>Splitting the data into training, validation, and testing sets is standard for most machine learning pipelines. We will use the first 70% as training, the next 15% as validation, and the last 15% as testing.</p>
+<div id="43b79bea" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Split the data into training, validation, and testing sets for each stock</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>train_df, val_df, test_df <span class="op">=</span> [], [], []</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ticker <span class="kw">in</span> stock_tickers:</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    ticker_df <span class="op">=</span> df[df[<span class="st">"Name"</span>] <span class="op">==</span> ticker]</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    n_days <span class="op">=</span> <span class="bu">len</span>(ticker_df)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    train_end <span class="op">=</span> <span class="bu">int</span>(n_days<span class="op">*</span><span class="fl">0.7</span>)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    val_end <span class="op">=</span> <span class="bu">int</span>(n_days<span class="op">*</span><span class="fl">0.85</span>)</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    train_df.append(ticker_df[:train_end])</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    val_df.append(ticker_df[train_end:val_end])</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    test_df.append(ticker_df[val_end:])</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>train_df <span class="op">=</span> pd.concat(train_df)</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>val_df <span class="op">=</span> pd.concat(val_df)</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>test_df <span class="op">=</span> pd.concat(test_df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="scaling-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="scaling-the-data">Scaling the data</h2>
+<p>We will rescale all the numerical values (Open, High, Low, Close, and Volume). This is a critical step. We will perform the scaling <em>within each stock ticker group</em> to a range of <code>(-1, 1)</code>. This ensures the model learns from the relative price movements of each stock, and the <code>(-1, 1)</code> range is generally better for the GRU’s internal <code>tanh</code> activation functions.</p>
+<p>The code below rebuilds the <code>train_df</code>, <code>val_df</code>, and <code>test_df</code> dataframes with the correctly scaled values, keeping the three-dataframe structure intact.</p>
+<div id="517a1694" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Dictionary to store a scaler for each stock, needed for inverse transform later</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>scalers <span class="op">=</span> {}</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>features_to_scale <span class="op">=</span> [<span class="st">"Open"</span>, <span class="st">"High"</span>, <span class="st">"Low"</span>, <span class="st">"Close"</span>, <span class="st">"Volume"</span>]</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Create empty lists to hold the scaled dataframes for each split</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>scaled_train_list <span class="op">=</span> []</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>scaled_val_list <span class="op">=</span> []</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>scaled_test_list <span class="op">=</span> []</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ticker <span class="kw">in</span> stock_tickers:</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># We'll use a (-1, 1) range, which is often better for GRU/LSTM models</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    scaler <span class="op">=</span> MinMaxScaler(feature_range<span class="op">=</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>))</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Isolate the data for the current ticker from each split</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    train_ticker_df <span class="op">=</span> train_df[train_df[<span class="st">"Name"</span>] <span class="op">==</span> ticker].copy()</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    val_ticker_df <span class="op">=</span> val_df[val_df[<span class="st">"Name"</span>] <span class="op">==</span> ticker].copy()</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>    test_ticker_df <span class="op">=</span> test_df[test_df[<span class="st">"Name"</span>] <span class="op">==</span> ticker].copy()</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Fit the scaler ONLY on the training data for this specific stock</span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>    scaler.fit(train_ticker_df[features_to_scale])</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>    scalers[ticker] <span class="op">=</span> scaler <span class="co"># Save the scaler</span></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Transform the data for the current ticker across all splits</span></span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>    train_ticker_df[features_to_scale] <span class="op">=</span> scaler.transform(train_ticker_df[features_to_scale])</span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>    val_ticker_df[features_to_scale] <span class="op">=</span> scaler.transform(val_ticker_df[features_to_scale])</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>    test_ticker_df[features_to_scale] <span class="op">=</span> scaler.transform(test_ticker_df[features_to_scale])</span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Add the scaled dataframes to our lists</span></span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>    scaled_train_list.append(train_ticker_df)</span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>    scaled_val_list.append(val_ticker_df)</span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>    scaled_test_list.append(test_ticker_df)</span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Recombine the lists of dataframes back into our three main dataframes</span></span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>train_df <span class="op">=</span> pd.concat(scaled_train_list)</span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>val_df <span class="op">=</span> pd.concat(scaled_val_list)</span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>test_df <span class="op">=</span> pd.concat(scaled_test_list)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Now plot that same data again:</p>
+<div id="e1e7e5b5" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>plt.clf()</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>sns.set_theme(style<span class="op">=</span><span class="st">"whitegrid"</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>stocks_to_plot <span class="op">=</span> [<span class="st">"AAPL"</span>, <span class="st">"MSFT"</span>, <span class="st">"GOOGL"</span>]</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>sns.lineplot(x<span class="op">=</span><span class="st">"Date"</span>, y<span class="op">=</span><span class="st">"Close"</span>, hue <span class="op">=</span> <span class="st">"Name"</span>, data<span class="op">=</span>train_df[train_df[<span class="st">"Name"</span>].isin(stocks_to_plot)])</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Stock Prices for AAPL, MSFT, and GOOGL"</span>)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-11-output-1.png" width="610" height="455" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>You can now more reasonably compare the performance of those stocks, on a one-to-one basis.</p>
+</section>
+<section id="sequence-creation" class="level2">
+<h2 class="anchored" data-anchor-id="sequence-creation">Sequence creation</h2>
+<p>Now we will create 20 day (about 1 month of trading days) sequences of data for each stock.</p>
+<div id="d5c6de1a" class="cell" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> create_sequences(data, sequence_length, feature_cols, ticker_col, target_col):</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    xs, ys, ticker_idx <span class="op">=</span> [], [], []</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Group by the stock name to process each individually</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> _, ticker_df <span class="kw">in</span> data.groupby(<span class="st">"Name"</span>):</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>        features <span class="op">=</span> ticker_df[feature_cols].values</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>        target <span class="op">=</span> ticker_df[target_col].values</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>        ticker_int <span class="op">=</span> ticker_df[ticker_col].iloc[<span class="dv">0</span>]</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Create sequences for the current stock</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(features)<span class="op">-</span>sequence_length):</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>            xs.append(features[i:(i<span class="op">+</span>sequence_length)])</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>            ys.append(target[i<span class="op">+</span>sequence_length])</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>            ticker_idx.append(ticker_int)</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.array(xs), np.array(ys), np.array(ticker_idx)</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>sequence_length <span class="op">=</span> <span class="dv">20</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>feature_cols <span class="op">=</span> [<span class="st">"Open"</span>, <span class="st">"High"</span>, <span class="st">"Low"</span>, <span class="st">"Close"</span>, <span class="st">"LogVolume"</span>]</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>ticker_col <span class="op">=</span> <span class="st">"TickerInt"</span></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>target_col <span class="op">=</span> <span class="st">"Close"</span></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>X_train, y_train, train_ticker_idx <span class="op">=</span> create_sequences(train_df, sequence_length, feature_cols, ticker_col, target_col)</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>X_val, y_val, val_ticker_idx <span class="op">=</span> create_sequences(val_df, sequence_length, feature_cols, ticker_col, target_col)</span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>X_test, y_test, test_ticker_idx <span class="op">=</span> create_sequences(test_df, sequence_length, feature_cols, ticker_col, target_col)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Let’s quickly understand the dimensions of this data.</p>
+<div id="e63cbd76" class="cell" data-execution_count="12">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"X_train shape: </span><span class="sc">{</span>X_train<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"y_train shape: </span><span class="sc">{</span>y_train<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"train_ticker_idx shape: </span><span class="sc">{</span>train_ticker_idx<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Unique tickers count: </span><span class="sc">{</span><span class="bu">len</span>(<span class="bu">set</span>(train_ticker_idx))<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>X_train shape: (4805, 20, 5)
+y_train shape: (4805,)
+train_ticker_idx shape: (4805,)
+Unique tickers count: 31</code></pre>
+</div>
+</div>
+<p>So the training data has dimension [4805, 20, 5], which means that there are 4805 days, each with 20 preceding window days, and 5 features. Then there are 4805 close prices, all corresponding to a list of 4805 tickers. But that list of tickers is repeptitive; there are 31 tickers in total, as we would expect.</p>
+</section>
+</section>
+<section id="data-loading-with-pytorch" class="level1">
+<h1>Data loading with pytorch</h1>
+<p>Pytorch uses a specialized data architecture. We will first create the <code>Dataset</code> and then the <code>DataLoader</code>.</p>
+<div id="ae4e3272" class="cell" data-execution_count="13">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> StockDataset(Dataset):</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, X, y, tickers):</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.X <span class="op">=</span> torch.tensor(X, dtype<span class="op">=</span>torch.float32)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.y <span class="op">=</span> torch.tensor(y, dtype<span class="op">=</span>torch.float32)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.tickers <span class="op">=</span> torch.tensor(tickers, dtype<span class="op">=</span>torch.<span class="bu">long</span>)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__len__</span>(<span class="va">self</span>):</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">len</span>(<span class="va">self</span>.X)</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__getitem__</span>(<span class="va">self</span>, idx):</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.X[idx], <span class="va">self</span>.y[idx], <span class="va">self</span>.tickers[idx]</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Create datasets</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>train_dataset <span class="op">=</span> StockDataset(X_train, y_train, train_ticker_idx)</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>val_dataset <span class="op">=</span> StockDataset(X_val, y_val, val_ticker_idx)</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>test_dataset <span class="op">=</span> StockDataset(X_test, y_test, test_ticker_idx)</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Create DataLoaders</span></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>BATCH_SIZE <span class="op">=</span> <span class="dv">64</span> <span class="co"># A common batch size, can be tuned</span></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>train_loader <span class="op">=</span> DataLoader(train_dataset, batch_size<span class="op">=</span>BATCH_SIZE, shuffle<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>val_loader <span class="op">=</span> DataLoader(val_dataset, batch_size<span class="op">=</span>BATCH_SIZE, shuffle<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>test_loader <span class="op">=</span> DataLoader(test_dataset, batch_size<span class="op">=</span>BATCH_SIZE, shuffle<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's inspect one batch to see what it looks like</span></span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>data_features, data_target, data_ticker <span class="op">=</span> <span class="bu">next</span>(<span class="bu">iter</span>(train_loader))</span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Feature batch shape: </span><span class="sc">{</span>data_features<span class="sc">.</span>size()<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Target batch shape: </span><span class="sc">{</span>data_target<span class="sc">.</span>size()<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Ticker batch shape: </span><span class="sc">{</span>data_ticker<span class="sc">.</span>size()<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Feature batch shape: torch.Size([64, 20, 5])
+Target batch shape: torch.Size([64])
+Ticker batch shape: torch.Size([64])</code></pre>
+</div>
+</div>
+</section>
+<section id="gru-model-setup" class="level1">
+<h1>GRU model setup</h1>
+<p>The GRU model is a modern RNN setup. I won’t get into all the details here, but basically there are special learned parameters for whether the ‘cell’ should reset or update at any given point. It gives the model some semblance of ‘memory’ that we would not otherwise have.</p>
+<div id="0981f806" class="cell" data-execution_count="14">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> StockGRU(nn.Module):</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, num_stocks, embedding_dim, input_features, hidden_size, num_layers, dropout_prob<span class="op">=</span><span class="fl">0.0</span>):</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Create the model layers</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>(StockGRU, <span class="va">self</span>).<span class="fu">__init__</span>()</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Embedding layer</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.embedding <span class="op">=</span> nn.Embedding(num_embeddings<span class="op">=</span>num_stocks,  embedding_dim<span class="op">=</span>embedding_dim)</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>        <span class="co"># GRU layer</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.gru <span class="op">=</span> nn.GRU(</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>            input_size <span class="op">=</span> input_features <span class="op">+</span> embedding_dim,</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>            hidden_size <span class="op">=</span> hidden_size,</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>            num_layers <span class="op">=</span> num_layers,</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>            batch_first <span class="op">=</span> <span class="va">True</span>,</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>            dropout <span class="op">=</span> dropout_prob <span class="cf">if</span> num_layers <span class="op">&gt;</span> <span class="dv">1</span> <span class="cf">else</span> <span class="dv">0</span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Map from GRU to a single predicted value</span></span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.fc <span class="op">=</span> nn.Linear(hidden_size, <span class="dv">1</span>)</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x_seq, stock_indices):</span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Define forward pass</span></span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Get embedding vector for each stock. shape (batch_size, embredding_dim)</span></span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>        embeddings <span class="op">=</span> <span class="va">self</span>.embedding(stock_indices)</span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Unsqueeze and repeat the embeddings to match the sequence length of the features</span></span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a>        seq_len <span class="op">=</span> x_seq.shape[<span class="dv">1</span>]</span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a>        embeddings <span class="op">=</span> embeddings.unsqueeze(<span class="dv">1</span>).repeat(<span class="dv">1</span>, seq_len, <span class="dv">1</span>)</span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Combine with original features. shape (batch_size, seq_len, num_features+embedding_dim)</span></span>
+<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a>        combined_seq <span class="op">=</span> torch.cat((x_seq, embeddings), dim<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a>        <span class="co"># pass to the GRU model. shape (batch_size, seq_len, hidden_size)</span></span>
+<span id="cb17-35"><a href="#cb17-35" aria-hidden="true" tabindex="-1"></a>        gru_out, _ <span class="op">=</span> <span class="va">self</span>.gru(combined_seq)</span>
+<span id="cb17-36"><a href="#cb17-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-37"><a href="#cb17-37" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Get output from last step. shape (batch_size, hidden_size)</span></span>
+<span id="cb17-38"><a href="#cb17-38" aria-hidden="true" tabindex="-1"></a>        last_time_step_out <span class="op">=</span> gru_out[:, <span class="op">-</span><span class="dv">1</span>, :]</span>
+<span id="cb17-39"><a href="#cb17-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-40"><a href="#cb17-40" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Get final prediction. shape (batch_size, 1)</span></span>
+<span id="cb17-41"><a href="#cb17-41" aria-hidden="true" tabindex="-1"></a>        prediction <span class="op">=</span> <span class="va">self</span>.fc(last_time_step_out)</span>
+<span id="cb17-42"><a href="#cb17-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-43"><a href="#cb17-43" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> prediction</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>And now we can actually set up the model with our inputs:</p>
+<div id="bd2ddf34" class="cell" data-execution_count="15">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>device <span class="op">=</span> torch.device(<span class="st">"cpu"</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> StockGRU(num_stocks<span class="op">=</span><span class="bu">len</span>(stock_tickers),</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>                 embedding_dim<span class="op">=</span><span class="dv">20</span>,</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>                 input_features<span class="op">=</span><span class="bu">len</span>(feature_cols),</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>                 hidden_size<span class="op">=</span><span class="dv">64</span>,</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>                 num_layers<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>                 dropout_prob<span class="op">=</span><span class="fl">0.2</span>).to(device)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="training-the-model" class="level1">
+<h1>Training the model</h1>
+<p>Now we will train the model using backpropagation. Note that we have not actually set many values–the model is mostly learning the best parameter values based on the data we are giving it.</p>
+<div id="64d65dc2" class="cell" data-execution_count="16">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Loss function and optimizer</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>criterion <span class="op">=</span> nn.MSELoss()</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>optimizer <span class="op">=</span> torch.optim.Adam(model.parameters(), lr<span class="op">=</span><span class="fl">0.001</span>)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Training setup</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>num_epochs <span class="op">=</span> <span class="dv">50</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>best_val_loss <span class="op">=</span> <span class="bu">float</span>(<span class="st">'inf'</span>)</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>train_losses <span class="op">=</span> []</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>val_losses <span class="op">=</span> []</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Starting model training..."</span>)</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> epoch <span class="kw">in</span> <span class="bu">range</span>(num_epochs):</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>    model.train()</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>    train_loss <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> features, targets, stock_ids <span class="kw">in</span> train_loader:</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>        features, targets, stock_ids <span class="op">=</span> features.to(device), targets.to(device), stock_ids.to(device)</span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Zero the gradients to start</span></span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>        optimizer.zero_grad()</span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Forward pass</span></span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>        outputs <span class="op">=</span> model(features, stock_ids)</span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Ensure target col has same shape as outputs</span></span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>        targets <span class="op">=</span> targets.unsqueeze(<span class="dv">1</span>)</span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Calculate loss</span></span>
+<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a>        loss <span class="op">=</span> criterion(outputs, targets)</span>
+<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Backward pass and optimization</span></span>
+<span id="cb19-32"><a href="#cb19-32" aria-hidden="true" tabindex="-1"></a>        loss.backward()</span>
+<span id="cb19-33"><a href="#cb19-33" aria-hidden="true" tabindex="-1"></a>        optimizer.step()</span>
+<span id="cb19-34"><a href="#cb19-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-35"><a href="#cb19-35" aria-hidden="true" tabindex="-1"></a>        train_loss <span class="op">+=</span> loss.item()</span>
+<span id="cb19-36"><a href="#cb19-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-37"><a href="#cb19-37" aria-hidden="true" tabindex="-1"></a>    epoch_train_loss <span class="op">=</span> train_loss <span class="op">/</span> <span class="bu">len</span>(train_loader)</span>
+<span id="cb19-38"><a href="#cb19-38" aria-hidden="true" tabindex="-1"></a>    train_losses.append(epoch_train_loss)</span>
+<span id="cb19-39"><a href="#cb19-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-40"><a href="#cb19-40" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Validation</span></span>
+<span id="cb19-41"><a href="#cb19-41" aria-hidden="true" tabindex="-1"></a>    model.<span class="bu">eval</span>()</span>
+<span id="cb19-42"><a href="#cb19-42" aria-hidden="true" tabindex="-1"></a>    val_loss <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb19-43"><a href="#cb19-43" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> torch.no_grad():</span>
+<span id="cb19-44"><a href="#cb19-44" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> features, targets, stock_ids <span class="kw">in</span> val_loader:</span>
+<span id="cb19-45"><a href="#cb19-45" aria-hidden="true" tabindex="-1"></a>            features, targets, stock_ids <span class="op">=</span> features.to(device), targets.to(device), stock_ids.to(device)</span>
+<span id="cb19-46"><a href="#cb19-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-47"><a href="#cb19-47" aria-hidden="true" tabindex="-1"></a>            outputs <span class="op">=</span> model(features, stock_ids)</span>
+<span id="cb19-48"><a href="#cb19-48" aria-hidden="true" tabindex="-1"></a>            targets <span class="op">=</span> targets.unsqueeze(<span class="dv">1</span>)</span>
+<span id="cb19-49"><a href="#cb19-49" aria-hidden="true" tabindex="-1"></a>            loss <span class="op">=</span> criterion(outputs, targets)</span>
+<span id="cb19-50"><a href="#cb19-50" aria-hidden="true" tabindex="-1"></a>            val_loss <span class="op">+=</span> loss.item()</span>
+<span id="cb19-51"><a href="#cb19-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-52"><a href="#cb19-52" aria-hidden="true" tabindex="-1"></a>    epoch_val_loss <span class="op">=</span> val_loss <span class="op">/</span> <span class="bu">len</span>(val_loader)</span>
+<span id="cb19-53"><a href="#cb19-53" aria-hidden="true" tabindex="-1"></a>    val_losses.append(epoch_val_loss)</span>
+<span id="cb19-54"><a href="#cb19-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-55"><a href="#cb19-55" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Epoch </span><span class="sc">{</span>epoch<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>num_epochs<span class="sc">}</span><span class="ss">, Train Loss: </span><span class="sc">{</span>epoch_train_loss<span class="sc">:.4f}</span><span class="ss">, Val Loss: </span><span class="sc">{</span>epoch_val_loss<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb19-56"><a href="#cb19-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-57"><a href="#cb19-57" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Check for early stopping</span></span>
+<span id="cb19-58"><a href="#cb19-58" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> epoch_val_loss <span class="op">&lt;</span> best_val_loss:</span>
+<span id="cb19-59"><a href="#cb19-59" aria-hidden="true" tabindex="-1"></a>        best_val_loss <span class="op">=</span> epoch_val_loss</span>
+<span id="cb19-60"><a href="#cb19-60" aria-hidden="true" tabindex="-1"></a>        torch.save(model.state_dict(), <span class="st">"best_model.pth"</span>)</span>
+<span id="cb19-61"><a href="#cb19-61" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"  -&gt; Validation loss decreased. Saving best model."</span>)</span>
+<span id="cb19-62"><a href="#cb19-62" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb19-63"><a href="#cb19-63" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st"> Training Complete"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Starting model training...
+Epoch 1/50, Train Loss: 0.0881, Val Loss: 0.1970
+  -&gt; Validation loss decreased. Saving best model.
+Epoch 2/50, Train Loss: 0.0257, Val Loss: 0.1940
+  -&gt; Validation loss decreased. Saving best model.
+Epoch 3/50, Train Loss: 0.0214, Val Loss: 0.1978
+Epoch 4/50, Train Loss: 0.0187, Val Loss: 0.2039
+Epoch 5/50, Train Loss: 0.0185, Val Loss: 0.2579
+Epoch 6/50, Train Loss: 0.0177, Val Loss: 0.1990
+Epoch 7/50, Train Loss: 0.0163, Val Loss: 0.1741
+  -&gt; Validation loss decreased. Saving best model.
+Epoch 8/50, Train Loss: 0.0157, Val Loss: 0.1658
+  -&gt; Validation loss decreased. Saving best model.
+Epoch 9/50, Train Loss: 0.0157, Val Loss: 0.1513
+  -&gt; Validation loss decreased. Saving best model.
+Epoch 10/50, Train Loss: 0.0146, Val Loss: 0.1848
+Epoch 11/50, Train Loss: 0.0145, Val Loss: 0.1588
+Epoch 12/50, Train Loss: 0.0140, Val Loss: 0.1627
+Epoch 13/50, Train Loss: 0.0139, Val Loss: 0.1594
+Epoch 14/50, Train Loss: 0.0136, Val Loss: 0.1632
+Epoch 15/50, Train Loss: 0.0135, Val Loss: 0.1582
+Epoch 16/50, Train Loss: 0.0133, Val Loss: 0.1697
+Epoch 17/50, Train Loss: 0.0138, Val Loss: 0.1719
+Epoch 18/50, Train Loss: 0.0135, Val Loss: 0.1499
+  -&gt; Validation loss decreased. Saving best model.
+Epoch 19/50, Train Loss: 0.0140, Val Loss: 0.1723
+Epoch 20/50, Train Loss: 0.0134, Val Loss: 0.1588
+Epoch 21/50, Train Loss: 0.0130, Val Loss: 0.1563
+Epoch 22/50, Train Loss: 0.0130, Val Loss: 0.1621
+Epoch 23/50, Train Loss: 0.0130, Val Loss: 0.1642
+Epoch 24/50, Train Loss: 0.0130, Val Loss: 0.1728
+Epoch 25/50, Train Loss: 0.0128, Val Loss: 0.1754
+Epoch 26/50, Train Loss: 0.0130, Val Loss: 0.1894
+Epoch 27/50, Train Loss: 0.0129, Val Loss: 0.1685
+Epoch 28/50, Train Loss: 0.0125, Val Loss: 0.1761
+Epoch 29/50, Train Loss: 0.0128, Val Loss: 0.2068
+Epoch 30/50, Train Loss: 0.0126, Val Loss: 0.1883
+Epoch 31/50, Train Loss: 0.0125, Val Loss: 0.1849
+Epoch 32/50, Train Loss: 0.0124, Val Loss: 0.1955
+Epoch 33/50, Train Loss: 0.0121, Val Loss: 0.1985
+Epoch 34/50, Train Loss: 0.0124, Val Loss: 0.2269
+Epoch 35/50, Train Loss: 0.0126, Val Loss: 0.1832
+Epoch 36/50, Train Loss: 0.0123, Val Loss: 0.1941
+Epoch 37/50, Train Loss: 0.0121, Val Loss: 0.1916
+Epoch 38/50, Train Loss: 0.0118, Val Loss: 0.1762
+Epoch 39/50, Train Loss: 0.0126, Val Loss: 0.1975
+Epoch 40/50, Train Loss: 0.0119, Val Loss: 0.1896
+Epoch 41/50, Train Loss: 0.0123, Val Loss: 0.1820
+Epoch 42/50, Train Loss: 0.0121, Val Loss: 0.1964
+Epoch 43/50, Train Loss: 0.0119, Val Loss: 0.1905
+Epoch 44/50, Train Loss: 0.0117, Val Loss: 0.2139
+Epoch 45/50, Train Loss: 0.0118, Val Loss: 0.1923
+Epoch 46/50, Train Loss: 0.0120, Val Loss: 0.1919
+Epoch 47/50, Train Loss: 0.0118, Val Loss: 0.1940
+Epoch 48/50, Train Loss: 0.0147, Val Loss: 0.2531
+Epoch 49/50, Train Loss: 0.0136, Val Loss: 0.1909
+Epoch 50/50, Train Loss: 0.0118, Val Loss: 0.2113
+
+ Training Complete</code></pre>
+</div>
+</div>
+<p>Now we can plot the training and validation loss over time</p>
+<div id="e418f56f" class="cell" data-execution_count="17">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>plt.clf()</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>plt.plot(train_losses, label<span class="op">=</span><span class="st">"Train Loss"</span>)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>plt.plot(val_losses, label<span class="op">=</span><span class="st">"Validation Loss"</span>)</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Epoch"</span>)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Loss"</span>)</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-18-output-1.png" width="601" height="435" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Finally, we can run the final trained model on the test set, calculate the root mean square error (RMSE), and plot the predictions against actual values for a few stocks</p>
+<p>First the test predictions:</p>
+<div id="ebe676a1" class="cell" data-execution_count="18">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the best model</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>model.load_state_dict(torch.load(<span class="st">"best_model.pth"</span>))</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>model.to(device)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>model.<span class="bu">eval</span>()</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict on test set</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>test_predictions <span class="op">=</span> []</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>test_truth <span class="op">=</span> []</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>all_stock_indices <span class="op">=</span> []</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> torch.no_grad():</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> features, targets, stock_ids <span class="kw">in</span> test_loader:</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>        features <span class="op">=</span> features.to(device)</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>        targets <span class="op">=</span> targets.to(device)</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>        stock_ids <span class="op">=</span> stock_ids.to(device)</span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Get predictions</span></span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>        outputs <span class="op">=</span> model(features, stock_ids)</span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Store results</span></span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>        test_predictions.append(outputs.cpu().numpy())</span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>        test_truth.append(targets.cpu().numpy())</span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>        all_stock_indices.append(stock_ids.cpu().numpy())</span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>predictions_scaled <span class="op">=</span> np.concatenate(test_predictions).flatten()</span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>truth_scaled <span class="op">=</span> np.concatenate(test_truth).flatten()</span>
+<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a>stock_indices_flat <span class="op">=</span> np.concatenate(all_stock_indices).flatten()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/var/folders/k9/2x8pccyj4l186_tbnbtkf8_40000gn/T/ipykernel_68888/523845198.py:2: FutureWarning:
+
+You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+</code></pre>
+</div>
+</div>
+<p>Now the RMSE:</p>
+<div id="530adc5c" class="cell" data-execution_count="19">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>id_to_stock <span class="op">=</span> {v: k <span class="cf">for</span> k, v <span class="kw">in</span> ticker_to_int.items()}</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>predictions_unscaled <span class="op">=</span> []</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>truth_unscaled <span class="op">=</span> []</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Find the index of the 'Close' column, which is our target variable</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>close_feature_index <span class="op">=</span> features_to_scale.index(<span class="st">"Close"</span>)</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>num_features <span class="op">=</span> <span class="bu">len</span>(features_to_scale)</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(predictions_scaled)):</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>    stock_id <span class="op">=</span> stock_indices_flat[i]</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>    stock_name <span class="op">=</span> id_to_stock[stock_id]</span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>    scaler <span class="op">=</span> scalers[stock_name]</span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Create dummy arrays with the shape the scaler expects (1, num_features)</span></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>    dummy_pred <span class="op">=</span> np.zeros((<span class="dv">1</span>, num_features))</span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>    dummy_truth <span class="op">=</span> np.zeros((<span class="dv">1</span>, num_features))</span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Place the single predicted and true values into the 'Close' column</span></span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>    dummy_pred[<span class="dv">0</span>, close_feature_index] <span class="op">=</span> predictions_scaled[i]</span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>    dummy_truth[<span class="dv">0</span>, close_feature_index] <span class="op">=</span> truth_scaled[i]</span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Now, inverse transform the full arrays</span></span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>    pred_unscaled_full <span class="op">=</span> scaler.inverse_transform(dummy_pred)</span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a>    truth_unscaled_full <span class="op">=</span> scaler.inverse_transform(dummy_truth)</span>
+<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Extract just the unscaled 'Close' price</span></span>
+<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a>    predictions_unscaled.append(pred_unscaled_full[<span class="dv">0</span>, close_feature_index])</span>
+<span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a>    truth_unscaled.append(truth_unscaled_full[<span class="dv">0</span>, close_feature_index])</span>
+<span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a>rmse <span class="op">=</span> np.sqrt(np.mean((np.array(predictions_unscaled) <span class="op">-</span> np.array(truth_unscaled))<span class="op">**</span><span class="dv">2</span>))</span>
+<span id="cb24-33"><a href="#cb24-33" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"RMSE: </span><span class="sc">{</span>rmse<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>RMSE: 13.132668698887342</code></pre>
+</div>
+</div>
+<p>Finally, we can plot the predictions and truth for a single stock:</p>
+<div id="2d7d23b3" class="cell" data-execution_count="20">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># filter for just "AAPL"</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>curr_id <span class="op">=</span> ticker_to_int[<span class="st">"AAPL"</span>]</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>curr_pred <span class="op">=</span> np.array(predictions_unscaled)[stock_indices_flat <span class="op">==</span> curr_id]</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>curr_truth <span class="op">=</span> np.array(truth_unscaled)[stock_indices_flat <span class="op">==</span> curr_id]</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>plt.clf()</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>plt.plot(curr_truth, label<span class="op">=</span><span class="st">"Truth"</span>)</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>plt.plot(curr_pred, label<span class="op">=</span><span class="st">"Predictions"</span>)</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"AAPL Predictions and truth"</span>)</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-21-output-1.png" width="582" height="435" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="looking-at-the-embedding-matrix" class="level1">
+<h1>Looking at the embedding matrix</h1>
+<p>Finally, we can look at the learned embedding matrix. Here it is:</p>
+<div id="1862a391" class="cell" data-execution_count="21">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract embedding matrix </span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>embedding_matrix <span class="op">=</span> model.embedding.weight.data.numpy()</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(embedding_matrix)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[ 6.41760707e-01 -1.14142406e+00  4.12764177e-02 -1.36975384e+00
+   1.77361333e+00 -3.52475286e-01 -4.00140643e-01 -8.38561356e-01
+  -6.84329987e-01 -5.60092330e-01 -8.27509999e-01  7.75516629e-01
+  -1.59447634e+00 -1.48932010e-01  2.19432139e+00 -8.36391926e-01
+  -7.33397841e-01  1.00966477e+00  7.57936537e-01  1.48838091e+00]
+ [ 2.28843629e-01 -6.34771824e-01 -4.25800353e-01  1.41501889e-01
+  -1.14357151e-01  4.96075377e-02 -3.54390413e-01  8.75615418e-01
+  -3.55439842e-01 -3.59233171e-01  8.25989783e-01 -5.58731079e-01
+   1.97347537e-01 -3.23170364e-01  3.19219470e-01 -6.28627241e-01
+   1.02026381e-01  3.60481501e-01  1.44355941e+00 -6.72315061e-01]
+ [-1.25801301e+00  2.01196313e+00 -1.15901399e+00 -3.72060418e-01
+  -1.35630834e+00  8.74390900e-01 -9.35527384e-02  2.28866172e+00
+  -5.09589791e-01  1.08724749e+00 -8.40249419e-01 -7.38921463e-01
+  -8.40176582e-01 -8.78490448e-01  1.70360374e+00  1.12073787e-01
+  -1.61134228e-01  1.79364550e+00 -1.13537419e+00  1.35150492e+00]
+ [-1.18235564e+00  7.11894989e-01 -9.77480710e-01  5.70863128e-01
+   2.76621580e-01 -1.81894422e-01 -1.01884556e+00  1.24698436e+00
+   1.25808597e-01  1.48420542e-01 -8.38613603e-03 -2.04659745e-01
+   5.56867838e-01 -6.47398293e-01 -2.14188814e+00 -7.51484752e-01
+   2.65799356e+00  3.53560776e-01 -4.14970368e-02  4.83402967e-01]
+ [ 5.16533315e-01  5.04493713e-01  1.09677470e+00  3.10765933e-02
+   7.35663354e-01 -6.35114014e-01 -5.87375224e-01  9.33346748e-01
+  -1.68858850e+00 -7.89346337e-01  1.30741405e+00  4.86667722e-01
+  -1.90499455e-01  1.20735466e+00  1.19923532e+00  1.54018149e-01
+   6.46104217e-01  5.82522750e-01  1.03011751e+00 -3.71500790e-01]
+ [-7.38144219e-01  5.74839592e-01  2.45435178e-01 -3.95519644e-01
+   3.42203796e-01  1.10198808e+00 -5.08025773e-02 -3.16796750e-01
+  -9.96258855e-01  8.22116211e-02  3.78308117e-01  5.87060392e-01
+   6.02088213e-01  6.95299879e-02 -3.38151067e-01  5.05029261e-01
+   9.87961233e-01 -6.25898600e-01  1.03089356e+00 -2.51603633e-01]
+ [ 1.04667306e+00  2.77675778e-01  6.98742211e-01  4.52382207e-01
+  -5.00931680e-01  4.91192102e-01 -4.65178251e-01 -4.23827916e-01
+  -9.77671891e-02  1.61461961e+00  6.17139459e-01  5.25417507e-01
+  -3.62287819e-01  2.00952869e-02  1.31402194e-01  7.25262105e-01
+  -3.75107139e-01  9.37774658e-01 -6.49333715e-01  6.47423565e-01]
+ [ 2.36486435e-01 -3.10989171e-02 -1.40798843e+00 -6.05268240e-01
+   2.41226003e-01 -2.17434511e-01 -7.06100523e-01  8.76561180e-02
+   1.02581179e+00 -3.95266384e-01 -2.23896575e+00  4.81487125e-01
+  -2.37299418e+00 -4.74188268e-01 -1.16480279e+00  7.87901938e-01
+  -3.26828212e-01 -3.45807672e-01 -9.19755280e-01  2.09658816e-01]
+ [ 2.12038264e-01 -6.67127609e-01  2.35754550e-01 -1.06597662e+00
+   9.50986743e-01 -3.53556007e-01  5.75187445e-01  1.08244777e+00
+  -1.59113872e+00  6.50627613e-01  7.55966365e-01  2.02469826e+00
+   7.86027968e-01 -6.18678987e-01 -4.84882981e-01  2.31599122e-01
+  -8.66977692e-01 -1.52425599e+00 -1.14020240e+00 -4.21398729e-01]
+ [ 6.98262036e-01  1.46942258e+00 -1.36362243e+00 -7.67262697e-01
+   1.02550113e+00 -4.32120323e-01  5.60828388e-01  7.33975828e-01
+  -1.52646995e+00 -7.48657823e-01  4.68615741e-01  6.40668333e-01
+  -1.12349164e+00  3.73003095e-01  4.94431943e-01  1.35985792e+00
+  -2.40478769e-01 -4.12612468e-01  8.90145242e-01 -1.33954495e-01]
+ [ 4.86539826e-02  1.07103550e+00  1.27099109e+00  4.84874040e-01
+   3.01775545e-01 -7.37261176e-01 -2.07959223e+00 -1.51233757e+00
+   1.11954637e-01  4.10629004e-01 -1.86052829e-01 -2.20756841e+00
+   1.23627388e+00  5.25716543e-01  1.03054023e+00 -2.24707454e-01
+   3.66469562e-01 -4.35204834e-01  9.65668976e-01  1.59222209e+00]
+ [-4.46240092e-03 -7.41443336e-01 -1.03177381e+00 -7.14859247e-01
+  -5.74759781e-01  1.00528784e-01  3.99143368e-01  1.95066798e+00
+  -4.18759018e-01 -6.92139864e-02 -1.35553992e+00  3.71704012e-01
+  -1.14556514e-02  1.07477956e-01  1.77317396e-01  3.88715625e-01
+  -1.51529694e+00  2.19784784e+00  9.34992552e-01  1.33733964e+00]
+ [-7.70037472e-01 -4.35320251e-02 -3.53403836e-01  1.31359780e+00
+   1.75487056e-01  1.05343854e+00  3.99766453e-02 -6.68266192e-02
+   5.33480287e-01  6.63324893e-01  4.92043614e-01  2.17907891e-01
+  -8.44594657e-01  1.48420680e+00 -8.70472848e-01 -4.97142106e-01
+  -1.35921788e+00  4.83252347e-01 -2.31028110e-01  8.22829187e-01]
+ [ 5.14641285e-01  1.76229024e+00  9.96322930e-01 -9.29941177e-01
+   1.25862718e+00  1.95473492e-01 -1.87061000e+00  4.39966172e-02
+  -1.43068373e+00 -1.82693279e+00 -1.20898694e-01  7.42986739e-01
+  -2.30663776e-01 -7.91097939e-01  1.67091000e+00  3.45919654e-02
+   8.33615661e-01 -5.49168944e-01 -8.87610853e-01 -1.41350850e-01]
+ [ 3.68108898e-01  1.18101251e+00  2.24354848e-01 -1.21400379e-01
+  -4.72058922e-01  2.78243601e-01  2.70778000e-01  6.86221898e-01
+  -3.24653774e-01 -9.31926221e-02 -6.58364952e-01 -8.08802154e-03
+   5.30802310e-01  9.38842833e-01 -2.86634654e-01 -4.71362531e-01
+  -3.80043648e-02  1.44268826e-01  1.26471829e+00  7.23792315e-01]
+ [ 3.20058882e-01 -5.21111786e-01  8.28912020e-01 -6.09781861e-01
+   4.62739944e-01  1.21937907e+00 -2.22406054e+00 -1.22896826e+00
+   1.92272440e-01 -1.22381151e+00  1.77746153e+00  5.69071174e-02
+  -7.35171437e-01 -6.65008351e-02  1.19877326e+00 -1.00136876e+00
+   3.35576773e-01  8.68975520e-01 -1.80110729e+00 -1.29643095e+00]
+ [ 5.43128371e-01  3.10235471e-01  8.03864822e-02  1.07086718e-01
+  -4.00724858e-01  4.58084457e-02 -2.58035898e-01 -1.15368700e+00
+   4.50249046e-01  2.72949576e-01 -5.78305066e-01  2.61135492e-02
+   1.61181569e-01 -8.90061080e-01  1.87081623e+00  4.17281777e-01
+   5.43467164e-01 -7.42309451e-01 -5.56090236e-01  1.11632742e-01]
+ [ 3.27682644e-01  9.87897664e-02  2.70947313e+00 -6.54059887e-01
+   9.38856006e-01 -5.73074818e-01 -5.22129178e-01 -3.11149031e-01
+  -2.60551631e-01 -6.54898703e-01  7.25920871e-02 -2.51580477e-01
+  -2.35162705e-01 -8.02271962e-01 -4.88955021e-01  1.90907145e+00
+   8.03063452e-01 -7.45709598e-01  2.67324328e-01  2.61150211e-01]
+ [-1.69579470e+00 -6.92527831e-01 -3.69451344e-01  1.78828645e+00
+   1.11335099e-01 -7.97521994e-02 -1.20621756e-01 -1.17764795e+00
+   2.74306387e-01  6.33766174e-01 -1.93392247e-01  6.85137510e-01
+  -1.26898527e+00  1.58488715e+00  1.89203203e+00 -8.13378915e-02
+  -5.78456640e-01  8.85918081e-01 -4.17309850e-01 -2.71611035e-01]
+ [-1.12781622e-01 -4.63514835e-01  9.78085518e-01  2.12173685e-01
+   1.40672910e+00 -8.93225670e-01 -5.83315611e-01 -1.08696625e-01
+  -1.20838034e+00  8.63236904e-01 -1.33727717e+00 -6.70106709e-01
+   9.40750003e-01 -3.23135793e-01 -7.73113549e-01  8.10014606e-01
+   1.43356919e+00 -1.35363376e+00 -3.54191661e-01 -3.29997689e-02]
+ [ 9.12107468e-01 -9.00928527e-02  2.08457530e-01 -4.39462550e-02
+  -3.03371727e-01 -5.78399301e-01  4.13746417e-01  3.62069786e-01
+  -1.63393229e-01 -2.99655974e-01 -1.81800842e-01  8.06016624e-01
+   6.94573641e-01 -1.35317862e+00  7.41126597e-01  7.37512589e-01
+  -5.56269884e-01 -5.86349070e-01 -3.47791202e-02 -1.59378958e+00]
+ [-6.88430607e-01  2.39587933e-01  7.60497749e-01  1.54302821e-01
+   9.14610922e-01 -6.23073280e-01 -5.22587001e-01  6.83146536e-01
+   1.85526860e+00 -1.34141326e+00  5.53900957e-01 -2.62180716e-01
+   8.39321733e-01  1.92788208e-03  6.35610223e-01  9.66935396e-01
+   7.02802420e-01  1.43018365e+00 -1.08977807e+00  1.97634399e+00]
+ [-1.96323078e-02  1.15340948e+00  7.22166598e-01 -7.53698111e-01
+  -6.12139225e-01  1.36203957e+00  2.09366933e-01  1.13656439e-01
+  -4.42705512e-01 -9.02424216e-01 -6.00151896e-01  8.18189681e-01
+  -2.86801785e-01  6.47520646e-02  1.09528375e+00  1.16722301e-01
+  -1.67486898e-03 -9.14238989e-01 -1.21512938e+00  1.04001260e+00]
+ [-8.75952363e-01  2.52744532e+00  6.59829676e-01  6.45369887e-01
+   1.52580380e-01  1.16410542e+00 -1.28972030e+00 -1.39095306e+00
+   1.21657573e-01 -3.65171909e-01  2.19626039e-01 -1.49784982e+00
+   2.74529195e+00  1.91646862e+00  1.94143903e+00 -1.03649914e+00
+  -1.97551167e+00  9.97881114e-01  6.64939344e-01 -6.43275261e-01]
+ [-4.65051830e-01 -5.62630951e-01 -1.59458101e+00 -9.89392698e-01
+  -9.95415330e-01  2.74381995e+00 -9.09700930e-01 -3.61390203e-01
+  -4.35305923e-01 -2.10234709e-02  3.57831180e-01 -2.74807252e-02
+  -2.30223370e+00 -6.31345987e-01  1.00014031e+00  1.37772894e+00
+  -7.44744360e-01 -6.54106140e-01 -1.23502421e+00  1.83245480e+00]
+ [-1.05321300e+00  1.19157612e+00  2.03877017e-01  5.55495381e-01
+   5.67546725e-01  4.62194026e-01 -2.51522601e-01  4.98369366e-01
+  -1.73003101e+00  1.11012042e+00  4.78471488e-01  3.63174558e-01
+   1.54758620e+00  1.77372485e-01 -6.93245292e-01 -9.57159400e-01
+  -8.03570747e-01 -1.58129036e+00 -8.11112702e-01 -9.08355117e-02]
+ [-1.70232749e+00  1.02444135e-01 -1.82745802e+00 -7.60906458e-01
+  -6.14096403e-01 -7.87997663e-01 -8.02558064e-01  1.81637526e+00
+   3.64789337e-01 -2.53366685e+00 -1.38334417e+00 -9.96919274e-01
+   1.48949146e-01 -1.07850325e+00  1.87267706e-01  1.61198759e+00
+   1.11270535e+00  6.44365430e-01  1.02423680e+00 -4.42746639e-01]
+ [-7.52864704e-02 -3.42367172e-01 -5.93554676e-01 -1.31128287e+00
+  -6.29722774e-01 -7.12510169e-01 -2.21413404e-01  1.59659600e+00
+   4.30030137e-01  1.47203875e+00 -1.00230110e+00  5.61584055e-01
+  -1.98873138e+00 -4.28384483e-01 -9.50967729e-01 -3.58721912e-02
+  -8.15662920e-01 -2.73768187e-01 -1.72121361e-01  3.13028544e-01]
+ [ 1.16766788e-01 -1.68031126e-01  2.94870913e-01 -4.65907425e-01
+  -1.02340728e-01 -2.73402035e-02 -5.57118244e-02 -2.30663419e-02
+   5.27067900e-01 -5.88415146e-01 -1.77089900e-01  6.50333583e-01
+   1.44420698e-01 -2.52511144e-01  6.32990837e-01  1.84374288e-01
+  -1.66663778e+00 -2.23856688e-01 -4.58516449e-01  2.02023721e+00]
+ [ 8.82865071e-01 -1.35191762e+00  2.69959904e-02  9.25804257e-01
+  -2.83786118e-01 -1.89318255e-01 -1.26195145e+00 -9.30214524e-01
+   8.61930072e-01 -1.46914303e-01  6.78635120e-01  7.28050292e-01
+  -9.16099429e-01  3.56288463e-01  7.70073950e-01 -9.98479009e-01
+   4.64271843e-01  1.63385355e+00  1.11262836e-01  2.26415917e-01]
+ [ 5.68573594e-01  2.32138231e-01  1.67377460e+00  5.64837515e-01
+  -4.47527915e-01  3.94940376e-01 -6.66161299e-01 -4.98712391e-01
+   1.08154483e-01  3.45441396e-03  5.26595592e-01 -4.95949060e-01
+  -1.06596804e+00 -4.30209845e-01  7.50478268e-01  1.45355737e+00
+   8.27714801e-02  1.38327861e+00  2.80853033e-01  5.44879556e-01]]</code></pre>
+</div>
+</div>
+<p>Great, still a bunch of numbers! We’ll use a technique called t-SNE to visualize it in a 2D space.</p>
+<div id="21e86fb4" class="cell" data-execution_count="22">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply t-SNE</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>tsne <span class="op">=</span> TSNE(n_components<span class="op">=</span><span class="dv">2</span>, random_state<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>tsne_results <span class="op">=</span> tsne.fit_transform(embedding_matrix)</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="co"># label each row with the corresponding stock ticker</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>tsne_df <span class="op">=</span> pd.DataFrame(tsne_results, columns<span class="op">=</span>[<span class="st">'x'</span>, <span class="st">'y'</span>])</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>tsne_df[<span class="st">'ticker'</span>] <span class="op">=</span> stock_tickers</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot</span></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>plt.clf()</span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(data<span class="op">=</span>tsne_df, x<span class="op">=</span><span class="st">'x'</span>, y<span class="op">=</span><span class="st">'y'</span>, hue<span class="op">=</span><span class="st">'ticker'</span>, legend<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a><span class="co"># have the labels show up right on the points</span></span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> line <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>,tsne_df.shape[<span class="dv">0</span>]):</span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>     plt.text(tsne_df.x[line], tsne_df.y[line], tsne_df.ticker[line], horizontalalignment<span class="op">=</span><span class="st">'left'</span>, size<span class="op">=</span><span class="st">'small'</span>, color<span class="op">=</span><span class="st">'black'</span>, weight<span class="op">=</span><span class="st">'semibold'</span>)</span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"t-SNE Visualization of Embedding Matrix"</span>)</span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-23-output-1.png" width="597" height="455" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We could also look at similarity based on K nearest neighbors in the embedding matrix</p>
+<div id="f1ce727d" class="cell" data-execution_count="23">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We want to find the 5 nearest neighbors, so we set n_neighbors=6 to include the item itself</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>nn <span class="op">=</span> NearestNeighbors(n_neighbors<span class="op">=</span><span class="dv">6</span>, metric<span class="op">=</span><span class="st">'cosine'</span>)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>nn.fit(embedding_matrix)</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Find the nearest neighbors for each stock</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>distances, indices <span class="op">=</span> nn.kneighbors(embedding_matrix)</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a dictionary to store the results, mapping each stock to its neighbors</span></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>neighbors_dict <span class="op">=</span> {}</span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, ticker <span class="kw">in</span> <span class="bu">enumerate</span>(stock_tickers):</span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># The first neighbor is the stock itself, so we take the next 5</span></span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>    neighbor_indices <span class="op">=</span> indices[i][<span class="dv">1</span>:]</span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>    neighbors_dict[ticker] <span class="op">=</span> [stock_tickers[idx] <span class="cf">for</span> idx <span class="kw">in</span> neighbor_indices]</span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert to a DataFrame for a clear, tabular view</span></span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a>neighbors_df <span class="op">=</span> pd.DataFrame.from_dict(neighbors_dict, orient<span class="op">=</span><span class="st">'index'</span>, columns<span class="op">=</span>[<span class="ss">f'Neighbor_</span><span class="sc">{</span>j<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">'</span> <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">5</span>)])</span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a>neighbors_df</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="23">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Neighbor_1</th>
+<th data-quarto-table-cell-role="th">Neighbor_2</th>
+<th data-quarto-table-cell-role="th">Neighbor_3</th>
+<th data-quarto-table-cell-role="th">Neighbor_4</th>
+<th data-quarto-table-cell-role="th">Neighbor_5</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">AABA</th>
+<td>VZ</td>
+<td>WMT</td>
+<td>GS</td>
+<td>IBM</td>
+<td>MCD</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">AAPL</th>
+<td>BA</td>
+<td>UNH</td>
+<td>WMT</td>
+<td>GS</td>
+<td>MRK</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">AMZN</th>
+<td>GS</td>
+<td>PG</td>
+<td>NKE</td>
+<td>UTX</td>
+<td>UNH</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">AXP</th>
+<td>UNH</td>
+<td>MMM</td>
+<td>CAT</td>
+<td>MSFT</td>
+<td>TRV</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">BA</th>
+<td>IBM</td>
+<td>GE</td>
+<td>AAPL</td>
+<td>CAT</td>
+<td>XOM</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">CAT</th>
+<td>TRV</td>
+<td>MMM</td>
+<td>BA</td>
+<td>KO</td>
+<td>GE</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">CSCO</th>
+<td>XOM</td>
+<td>WMT</td>
+<td>HD</td>
+<td>PG</td>
+<td>AMZN</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">CVX</th>
+<td>UTX</td>
+<td>PG</td>
+<td>UNH</td>
+<td>GS</td>
+<td>AABA</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">DIS</th>
+<td>TRV</td>
+<td>MRK</td>
+<td>MMM</td>
+<td>GE</td>
+<td>UTX</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">GE</th>
+<td>BA</td>
+<td>IBM</td>
+<td>DIS</td>
+<td>CAT</td>
+<td>AABA</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">GOOGL</th>
+<td>PFE</td>
+<td>JPM</td>
+<td>MMM</td>
+<td>XOM</td>
+<td>KO</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">GS</th>
+<td>AMZN</td>
+<td>UTX</td>
+<td>VZ</td>
+<td>INTC</td>
+<td>UNH</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">HD</th>
+<td>MCD</td>
+<td>CSCO</td>
+<td>PG</td>
+<td>WMT</td>
+<td>TRV</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">IBM</th>
+<td>NKE</td>
+<td>JNJ</td>
+<td>BA</td>
+<td>KO</td>
+<td>JPM</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">INTC</th>
+<td>GS</td>
+<td>PFE</td>
+<td>BA</td>
+<td>CAT</td>
+<td>GOOGL</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">JNJ</th>
+<td>WMT</td>
+<td>IBM</td>
+<td>XOM</td>
+<td>PG</td>
+<td>BA</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">JPM</th>
+<td>NKE</td>
+<td>IBM</td>
+<td>MRK</td>
+<td>GOOGL</td>
+<td>XOM</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">KO</th>
+<td>MMM</td>
+<td>XOM</td>
+<td>IBM</td>
+<td>GOOGL</td>
+<td>CAT</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">MCD</th>
+<td>HD</td>
+<td>WMT</td>
+<td>AABA</td>
+<td>PFE</td>
+<td>JNJ</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">MMM</th>
+<td>KO</td>
+<td>GOOGL</td>
+<td>TRV</td>
+<td>AXP</td>
+<td>CAT</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">MRK</th>
+<td>DIS</td>
+<td>JPM</td>
+<td>IBM</td>
+<td>GE</td>
+<td>KO</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">MSFT</th>
+<td>VZ</td>
+<td>XOM</td>
+<td>UNH</td>
+<td>KO</td>
+<td>GOOGL</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">NKE</th>
+<td>IBM</td>
+<td>PG</td>
+<td>VZ</td>
+<td>JPM</td>
+<td>AMZN</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">PFE</th>
+<td>GOOGL</td>
+<td>INTC</td>
+<td>TRV</td>
+<td>MCD</td>
+<td>JNJ</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">PG</th>
+<td>NKE</td>
+<td>AMZN</td>
+<td>CVX</td>
+<td>VZ</td>
+<td>UTX</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">TRV</th>
+<td>DIS</td>
+<td>CAT</td>
+<td>MMM</td>
+<td>PFE</td>
+<td>HD</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">UNH</th>
+<td>AXP</td>
+<td>GS</td>
+<td>CVX</td>
+<td>AMZN</td>
+<td>AAPL</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">UTX</th>
+<td>CVX</td>
+<td>GS</td>
+<td>AMZN</td>
+<td>PG</td>
+<td>DIS</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">VZ</th>
+<td>NKE</td>
+<td>AABA</td>
+<td>MSFT</td>
+<td>PG</td>
+<td>GS</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">WMT</th>
+<td>JNJ</td>
+<td>MCD</td>
+<td>AABA</td>
+<td>XOM</td>
+<td>CSCO</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">XOM</th>
+<td>CSCO</td>
+<td>KO</td>
+<td>WMT</td>
+<td>MSFT</td>
+<td>GOOGL</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

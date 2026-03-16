@@ -3,7 +3,7 @@ title: "Learning about embedding matrices using stock prices"
 author: "Ravi Brenner"
 format: html
 categories: [projects]
-drafts: true
+draft: true
 engine: jupyter
 ---
 
