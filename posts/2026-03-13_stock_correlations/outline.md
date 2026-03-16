@@ -22,19 +22,22 @@ This section will focus on getting the data ready for the model.
     *   Parse the `Date` column into datetime objects.
     *   Check for and handle missing values. The data preview shows some missing values; a forward-fill (`fillna(method='ffill')`) strategy is a reasonable approach for time-series data.
 *   **Exploratory Data Analysis (EDA)**:
+    *   Plot histograms of the price and volume features to assess their distribution. Decide if a log transformation is necessary to reduce skewness.
     *   Plot the 'Close' price over time for a few sample stocks (e.g., `AAPL`, `GOOGL`, `XOM`) to visualize their trends.
     *   Create a list of all unique stock tickers (`Name`) present in the dataset.
-*   **Feature Engineering & Normalization**:
+*   **Feature Engineering**:
+    *   **Log Transformation**: Apply a log transformation (e.g., `numpy.log1p`) to the price and volume features (`Open`, `High`, `Low`, `Close`, `Volume`) to normalize their distributions. This should be done before scaling.
     *   **Stock Ticker Mapping**: Create a dictionary to map each unique stock `Name` to an integer index (e.g., `{'MMM': 0, 'AXP': 1, ...}`). This is essential for the embedding layer.
-    *   **Feature Scaling**: Neural networks perform best with normalized data. Use `scikit-learn`'s `MinMaxScaler` to scale the numerical features (`Open`, `High`, `Low`, `Close`, `Volume`) to a range (e.g., 0 to 1). It's important to fit the scaler *only* on the training data and then use it to transform the validation and test sets.
-*   **Sequence Creation**:
+*   **Data Splitting (Chronological)**:
+*   **Feature Scaling**:
+    *   Neural networks perform best with normalized data. Use `scikit-learn`'s `MinMaxScaler`.
+    *   **Important**: For each stock, fit a scaler *only* on its training data. Then, use that *same fitted scaler* to transform the validation and test sets for that stock. This prevents information from the future (validation/test sets) from leaking into the training process.
+*   **Sequence Creation (Sliding Window)**:
     *   Define a `sequence_length` (e.g., 30 days).
-    *   Write a function that iterates through the data for each stock and creates input/output pairs. For example, an input sequence would be 30 days of data (`Open`, `High`, `Low`, `Close`, `Volume`), and the corresponding label would be the `Close` price on the 31st day.
-*   **Data Splitting**:
-    *   For time-series data, the split must be chronological. A good approach would be:
-        *   **Training Set**: First 70% of the data.
-        *   **Validation Set**: Next 15% of the data.
-        *   **Test Set**: Final 15% of the data.
+    *   Write a function that takes the scaled data and creates input/output pairs. For each stock, it will iterate through the data, creating sequences.
+    *   An input `X` will be the data from day `t` to `t + 29`.
+    *   The corresponding output `y` will be the 'Close' price on day `t + 30`.
+    *   This process should be applied to the training, validation, and test sets.
 
 ## 3. PyTorch Dataset and DataLoader
 
