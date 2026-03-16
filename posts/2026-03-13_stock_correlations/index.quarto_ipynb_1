@@ -1,0 +1,861 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "---\n",
+        "title: \"Learning about embedding matrices using stock prices\"\n",
+        "author: \"Ravi Brenner\"\n",
+        "format: html\n",
+        "categories: [projects]\n",
+        "draft: true\n",
+        "engine: jupyter\n",
+        "---\n",
+        "\n",
+        "When you send a message to an AI model, how does it \"know\" what your words \"mean\"? It should go without saying that it is quite complicated, and the specific layers within a particular large language model (LLM) can vary a bit. I am not an expert on large language models, but I know they are a specific type of neural network. They use an architecture called a transformer and a technique called attention (this super [cool graphic](https://poloclub.github.io/transformer-explainer/) walks through some of the details).\n",
+        "\n",
+        "The first step in this kind of neural network is called embedding. An embedding layer or embedding matrix allows the model to convert categorical or text-like inputs into numbers. For example, with an LLM, there may be hundreds of thousands of possible input words. With the embedding layer, the model convert each word to a list of 200 numbers (for example). Each word can then be [compared to another](https://youtu.be/wjZofJX0v4M?t=747&si=4w36iWRWXraYx7rF), so similar words will have similar lists (called vectors) in this high dimensional space.\n",
+        "\n",
+        "If you're already feeling lost, don't worry. We are going to learn about embedding matrices using a simpler type of neural network called a recurrent neural network, or RNN. This is used to predict sequences of things, like stock prices over time or words in a sentence, and leverages an embedding layer to help accomplish that. If you're not interested in all the details, skip down to here to take a look at some of the results.\n",
+        "\n",
+        "# Introduction and setup\n",
+        "\n",
+        "The goal of this project is to understand a little bit about how deep learning models work, and to learn about embedding matrices. To do this, we will develop a deep learning model to predict daily stock closing prices. We will use a Gated Recurrent Unit (GRU), a type of recurrent neural network (RNN) for sequence data, implemented in PyTorch. We will also explore the embedding matrix that the model learns during training, and see how it captures relationships between different stocks.\n",
+        "\n",
+        "## Libraries"
+      ],
+      "id": "8df456f4"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: setup\n",
+        "import numpy as np\n",
+        "import pandas as pd\n",
+        "import torch\n",
+        "import torch.nn as nn\n",
+        "from torch.utils.data import Dataset, DataLoader\n",
+        "from sklearn.preprocessing import MinMaxScaler\n",
+        "from sklearn.neighbors import NearestNeighbors\n",
+        "from sklearn.manifold import TSNE\n",
+        "import matplotlib.pyplot as plt\n",
+        "import seaborn as sns\n",
+        "import random\n",
+        "\n",
+        "# for reproducibility\n",
+        "def set_seed(seed):\n",
+        "    random.seed(seed)\n",
+        "    np.random.seed(seed)\n",
+        "    torch.manual_seed(seed)\n",
+        "\n",
+        "set_seed(42)"
+      ],
+      "id": "setup",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Data\n",
+        "\n",
+        "The data we will use is [DJIA 30 Stock Time Series](https://www.kaggle.com/datasets/szrlee/stock-time-series-20050101-to-20171231) from Kaggle, which contains daily stock prices for the 30 companies in the Dow Jones Industrial Average (DJIA) from January 1, 2005 to December 31, 2017. We will focus on the closing prices of these stocks in 2017.\n"
+      ],
+      "id": "3a348097"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Load the data\n",
+        "df = pd.read_csv(\"all_stocks_2017-01-01_to_2018-01-01.csv\")\n",
+        "df.info()"
+      ],
+      "id": "b7d1755a",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Convert the date column to datetime, and check for missing values."
+      ],
+      "id": "4798d6db"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Convert the date column to datetime\n",
+        "df[\"Date\"] = pd.to_datetime(df[\"Date\"])\n",
+        "\n",
+        "# Check for missing values\n",
+        "df.isnull().sum()\n",
+        "\n",
+        "# Fill missing values\n",
+        "# It's safer to sort by ticker and date before filling to prevent data leakage across stocks\n",
+        "df.sort_values(by=[\"Name\", \"Date\"], inplace=True)\n",
+        "df.ffill(inplace=True)"
+      ],
+      "id": "1fc687e8",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "# Data Preparation\n",
+        "\n",
+        "Now that we have the data, we can prepare it for the RNN model. First we will visualize the data for one stock. Then we will get the stock tickers do the training and testing splits needed for model training. Finally we will scale the data to make it usable for the model.\n",
+        "\n",
+        "## Visualize the data\n",
+        "\n",
+        "Look at the data for just a few stocks"
+      ],
+      "id": "fc071108"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "plt.clf()\n",
+        "sns.set_theme(style=\"whitegrid\")\n",
+        "stocks_to_plot = [\"AAPL\", \"MSFT\", \"GOOGL\"]\n",
+        "sns.lineplot(x=\"Date\", y=\"Close\", hue = \"Name\", data=df[df[\"Name\"].isin(stocks_to_plot)])\n",
+        "plt.title(\"Stock Prices for AAPL, MSFT, and GOOGL\")\n",
+        "plt.show()"
+      ],
+      "id": "a6d867a5",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "One problem right off the bat is that the prices are on completely different scales. So we will need to scale the data to be able to compare them.\n",
+        "\n",
+        "Let's look at some distributions of the features too:"
+      ],
+      "id": "09c1b22d"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "ticker = \"GOOGL\"\n",
+        "df_temp = df[df[\"Name\"] == ticker]\n",
+        "features_to_examine = [\"Open\", \"High\", \"Low\", \"Close\", \"Volume\"]\n",
+        "fig, axes = plt.subplots(len(features_to_examine), 2, figsize=(12, 16))\n",
+        "fig.suptitle('Original vs. Log-Transformed Distributions', fontsize=16)\n",
+        "\n",
+        "for i, feature in enumerate(features_to_examine):\n",
+        "    # Original Data\n",
+        "    sns.histplot(df_temp[feature], ax=axes[i, 0], kde=True)\n",
+        "    axes[i, 0].set_title(f'Original {feature}')\n",
+        "    \n",
+        "    # Log-Transformed Data\n",
+        "    sns.histplot(np.log1p(df_temp[feature]), ax=axes[i, 1], kde=True, color='orange')\n",
+        "    axes[i, 1].set_title(f'Log-Transformed {feature}')\n",
+        "\n",
+        "plt.tight_layout(rect=[0, 0.03, 1, 0.96])\n",
+        "plt.show()"
+      ],
+      "id": "ff6a1175",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "I would say the log transformation helps with volume, but doesn't make much of a difference for the open/high/low/close featuers."
+      ],
+      "id": "08bce115"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "df[\"LogVolume\"] = np.log1p(df[\"Volume\"])"
+      ],
+      "id": "bfce0b2b",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Getting Stock tickers\n",
+        "\n",
+        "We will simply map each stock ticker to a number. The number is totally arbitrary."
+      ],
+      "id": "26efb8c5"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "stock_tickers = df[\"Name\"].unique()\n",
+        "\n",
+        "ticker_to_int = {ticker: i for i, ticker in enumerate(stock_tickers)}\n",
+        "df[\"TickerInt\"] = df[\"Name\"].map(ticker_to_int)"
+      ],
+      "id": "e2536e60",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Splitting the data\n",
+        "\n",
+        "Splitting the data into training, validation, and testing sets is standard for most machine learning pipelines. We will use the first 70% as training, the next 15% as validation, and the last 15% as testing."
+      ],
+      "id": "debbdb12"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Split the data into training, validation, and testing sets for each stock\n",
+        "train_df, val_df, test_df = [], [], []\n",
+        "for ticker in stock_tickers:\n",
+        "    ticker_df = df[df[\"Name\"] == ticker]\n",
+        "\n",
+        "    n_days = len(ticker_df)\n",
+        "    train_end = int(n_days*0.7)\n",
+        "    val_end = int(n_days*0.85)\n",
+        "\n",
+        "    train_df.append(ticker_df[:train_end])\n",
+        "    val_df.append(ticker_df[train_end:val_end])\n",
+        "    test_df.append(ticker_df[val_end:])\n",
+        "\n",
+        "train_df = pd.concat(train_df)\n",
+        "val_df = pd.concat(val_df)\n",
+        "test_df = pd.concat(test_df)"
+      ],
+      "id": "1f949dc4",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Scaling the data\n",
+        "\n",
+        "We will rescale all the numerical values (Open, High, Low, Close, and Volume). This is a critical step. We will perform the scaling *within each stock ticker group* to a range of `(-1, 1)`. This ensures the model learns from the relative price movements of each stock, and the `(-1, 1)` range is generally better for the GRU's internal `tanh` activation functions.\n",
+        "\n",
+        "The code below rebuilds the `train_df`, `val_df`, and `test_df` dataframes with the correctly scaled values, keeping the three-dataframe structure intact."
+      ],
+      "id": "d7eecc52"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Dictionary to store a scaler for each stock, needed for inverse transform later\n",
+        "scalers = {}\n",
+        "features_to_scale = [\"Open\", \"High\", \"Low\", \"Close\", \"Volume\"]\n",
+        "\n",
+        "# Create empty lists to hold the scaled dataframes for each split\n",
+        "scaled_train_list = []\n",
+        "scaled_val_list = []\n",
+        "scaled_test_list = []\n",
+        "\n",
+        "for ticker in stock_tickers:\n",
+        "    # We'll use a (-1, 1) range, which is often better for GRU/LSTM models\n",
+        "    scaler = MinMaxScaler(feature_range=(-1, 1))\n",
+        "\n",
+        "    # Isolate the data for the current ticker from each split\n",
+        "    train_ticker_df = train_df[train_df[\"Name\"] == ticker].copy()\n",
+        "    val_ticker_df = val_df[val_df[\"Name\"] == ticker].copy()\n",
+        "    test_ticker_df = test_df[test_df[\"Name\"] == ticker].copy()\n",
+        "\n",
+        "    # Fit the scaler ONLY on the training data for this specific stock\n",
+        "    scaler.fit(train_ticker_df[features_to_scale])\n",
+        "    scalers[ticker] = scaler # Save the scaler\n",
+        "\n",
+        "    # Transform the data for the current ticker across all splits\n",
+        "    train_ticker_df[features_to_scale] = scaler.transform(train_ticker_df[features_to_scale])\n",
+        "    val_ticker_df[features_to_scale] = scaler.transform(val_ticker_df[features_to_scale])\n",
+        "    test_ticker_df[features_to_scale] = scaler.transform(test_ticker_df[features_to_scale])\n",
+        "\n",
+        "    # Add the scaled dataframes to our lists\n",
+        "    scaled_train_list.append(train_ticker_df)\n",
+        "    scaled_val_list.append(val_ticker_df)\n",
+        "    scaled_test_list.append(test_ticker_df)\n",
+        "\n",
+        "# Recombine the lists of dataframes back into our three main dataframes\n",
+        "train_df = pd.concat(scaled_train_list)\n",
+        "val_df = pd.concat(scaled_val_list)\n",
+        "test_df = pd.concat(scaled_test_list)"
+      ],
+      "id": "1eeae084",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Now plot that same data again:"
+      ],
+      "id": "8a1b1112"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "plt.clf()\n",
+        "sns.set_theme(style=\"whitegrid\")\n",
+        "stocks_to_plot = [\"AAPL\", \"MSFT\", \"GOOGL\"]\n",
+        "sns.lineplot(x=\"Date\", y=\"Close\", hue = \"Name\", data=train_df[train_df[\"Name\"].isin(stocks_to_plot)])\n",
+        "plt.title(\"Stock Prices for AAPL, MSFT, and GOOGL\")\n",
+        "plt.show()"
+      ],
+      "id": "ac4bd333",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "You can now more reasonably compare the performance of those stocks, on a one-to-one basis.\n",
+        "\n",
+        "## Sequence creation\n",
+        "\n",
+        "Now we will create 20 day (about 1 month of trading days) sequences of data for each stock."
+      ],
+      "id": "bc41436f"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "def create_sequences(data, sequence_length, feature_cols, ticker_col, target_col):\n",
+        "    xs, ys, ticker_idx = [], [], []\n",
+        "    \n",
+        "    # Group by the stock name to process each individually\n",
+        "    for _, ticker_df in data.groupby(\"Name\"):\n",
+        "        features = ticker_df[feature_cols].values\n",
+        "        target = ticker_df[target_col].values\n",
+        "        ticker_int = ticker_df[ticker_col].iloc[0]\n",
+        "\n",
+        "        # Create sequences for the current stock\n",
+        "        for i in range(len(features)-sequence_length):\n",
+        "            xs.append(features[i:(i+sequence_length)])\n",
+        "            ys.append(target[i+sequence_length])\n",
+        "            ticker_idx.append(ticker_int)\n",
+        "    \n",
+        "    return np.array(xs), np.array(ys), np.array(ticker_idx)\n",
+        "\n",
+        "sequence_length = 20\n",
+        "feature_cols = [\"Open\", \"High\", \"Low\", \"Close\", \"LogVolume\"]\n",
+        "ticker_col = \"TickerInt\"\n",
+        "target_col = \"Close\"\n",
+        "\n",
+        "X_train, y_train, train_ticker_idx = create_sequences(train_df, sequence_length, feature_cols, ticker_col, target_col)\n",
+        "X_val, y_val, val_ticker_idx = create_sequences(val_df, sequence_length, feature_cols, ticker_col, target_col)\n",
+        "X_test, y_test, test_ticker_idx = create_sequences(test_df, sequence_length, feature_cols, ticker_col, target_col)"
+      ],
+      "id": "38a5b8eb",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Let's quickly understand the dimensions of this data."
+      ],
+      "id": "cf1e56a4"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "print(f\"X_train shape: {X_train.shape}\")\n",
+        "print(f\"y_train shape: {y_train.shape}\")\n",
+        "print(f\"train_ticker_idx shape: {train_ticker_idx.shape}\")\n",
+        "print(f\"Unique tickers count: {len(set(train_ticker_idx))}\")"
+      ],
+      "id": "50c435bb",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "So the training data has dimension [4805, 20, 5], which means that there are 4805 days, each with 20 preceding window days, and 5 features. Then there are 4805 close prices, all corresponding to a list of 4805 tickers. But that list of tickers is repeptitive; there are 31 tickers in total, as we would expect.\n",
+        "\n",
+        "# Data loading with pytorch\n",
+        "\n",
+        "Pytorch uses a specialized data architecture. We will first create the `Dataset` and then the `DataLoader`."
+      ],
+      "id": "c98ba16a"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "class StockDataset(Dataset):\n",
+        "    def __init__(self, X, y, tickers):\n",
+        "        self.X = torch.tensor(X, dtype=torch.float32)\n",
+        "        self.y = torch.tensor(y, dtype=torch.float32)\n",
+        "        self.tickers = torch.tensor(tickers, dtype=torch.long)\n",
+        "\n",
+        "    def __len__(self):\n",
+        "        return len(self.X)\n",
+        "\n",
+        "    def __getitem__(self, idx):\n",
+        "        return self.X[idx], self.y[idx], self.tickers[idx]\n",
+        "\n",
+        "# Create datasets\n",
+        "train_dataset = StockDataset(X_train, y_train, train_ticker_idx)\n",
+        "val_dataset = StockDataset(X_val, y_val, val_ticker_idx)\n",
+        "test_dataset = StockDataset(X_test, y_test, test_ticker_idx)\n",
+        "\n",
+        "# Create DataLoaders\n",
+        "BATCH_SIZE = 64 # A common batch size, can be tuned\n",
+        "train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True)\n",
+        "val_loader = DataLoader(val_dataset, batch_size=BATCH_SIZE, shuffle=False)\n",
+        "test_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE, shuffle=False)\n",
+        "\n",
+        "# Let's inspect one batch to see what it looks like\n",
+        "data_features, data_target, data_ticker = next(iter(train_loader))\n",
+        "print(f\"Feature batch shape: {data_features.size()}\")\n",
+        "print(f\"Target batch shape: {data_target.size()}\")\n",
+        "print(f\"Ticker batch shape: {data_ticker.size()}\")"
+      ],
+      "id": "48b897fc",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "# GRU model setup\n",
+        "\n",
+        "The GRU model is a modern RNN setup. I won't get into all the details here, but basically there are special learned parameters for whether the 'cell' should reset or update at any given point. It gives the model some semblance of 'memory' that we would not otherwise have."
+      ],
+      "id": "aca49e3a"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "class StockGRU(nn.Module):\n",
+        "    def __init__(self, num_stocks, embedding_dim, input_features, hidden_size, num_layers, dropout_prob=0.0):\n",
+        "        # Create the model layers\n",
+        "        super(StockGRU, self).__init__()\n",
+        "\n",
+        "        # Embedding layer\n",
+        "        self.embedding = nn.Embedding(num_embeddings=num_stocks,  embedding_dim=embedding_dim)\n",
+        "\n",
+        "        # GRU layer\n",
+        "        self.gru = nn.GRU(\n",
+        "            input_size = input_features + embedding_dim,\n",
+        "            hidden_size = hidden_size,\n",
+        "            num_layers = num_layers,\n",
+        "            batch_first = True,\n",
+        "            dropout = dropout_prob if num_layers > 1 else 0\n",
+        "        )\n",
+        "\n",
+        "        # Map from GRU to a single predicted value\n",
+        "        self.fc = nn.Linear(hidden_size, 1)\n",
+        "    \n",
+        "    def forward(self, x_seq, stock_indices):\n",
+        "        # Define forward pass\n",
+        "        \n",
+        "        # Get embedding vector for each stock. shape (batch_size, embredding_dim)\n",
+        "        embeddings = self.embedding(stock_indices)\n",
+        "        \n",
+        "        # Unsqueeze and repeat the embeddings to match the sequence length of the features\n",
+        "        seq_len = x_seq.shape[1]\n",
+        "        embeddings = embeddings.unsqueeze(1).repeat(1, seq_len, 1)\n",
+        "\n",
+        "        # Combine with original features. shape (batch_size, seq_len, num_features+embedding_dim)\n",
+        "        combined_seq = torch.cat((x_seq, embeddings), dim=2)\n",
+        "\n",
+        "        # pass to the GRU model. shape (batch_size, seq_len, hidden_size)\n",
+        "        gru_out, _ = self.gru(combined_seq)\n",
+        "\n",
+        "        # Get output from last step. shape (batch_size, hidden_size)\n",
+        "        last_time_step_out = gru_out[:, -1, :]\n",
+        "\n",
+        "        # Get final prediction. shape (batch_size, 1)\n",
+        "        prediction = self.fc(last_time_step_out)\n",
+        "\n",
+        "        return prediction"
+      ],
+      "id": "98725f12",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "And now we can actually set up the model with our inputs:"
+      ],
+      "id": "dab7d8da"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "device = torch.device(\"cpu\")\n",
+        "\n",
+        "model = StockGRU(num_stocks=len(stock_tickers),\n",
+        "                 embedding_dim=20,\n",
+        "                 input_features=len(feature_cols),\n",
+        "                 hidden_size=64,\n",
+        "                 num_layers=2,\n",
+        "                 dropout_prob=0.2).to(device)"
+      ],
+      "id": "a710eeac",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "# Training the model\n",
+        "\n",
+        "Now we will train the model using backpropagation. Note that we have not actually set many values--the model is mostly learning the best parameter values based on the data we are giving it.\n"
+      ],
+      "id": "567dbf77"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Loss function and optimizer\n",
+        "criterion = nn.MSELoss()\n",
+        "optimizer = torch.optim.Adam(model.parameters(), lr=0.001)\n",
+        "\n",
+        "# Training setup\n",
+        "num_epochs = 50\n",
+        "best_val_loss = float('inf')\n",
+        "train_losses = []\n",
+        "val_losses = []\n",
+        "\n",
+        "print(\"Starting model training...\")\n",
+        "for epoch in range(num_epochs):\n",
+        "    model.train()\n",
+        "    train_loss = 0.0\n",
+        "\n",
+        "    for features, targets, stock_ids in train_loader:\n",
+        "        features, targets, stock_ids = features.to(device), targets.to(device), stock_ids.to(device)\n",
+        "\n",
+        "        # Zero the gradients to start\n",
+        "        optimizer.zero_grad()\n",
+        "\n",
+        "        # Forward pass\n",
+        "        outputs = model(features, stock_ids)\n",
+        "\n",
+        "        # Ensure target col has same shape as outputs\n",
+        "        targets = targets.unsqueeze(1)\n",
+        "\n",
+        "        # Calculate loss\n",
+        "        loss = criterion(outputs, targets)\n",
+        "\n",
+        "        # Backward pass and optimization\n",
+        "        loss.backward()\n",
+        "        optimizer.step()\n",
+        "\n",
+        "        train_loss += loss.item()\n",
+        "\n",
+        "    epoch_train_loss = train_loss / len(train_loader)\n",
+        "    train_losses.append(epoch_train_loss)\n",
+        "\n",
+        "    # Validation\n",
+        "    model.eval()\n",
+        "    val_loss = 0.0\n",
+        "    with torch.no_grad():\n",
+        "        for features, targets, stock_ids in val_loader:\n",
+        "            features, targets, stock_ids = features.to(device), targets.to(device), stock_ids.to(device)\n",
+        "\n",
+        "            outputs = model(features, stock_ids)\n",
+        "            targets = targets.unsqueeze(1)\n",
+        "            loss = criterion(outputs, targets)\n",
+        "            val_loss += loss.item()\n",
+        "\n",
+        "    epoch_val_loss = val_loss / len(val_loader)\n",
+        "    val_losses.append(epoch_val_loss)\n",
+        "\n",
+        "    print(f\"Epoch {epoch+1}/{num_epochs}, Train Loss: {epoch_train_loss:.4f}, Val Loss: {epoch_val_loss:.4f}\")\n",
+        "\n",
+        "    # Check for early stopping\n",
+        "    if epoch_val_loss < best_val_loss:\n",
+        "        best_val_loss = epoch_val_loss\n",
+        "        torch.save(model.state_dict(), \"best_model.pth\")\n",
+        "        print(f\"  -> Validation loss decreased. Saving best model.\")\n",
+        "    \n",
+        "print(\"\\n Training Complete\")"
+      ],
+      "id": "bc56a8c6",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Now we can plot the training and validation loss over time"
+      ],
+      "id": "72a4ac20"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "plt.clf()\n",
+        "plt.plot(train_losses, label=\"Train Loss\")\n",
+        "plt.plot(val_losses, label=\"Validation Loss\")\n",
+        "plt.xlabel(\"Epoch\")\n",
+        "plt.ylabel(\"Loss\")\n",
+        "plt.legend()\n",
+        "plt.show()"
+      ],
+      "id": "e6124b8b",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Finally, we can run the final trained model on the test set, calculate the root mean square error (RMSE), and plot the predictions against actual values for a few stocks\n",
+        "\n",
+        "First the test predictions:"
+      ],
+      "id": "710c5985"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Load the best model\n",
+        "model.load_state_dict(torch.load(\"best_model.pth\"))\n",
+        "model.to(device)\n",
+        "model.eval()\n",
+        "\n",
+        "# Predict on test set\n",
+        "test_predictions = []\n",
+        "test_truth = []\n",
+        "all_stock_indices = []\n",
+        "\n",
+        "with torch.no_grad():\n",
+        "    for features, targets, stock_ids in test_loader:\n",
+        "        features = features.to(device)\n",
+        "        targets = targets.to(device)\n",
+        "        stock_ids = stock_ids.to(device)\n",
+        "\n",
+        "        # Get predictions\n",
+        "        outputs = model(features, stock_ids)\n",
+        "\n",
+        "        # Store results\n",
+        "        test_predictions.append(outputs.cpu().numpy())\n",
+        "        test_truth.append(targets.cpu().numpy())\n",
+        "        all_stock_indices.append(stock_ids.cpu().numpy())\n",
+        "\n",
+        "predictions_scaled = np.concatenate(test_predictions).flatten()\n",
+        "truth_scaled = np.concatenate(test_truth).flatten()\n",
+        "stock_indices_flat = np.concatenate(all_stock_indices).flatten()"
+      ],
+      "id": "0f259c64",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Now the RMSE:"
+      ],
+      "id": "02897787"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "id_to_stock = {v: k for k, v in ticker_to_int.items()}\n",
+        "\n",
+        "predictions_unscaled = []\n",
+        "truth_unscaled = []\n",
+        "\n",
+        "# Find the index of the 'Close' column, which is our target variable\n",
+        "close_feature_index = features_to_scale.index(\"Close\")\n",
+        "num_features = len(features_to_scale)\n",
+        "\n",
+        "for i in range(len(predictions_scaled)):\n",
+        "    stock_id = stock_indices_flat[i]\n",
+        "    stock_name = id_to_stock[stock_id]\n",
+        "\n",
+        "    scaler = scalers[stock_name]\n",
+        "\n",
+        "    # Create dummy arrays with the shape the scaler expects (1, num_features)\n",
+        "    dummy_pred = np.zeros((1, num_features))\n",
+        "    dummy_truth = np.zeros((1, num_features))\n",
+        "\n",
+        "    # Place the single predicted and true values into the 'Close' column\n",
+        "    dummy_pred[0, close_feature_index] = predictions_scaled[i]\n",
+        "    dummy_truth[0, close_feature_index] = truth_scaled[i]\n",
+        "\n",
+        "    # Now, inverse transform the full arrays\n",
+        "    pred_unscaled_full = scaler.inverse_transform(dummy_pred)\n",
+        "    truth_unscaled_full = scaler.inverse_transform(dummy_truth)\n",
+        "\n",
+        "    # Extract just the unscaled 'Close' price\n",
+        "    predictions_unscaled.append(pred_unscaled_full[0, close_feature_index])\n",
+        "    truth_unscaled.append(truth_unscaled_full[0, close_feature_index])\n",
+        "\n",
+        "rmse = np.sqrt(np.mean((np.array(predictions_unscaled) - np.array(truth_unscaled))**2))\n",
+        "print(f\"RMSE: {rmse}\")"
+      ],
+      "id": "e82c6207",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Finally, we can plot the predictions and truth for a single stock:\n"
+      ],
+      "id": "da73b52c"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# filter for just \"AAPL\"\n",
+        "curr_id = ticker_to_int[\"AAPL\"]\n",
+        "curr_pred = np.array(predictions_unscaled)[stock_indices_flat == curr_id]\n",
+        "curr_truth = np.array(truth_unscaled)[stock_indices_flat == curr_id]\n",
+        "plt.clf()\n",
+        "plt.plot(curr_truth, label=\"Truth\")\n",
+        "plt.plot(curr_pred, label=\"Predictions\")\n",
+        "plt.title(\"AAPL Predictions and truth\")\n",
+        "plt.legend()\n",
+        "plt.show()"
+      ],
+      "id": "7cfba489",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "# Looking at the embedding matrix\n",
+        "\n",
+        "Finally, we can look at the learned embedding matrix. Here it is:\n"
+      ],
+      "id": "63f07cc0"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Extract embedding matrix \n",
+        "embedding_matrix = model.embedding.weight.data.numpy()\n",
+        "print(embedding_matrix)"
+      ],
+      "id": "4a087807",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Great, still a bunch of numbers! We'll use a technique called t-SNE to visualize it in a 2D space.\n"
+      ],
+      "id": "ccc019c1"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Apply t-SNE\n",
+        "tsne = TSNE(n_components=2, random_state=42)\n",
+        "tsne_results = tsne.fit_transform(embedding_matrix)\n",
+        "\n",
+        "# label each row with the corresponding stock ticker\n",
+        "tsne_df = pd.DataFrame(tsne_results, columns=['x', 'y'])\n",
+        "tsne_df['ticker'] = stock_tickers\n",
+        "\n",
+        "# Plot\n",
+        "plt.clf()\n",
+        "sns.scatterplot(data=tsne_df, x='x', y='y', hue='ticker', legend=False)\n",
+        "# have the labels show up right on the points\n",
+        "for line in range(0,tsne_df.shape[0]):\n",
+        "     plt.text(tsne_df.x[line], tsne_df.y[line], tsne_df.ticker[line], horizontalalignment='left', size='small', color='black', weight='semibold')\n",
+        "plt.title(\"t-SNE Visualization of Embedding Matrix\")\n",
+        "plt.show()"
+      ],
+      "id": "53de83b2",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "We could also look at similarity based on K nearest neighbors in the embedding matrix\n"
+      ],
+      "id": "83cb9352"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# We want to find the 5 nearest neighbors, so we set n_neighbors=6 to include the item itself\n",
+        "nn = NearestNeighbors(n_neighbors=6, metric='cosine')\n",
+        "nn.fit(embedding_matrix)\n",
+        "\n",
+        "# Find the nearest neighbors for each stock\n",
+        "distances, indices = nn.kneighbors(embedding_matrix)\n",
+        "\n",
+        "# Create a dictionary to store the results, mapping each stock to its neighbors\n",
+        "neighbors_dict = {}\n",
+        "for i, ticker in enumerate(stock_tickers):\n",
+        "    # The first neighbor is the stock itself, so we take the next 5\n",
+        "    neighbor_indices = indices[i][1:]\n",
+        "    neighbors_dict[ticker] = [stock_tickers[idx] for idx in neighbor_indices]\n",
+        "\n",
+        "# Convert to a DataFrame for a clear, tabular view\n",
+        "neighbors_df = pd.DataFrame.from_dict(neighbors_dict, orient='index', columns=[f'Neighbor_{j+1}' for j in range(5)])\n",
+        "neighbors_df"
+      ],
+      "id": "bdbbe46a",
+      "execution_count": null,
+      "outputs": []
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "name": "python3",
+      "language": "python",
+      "display_name": "Python 3 (ipykernel)",
+      "path": "/Users/ravibrenner/Library/Python/3.10/share/jupyter/kernels/python3"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 5
+}
