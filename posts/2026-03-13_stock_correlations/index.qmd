@@ -332,7 +332,7 @@ And now we can actually set up the model with our inputs:
 device = torch.device("cpu")
 
 model = StockGRU(num_stocks=len(stock_tickers),
-                 embedding_dim=10,
+                 embedding_dim=20,
                  input_features=len(feature_cols),
                  hidden_size=64,
                  num_layers=2,
@@ -511,4 +511,65 @@ plt.plot(curr_pred, label="Predictions")
 plt.title("AAPL Predictions and truth")
 plt.legend()
 plt.show()
+```
+
+# Looking at the embedding matrix
+
+Finally, we can look at the learned embedding matrix. Here it is:
+
+
+```{python}
+# Extract embedding matrix 
+embedding_matrix = model.embedding.weight.data.numpy()
+print(embedding_matrix)
+```
+
+Great, still a bunch of numbers! We'll use a technique called t-SNE to visualize it in a 2D space.
+
+
+```{python}
+from sklearn.manifold import TSNE
+
+# Apply t-SNE
+tsne = TSNE(n_components=2, random_state=42)
+tsne_results = tsne.fit_transform(embedding_matrix)
+
+# label each row with the corresponding stock ticker
+tsne_df = pd.DataFrame(tsne_results, columns=['x', 'y'])
+tsne_df['ticker'] = stock_tickers
+
+# Plot
+plt.clf()
+sns.scatterplot(data=tsne_df, x='x', y='y', hue='ticker', legend=False)
+# have the labels show up right on the points
+for line in range(0,tsne_df.shape[0]):
+     plt.text(tsne_df.x[line], tsne_df.y[line], tsne_df.ticker[line], horizontalalignment='left', size='small', color='black', weight='semibold')
+plt.title("t-SNE Visualization of Embedding Matrix")
+plt.show()
+
+```
+
+We could also look at similarity based on K nearest neighbors in the embedding matrix
+
+
+```{python}
+from sklearn.neighbors import NearestNeighbors
+
+# We want to find the 5 nearest neighbors, so we set n_neighbors=6 to include the item itself
+nn = NearestNeighbors(n_neighbors=6, metric='cosine')
+nn.fit(embedding_matrix)
+
+# Find the nearest neighbors for each stock
+distances, indices = nn.kneighbors(embedding_matrix)
+
+# Create a dictionary to store the results, mapping each stock to its neighbors
+neighbors_dict = {}
+for i, ticker in enumerate(stock_tickers):
+    # The first neighbor is the stock itself, so we take the next 5
+    neighbor_indices = indices[i][1:]
+    neighbors_dict[ticker] = [stock_tickers[idx] for idx in neighbor_indices]
+
+# Convert to a DataFrame for a clear, tabular view
+neighbors_df = pd.DataFrame.from_dict(neighbors_dict, orient='index', columns=[f'Neighbor_{j+1}' for j in range(5)])
+neighbors_df
 ```
