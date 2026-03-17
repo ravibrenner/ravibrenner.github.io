@@ -195,7 +195,7 @@ ggplot() +
   scale_color_identity()
 ```
 
-Now bad! This probably isn't a perfect list of express stops, but I think it's a pretty good list. I tried to verify it manually by referring to the real subway map, although I may have accidentally included some stops or missed others.
+Not bad! This probably isn't a perfect list of express stops, but I think it's a pretty good list. I tried to verify it manually by referring to the real subway map, although I may have accidentally included some stops or missed others.
 
 Finally, we can calculate a time between stations on the same lines.
 

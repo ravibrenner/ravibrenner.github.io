@@ -60,12 +60,12 @@ server <- function(input, output, session) {
       ungroup() |>
       filter(stop_name_orig == input$orig_select_input,
              route_list == input$train_select_input,
-             stop_name_dest == input$dest_select_input,) |>
+             stop_name_dest == input$dest_select_input) |>
       select(route_id, direction_letter, lag_time, route_color) |>
       arrange(lag_time) |>
       mutate(wait_time = last(lag_time) - lag_time) |>
       mutate(wait_time_minutes = round(as.numeric(wait_time)/60),
-             wait_time_minutes = case_when(wait_time_minutes == 0 ~ "If this local train is at the station...",
+             wait_time_minutes = case_when(wait_time_minutes == 0 ~ "If this train is at the station...",
                                            .default = paste0("Wait no more than ", wait_time_minutes," minutes"))) 
     
     df |>
