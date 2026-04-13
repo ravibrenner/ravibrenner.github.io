@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Ravi Brenner">
+<meta name="dcterms.date" content="2026-04-13">
 
-<title>Blog Posts – Ravi Brenner</title>
+<title>How machines ‘know’ what you ‘mean’ – Ravi Brenner</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -26,25 +28,23 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-listing/list.min.js"></script>
-<script src="site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-b6a8276bf55561bdbc268162d41bd1f7.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-6033a600180109c3731f6a886c29932c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-b6a8276bf55561bdbc268162d41bd1f7.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-6033a600180109c3731f6a886c29932c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -72,77 +72,19 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
 
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
 
-    const options = {
-      valueNames: ['listing-date','listing-title','listing-reading-time','listing-description','listing-categories','listing-image',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-title","listing-author","listing-date","listing-image","listing-description","listing-categories"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
-
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
-
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../../styles.css">
 </head>
 
-<body class="nav-fixed quarto-light">
+<body class="nav-fixed fullcontent quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Ravi Brenner</span>
     </a>
   </div>
@@ -153,19 +95,19 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./index.html"> 
+    <a class="nav-link" href="../../index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./resume.html"> 
+    <a class="nav-link" href="../../resume.html"> 
 <span class="menu-text">Resume</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./publications.html"> 
+    <a class="nav-link" href="../../publications.html"> 
 <span class="menu-text">Publications</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./blog.html" aria-current="page"> 
+    <a class="nav-link" href="../../blog.html"> 
 <span class="menu-text">Blog</span></a>
   </li>  
 </ul>
@@ -176,304 +118,227 @@ window.Quarto = {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">How machines ‘know’ what you ‘mean’</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">projects</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Ravi Brenner </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">April 13, 2026</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(9)</span></div><div class="category" data-category="Z2VuZXJhbA==">general <span class="quarto-category-count">(5)</span></div><div class="category" data-category="cHJvamVjdHM=">projects <span class="quarto-category-count">(4)</span></div><div class="category" data-category="c3RhdGlzdGljcw==">statistics <span class="quarto-category-count">(1)</span></div></div></div>
+    
 <!-- main -->
-<main class="content column-page-left" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Blog Posts</h1>
-</div>
-
-
-
-<div class="quarto-title-meta column-page-left">
-
-    
-  
-    
-  </div>
-  
-
-
-</header>
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
 
 
+<p>When you send a message to an AI model, how does it “know” what your words “mean”? It should go without saying that it is quite complicated, and the specific layers within a particular large language model (LLM) can vary a bit. I am not an expert on large language models, but I know they are a specific type of neural network. They use an architecture called a transformer and a technique called attention (this super <a href="https://poloclub.github.io/transformer-explainer/">cool graphic</a> walks through some of the details).</p>
+<p>The first (or maybe second) step in this kind of neural network is called embedding. An embedding layer or embedding matrix allows the model to convert categorical or text-like inputs into numbers. For example, with an LLM, there may be hundreds of thousands of possible input words. With the embedding layer, the model convert each word to a list of 200 numbers (for example). Each word can then be <a href="https://youtu.be/wjZofJX0v4M?t=747&amp;si=4w36iWRWXraYx7rF">compared to another</a>, so similar words will have similar lists (called vectors) in this high dimensional space.</p>
+<p>This allows you to do vector math, adding and subtracting words to get new meanings. You may have seen examples like this before: King + Female = Queen. Or maybe something like France + Capital = Paris. Here is an example from wikipedia:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Word_embedding_illustration.svg.png" class="img-fluid figure-img" style="width:50.0%"></p>
+<figcaption>A toy example of word embeddings from <a href="https://en.wikipedia.org/wiki/Word_embedding">wikipedia</a></figcaption>
+</figure>
+</div>
+<p>In this post, I will dive a bit deeper on embedding layers, how they are constructed, and what you can do with them. I will use an embedding layer I trained using a book review dataset.</p>
+<p>If you’re interested in more technical details about that, you can check it out <a href="https://github.com/ravibrenner/embedding_basics">here</a>. I have simplified things here to make this subject approachable for <em>anyone</em>.</p>
+<section id="how-are-embeddings-trained" class="level2">
+<h2 class="anchored" data-anchor-id="how-are-embeddings-trained">How are embeddings trained?</h2>
+<p>As mentioned earlier, embeddings are one possible “layer” of a neural network mode. LLMs are a <a href="../../docs/posts/2026-03-23_black_box_models_plus.html">type of neural network</a>, with many layers all playing different, sometimes opaque roles. The layers are just really big lists or matrices of numbers, and most neural networks just do some simple math (multiplication and addition) for the majority of the calculations to give you a prediction.</p>
+<p>To make this a bit more concrete, I created a very simple collaborative filtering recommendation system using book reviews. Put simply, I created a simple model to predict what rating different users gave to different books.</p>
+<p>Here is an example of what the data looked like. In reality there were millions of rows, now just 5.</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: right;">user_id</th>
+<th style="text-align: right;">book_id</th>
+<th style="text-align: right;">rating</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Here’s how I setup the model. I created two embedding matrices, one for users and one for books. Each embedding matrix has 32 columns, and one row for each book/user. To get a prediction of the rating for a given book-user pair, you just take the dot product between the corresponding row of the embedding matrix. In this case, the dot product just functions as a measure of <em>similarity</em>: users and books that are similar (read: user rates the book high) will have a high dot product. Users and books that are different (user rates the book low) will have a low dot product. There’s some adjusting to make the math work but that’s all–just seeing how similar different rows of these 32 column matrices are.</p>
+<p>The values for those matrices come from the training process. You let the model try a bunch of random numbers, see how close it gets, and have it try to improve. With a few minutes on a standard laptop, you can get the error down to less than 1 star.</p>
+<p>What you get out the other side are these embedding matrices. Goodreads or Amazon might use this type of information to recommend you new books: They take your 32 numbers, and see which books most closely match up.</p>
+<p>In other words, it’s just data being input and output. There’s no direct meaning being encoded about the authors, the genres, the publication year, or the user’s demographics. It’s just looking at what books users liked, and if similar users would like similar books.</p>
+</section>
+<section id="what-can-you-do-with-embeddings" class="level2">
+<h2 class="anchored" data-anchor-id="what-can-you-do-with-embeddings">What can you do with embeddings?</h2>
+<section id="find-closely-related-books" class="level3">
+<h3 class="anchored" data-anchor-id="find-closely-related-books">1. Find closely related books</h3>
+<p>One interesting thing you can do with this data is find closely related books. We can start with a book we know, and then find the top 5 or 10 most closely related books.</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Top 5 most similar books to ‘The Hobbit’</caption>
+<colgroup>
+<col style="width: 66%">
+<col style="width: 20%">
+<col style="width: 13%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Title</th>
+<th style="text-align: left;">Author</th>
+<th style="text-align: right;">Similarity</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">The Fellowship of the Ring (The Lord of the Rings, #1)</td>
+<td style="text-align: left;">J.R.R. Tolkien</td>
+<td style="text-align: right;">0.9968632</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">The Return of the King (The Lord of the Rings, #3)</td>
+<td style="text-align: left;">J.R.R. Tolkien</td>
+<td style="text-align: right;">0.9867635</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">The Two Towers (The Lord of the Rings, #2)</td>
+<td style="text-align: left;">J.R.R. Tolkien</td>
+<td style="text-align: right;">0.9864784</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ender’s Game (Ender’s Saga, #1)</td>
+<td style="text-align: left;">Orson Scott Card</td>
+<td style="text-align: right;">0.9830799</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">The Lord of the Rings (The Lord of the Rings, #1-3)</td>
+<td style="text-align: left;">J.R.R. Tolkien</td>
+<td style="text-align: right;">0.9790838</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="look-at-specific-embedding-values" class="level3">
+<h3 class="anchored" data-anchor-id="look-at-specific-embedding-values">2. Look at specific embedding values</h3>
+<p>We can actually look at the specific 32 embedding values and visualize how similar they are. Here are the top 10 books similar to Harry Potter and the Sorcerer’s Stone:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="create-a-2d-representation" class="level3">
+<h3 class="anchored" data-anchor-id="create-a-2d-representation">3. Create a 2D representation</h3>
+<p>Since looking at 32 values at once can be kind of tricky, we can use some statistical techniques to compress it down to a 2 dimensional space.</p>
+<p>Here is the 2-D version of all of the books’ embedding values. It’s interesting to see that there are distinct shapes and clusters:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Then, we can look at how some of the top author cluster together. Here are the top 5 authors by number of ratings. You can see that the Young Adult authors like J.K. Rowling, Suzanne Collins, and Stephanie Meyer are closer together toward the top. Stephen King has an area in the middle, and Tolkien is on the bottom left, quite far from the modern fantasy/YA authors.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="try-to-discern-what-different-values-mean" class="level3">
+<h3 class="anchored" data-anchor-id="try-to-discern-what-different-values-mean">4. Try to discern what different values mean</h3>
+<p>This is somewhat more of an art than a science, but here is an example. We can compare the embedding values for The Hobbit and The Hobbit: Graphic Novel. You can see that most of the values are very similar, but some (like dimension 2, highlighted with red arrow) are very far apart. You could, in theory, analyze differences like this to discern whether certain dimensions themselves have a meaning. In this case, maybe a higher value of dimension 2 indicates “graphic novel” while a low value indicates “text only”. Or it could just be a chance difference.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="predicting-books-to-read-next" class="level3">
+<h3 class="anchored" data-anchor-id="predicting-books-to-read-next">5. Predicting books to read next</h3>
+<p>Finally, you can predict what books you should read next. I don’t have an example for this one, because it requires putting together a listing of books I have read and rated. I read plenty but I did not take the time to cross-reference with the books in my dataset here.</p>
+</section>
+</section>
+<section id="does-ai-know-what-our-words-mean" class="level2">
+<h2 class="anchored" data-anchor-id="does-ai-know-what-our-words-mean">Does AI know what our words mean?</h2>
+<p>So does a machine learning model, neural network, or large language model know what our words mean? In a way maybe. That first embedding layer of an LLM works in much the same way as this one, but with words instead of books. The words are translated into (even bigger) vectors (lists of numbers) that embed some meaning in their values.</p>
+<p>At the same time, these are just numbers used to do math. The relationships we observe in the embedding layers, while sometimes meaningful, are the result of meaning we already give them. In the books example, there could be a value for graphic numbers or one for genre–but there also might not be.</p>
+<p>Embeddings are also used for things like images. Image recognition networks sometimes develop <a href="https://youtu.be/UZDiGooFs54?si=NptXi-ueN_6iX2yM">specific layers</a> that can recognize things like faces, animals, or shapes. But sometimes we can’t understand what the layer is doing. If there is some discernable meaning, it’s probably because there’s such a strong relationship in the data, not because the model actaully “understands” anything.</p>
+<p>In the end, it’s just data and math. Still, I find it impressive and even somewhat magical that machines can create a semblance of meaning just being fed our words, images, and preferences.</p>
 
-<div class="quarto-listing quarto-listing-container-grid" id="listing-listing">
-<div class="listing-actions-group">
-   <div class="input-group input-group-sm quarto-listing-sort">
-    <span class="input-group-text"><i class="bi bi-sort-down"></i></span>
-    <select id="listing-listing-sort" class="form-select" aria-label="Order By" onchange="window['quarto-listings']['listing-listing'].sort(this.options[this.selectedIndex].value, { order: this.options[this.selectedIndex].getAttribute('data-direction')})">
-      <option value="" disabled="" selected="" hidden="">Order By</option>
-      <option value="index" data-direction="asc">Default</option>
-      <option value="listing-title" data-direction="asc">
-        Title
-      </option>
-      <option value="listing-date-sort" data-direction="asc">
-        Date - Oldest
-      </option>
-      <option value="listing-date-sort" data-direction="desc">
-        Date - Newest
-      </option>
-    </select>
-  </div>
-    <div class="input-group input-group-sm quarto-listing-filter">
-      <span class="input-group-text"><i class="bi bi-search"></i></span>
-      <input type="text" class="search form-control" placeholder="Filter">
-    </div>
-</div>
-<div class="list grid quarto-listing-cols-3">
-<div class="g-col-1" data-index="0" data-categories="cHJvamVjdHM=" data-listing-date-sort="1776052800000" data-listing-file-modified-sort="1776107471531" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="11" data-listing-word-count-sort="2035">
-<a href="./posts/2026-04-13_book_embedding_meaning/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top"><img loading='lazy' src="posts/2026-04-13_book_embedding_meaning/Word_embedding_illustration.svg.png" style="height: 200px;"  class="thumbnail-image card-img"/></p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-How machines ‘know’ what you ‘mean’
-</h5>
-<div class="listing-reading-time card-text text-muted">11 min</div>
-<div class="listing-categories">
 
-<div class="listing-category" onclick="window.quartoListingCategory('cHJvamVjdHM='); return false;">projects</div>
+</section>
 
-</div>
-<div class="card-text listing-description delink">
-When you send a message to an AI model, how does it “know” what your words “mean”? It should go without saying that it is quite complicated, and the specific layers within a…
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Apr 13, 2026
-</div>
-</div>
-</div>
-</div></a>
-</div>
-<div class="g-col-1" data-index="1" data-categories="Z2VuZXJhbA==" data-listing-date-sort="1774497600000" data-listing-file-modified-sort="1774532293518" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="932">
-<a href="./posts/2026-03-23_black_box_models_plus.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top"><img loading='lazy' src="posts/images/AI-ML-DL.svg.png" style="height: 200px;"  class="thumbnail-image card-img"/></p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Looking into the Black Box
-</h5>
-<div class="listing-reading-time card-text text-muted">5 min</div>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('Z2VuZXJhbA=='); return false;">general</div>
-
-</div>
-<div class="card-text listing-description delink">
-I have been reading a bit more about deep learning recently (future post to come), and was trying to connect it to the bigger picture of how we use computers to learn from…
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Mar 26, 2026
-</div>
-</div>
-</div>
-</div></a>
-</div>
-<div class="g-col-1" data-index="2" data-categories="cHJvamVjdHM=" data-listing-date-sort="1772427600000" data-listing-file-modified-sort="1773748516014" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="17" data-listing-word-count-sort="3387">
-<a href="./posts/2026-03-02_subway_local_express/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top"><img loading='lazy' src="posts/2026-03-02_subway_local_express/index_files/figure-html/unnamed-chunk-4-1.png" style="height: 200px;"  class="thumbnail-image card-img"/></p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Should You Wait? Solving a Niche NYC Problem
-</h5>
-<div class="listing-reading-time card-text text-muted">17 min</div>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('cHJvamVjdHM='); return false;">projects</div>
-
-</div>
-<div class="card-text listing-description delink">
-Here is a common problem I face: I live near a subway stop in New York City that has both express and local trains. If they arrive at the same time, it’s much faster to take…
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Mar 2, 2026
-</div>
-</div>
-</div>
-</div></a>
-</div>
-<div class="g-col-1" data-index="3" data-categories="Z2VuZXJhbCUyQ3N0YXRpc3RpY3M=" data-listing-date-sort="1771477200000" data-listing-file-modified-sort="1776033495574" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="21" data-listing-word-count-sort="4045">
-<a href="./posts/2026-02-16_reviews_of_reviews.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img loading="lazy" src="./posts/images/mamas_too_slice.jpg" class="thumbnail-image card-img" style="height: 200px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-⭐️⭐️⭐️⭐️⭐️ 5 Stars: Reviewing Online Reviews
-</h5>
-<div class="listing-reading-time card-text text-muted">21 min</div>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('Z2VuZXJhbA=='); return false;">general</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('c3RhdGlzdGljcw=='); return false;">statistics</div>
-
-</div>
-<div class="card-text listing-description delink">
-“Mama’s Too” is an amazing pizza restaurant, not far from where I live in New York City. It was recently listed as one of the best slices in the world, and I seriously…
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Feb 19, 2026
-</div>
-</div>
-</div>
-</div></a>
-</div>
-<div class="g-col-1" data-index="4" data-categories="Z2VuZXJhbA==" data-listing-date-sort="1770613200000" data-listing-file-modified-sort="1770665027591" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="877">
-<a href="./posts/2026-02-09_desk_job_AI.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img loading="lazy" src="./posts/images/adarc_office.jpeg" class="thumbnail-image card-img" style="height: 200px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-On Desk Jobs and AI
-</h5>
-<div class="listing-reading-time card-text text-muted">5 min</div>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('Z2VuZXJhbA=='); return false;">general</div>
-
-</div>
-<div class="card-text listing-description delink">
-When I was a kid, I wanted to be an astronomer. Not an astronaut to be clear; I did not want to go to space. I wanted to be the one behind the telescope, exploring the…
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Feb 9, 2026
-</div>
-</div>
-</div>
-</div></a>
-</div>
-<div class="g-col-1" data-index="5" data-categories="Z2VuZXJhbA==" data-listing-date-sort="1769576400000" data-listing-file-modified-sort="1769629825285" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1389">
-<a href="./posts/2026-01-26_my_antivax_story/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img loading="lazy" src="./posts/2026-01-26_my_antivax_story/covid_vaccine_pic.jpg" class="thumbnail-image card-img" style="height: 200px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-My Vaccine Story
-</h5>
-<div class="listing-reading-time card-text text-muted">7 min</div>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('Z2VuZXJhbA=='); return false;">general</div>
-
-</div>
-<div class="card-text listing-description delink">
-When I was 17, I drove myself to the pediatrician for the first time, without my parents. After most of the physical exam had concluded, my doctor asked me if I wanted to…
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Jan 28, 2026
-</div>
-</div>
-</div>
-</div></a>
-</div>
-<div class="g-col-1" data-index="6" data-categories="cHJvamVjdHM=" data-listing-date-sort="1769058000000" data-listing-file-modified-sort="1769099432366" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1104">
-<a href="./posts/2026-01-22_past_projects_and_pubs/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img loading="lazy" src="./posts/2026-01-22_past_projects_and_pubs/COVID_care_plot.png" class="thumbnail-image card-img" style="height: 200px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Past Projects and Publications
-</h5>
-<div class="listing-reading-time card-text text-muted">6 min</div>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('cHJvamVjdHM='); return false;">projects</div>
-
-</div>
-<div class="card-text listing-description delink">
-These are a few of the projects I have worked on in some of my past public health jobs. This is a sampling of final products, since there were plenty of other interesting…
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Jan 22, 2026
-</div>
-</div>
-</div>
-</div></a>
-</div>
-<div class="g-col-1" data-index="7" data-categories="cHJvamVjdHM=" data-listing-date-sort="1768194000000" data-listing-file-modified-sort="1768247310203" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="820">
-<a href="./posts/2026-01-12_grad_school_projects/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img loading="lazy" src="./posts/2026-01-12_grad_school_projects/lane_dist.png" class="thumbnail-image card-img" style="height: 200px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Grad School Project Highlights
-</h5>
-<div class="listing-reading-time card-text text-muted">5 min</div>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('cHJvamVjdHM='); return false;">projects</div>
-
-</div>
-<div class="card-text listing-description delink">
-These are 3 projects I have completed for classes as part of my masters degree. There are links to the final presentation, poster, and reports I wrote for each of these, as…
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Jan 12, 2026
-</div>
-</div>
-</div>
-</div></a>
-</div>
-<div class="g-col-1" data-index="8" data-categories="Z2VuZXJhbA==" data-listing-date-sort="1767589200000" data-listing-file-modified-sort="1770652577950" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="401">
-<a href="./posts/2026-01-05_welcome_intro.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img loading="lazy" src="./posts/images/maggie_sunset.jpeg" class="thumbnail-image card-img" style="height: 200px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-About me and this blog
-</h5>
-<div class="listing-reading-time card-text text-muted">3 min</div>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('Z2VuZXJhbA=='); return false;">general</div>
-
-</div>
-<div class="card-text listing-description delink">
-Welcome to the blog section of my website!
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Jan 5, 2026
-</div>
-</div>
-</div>
-</div></a>
-</div>
-</div>
-<div class="listing-no-matching d-none">No matching items</div>
-</div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";

@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Ravi Brenner">
+<meta name="dcterms.date" content="2026-03-26">
 
-<title>Blog Posts – Ravi Brenner</title>
+<title>Looking into the Black Box – Ravi Brenner</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -26,25 +28,23 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-listing/list.min.js"></script>
-<script src="site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-b6a8276bf55561bdbc268162d41bd1f7.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-6033a600180109c3731f6a886c29932c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-b6a8276bf55561bdbc268162d41bd1f7.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-6033a600180109c3731f6a886c29932c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -72,77 +72,19 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
 
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
 
-    const options = {
-      valueNames: ['listing-date','listing-title','listing-reading-time','listing-description','listing-categories','listing-image',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-title","listing-author","listing-date","listing-image","listing-description","listing-categories"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
-
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
-
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../styles.css">
 </head>
 
-<body class="nav-fixed quarto-light">
+<body class="nav-fixed fullcontent quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">Ravi Brenner</span>
     </a>
   </div>
@@ -153,19 +95,19 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./index.html"> 
+    <a class="nav-link" href="../index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./resume.html"> 
+    <a class="nav-link" href="../resume.html"> 
 <span class="menu-text">Resume</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./publications.html"> 
+    <a class="nav-link" href="../publications.html"> 
 <span class="menu-text">Publications</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./blog.html" aria-current="page"> 
+    <a class="nav-link" href="../blog.html"> 
 <span class="menu-text">Blog</span></a>
   </li>  
 </ul>
@@ -176,304 +118,93 @@ window.Quarto = {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Looking into the Black Box</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">general</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Ravi Brenner </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">March 26, 2026</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(9)</span></div><div class="category" data-category="Z2VuZXJhbA==">general <span class="quarto-category-count">(5)</span></div><div class="category" data-category="cHJvamVjdHM=">projects <span class="quarto-category-count">(4)</span></div><div class="category" data-category="c3RhdGlzdGljcw==">statistics <span class="quarto-category-count">(1)</span></div></div></div>
+    
 <!-- main -->
-<main class="content column-page-left" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Blog Posts</h1>
-</div>
-
-
-
-<div class="quarto-title-meta column-page-left">
-
-    
-  
-    
-  </div>
-  
-
-
-</header>
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
 
 
+<p>I have been reading a bit more about deep learning recently (future post to come), and was trying to connect it to the bigger picture of how we use computers to learn from data.</p>
+<p>Generally speaking, deep learning is a special type of machine learning, which is itself a special type of AI (artificial intelligence). Confusingly, when most people talk about AI, they are referring to generative AI and large language models, which are really special types of deep learning models (so they would be inside the innermost circle below):</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/AI-ML-DL.svg.png" class="img-fluid figure-img" style="width:50.0%"></p>
+<figcaption>Taxonomy of AI, ML, and DL from <a href="https://en.wikipedia.org/wiki/Machine_learning">Wikipedia</a></figcaption>
+</figure>
+</div>
+<p>Often, people refer to these deep learning models as “Black Box” models.</p>
+<p>A <a href="https://en.wikipedia.org/wiki/Black_box#Computing_and_mathematics">black box model</a> is one where we can see the inputs and the outputs, but where the intermediate steps are too hard to see or understand. The data goes into the black box and comes out the other side, and we can’t understand anything in between.</p>
+<p>I say ‘understand’ because we actually can <em>see</em> it most of the time. Even for deep learning models and large language models, we can technically extract the values of all the neurons at any given step. But they are considered uninterpretable, at least to <a href="https://youtu.be/UZDiGooFs54?si=c1JTr_3hx-BNrQMn">human eyes</a>. The models are so large, and the internal math so long, that we can’t understand what is happening.</p>
+<p>The opposite of this would be a ‘white’ or ‘glass’ box model, one where we can interpret what is going on more easily. Some of the more conventional machine learning models (like logistic regression or decision trees) are more like this. We can see and understand what is happening at each step.</p>
+<p>LLMs take the black box concept a step further, because they actually enforce randomness in the model outputs. When the model is predicting the next word it should write, it doesn’t always use the most probable output. It randomly selects from the possible next words instead.</p>
+<p>This leads to a situation where each input and output pair from a large language model is essentially a tiny experiment, with <a href="https://substack.com/inbox/post/191842708">sample size of 1</a>.</p>
+<section id="war-with-words" class="level1">
+<h1>War with words</h1>
+<p>This is why it is so shocking to me that the U.S. military is <a href="https://thehill.com/policy/defense/5799136-claude-pentagon-iran-war/">reportedly</a> using Anthropic’s Claude for the ongoing war with Iran.</p>
+<p>Large language models are impressive. Certainly I would expect that software engineers and data scientists in the military are using generative AI to speed up writing new code. But this is apparently not <a href="https://www.cbsnews.com/news/ai-artificial-intelligence-military-use-in-war/">what is going on</a>:</p>
+<blockquote class="blockquote">
+<p>“The Pentagon uses AI in the ways many consumers do — to summarize and distill lots of information at once. According to former Pentagon officials, by analyzing documents, video, and images coming in from the battlefield, AI can help the military war-game out scenarios to minimize casualties and determine which weapons can be most effective.”</p>
+</blockquote>
+<p>I am not a military planning expert, but this is not how I would expect or want the military to be using AI. What if they run the same data through the model twice, or 10 times, or 100 times? Will it give the same responses about where to strike, and when? What if the prompts are changed, are the responses the same? If you ask Claude to pick military targets based on some inputs, it will do it. But is that the right question to be asking it?</p>
+<p>This brings to mind the classic quote by statistician <a href="https://en.wikipedia.org/wiki/George_E._P._Box">George Box</a>:</p>
+<blockquote class="blockquote">
+<p>“All models are wrong but some are useful”</p>
+</blockquote>
+<p>LLMs can be useful for some tasks, but they are fundamentally the wrong tool for high-stakes decision making. Only <em>some</em> models are useful for a given task, and choosing the right one is important. Unfortunately when you have a hammer, everything looks like a nail.</p>
+<p>We now have access to such a wide range of tools for learning from data. Large language models (and vision/audio models) are undoubtedly a powerful part of the toolkit now. But they have serious tradeoffs in terms of specialization, controllability, randomness, predictability, and honesty that can’t be resolved. Not being able to look into the black box is a serious drawback. There is still an important place for conventional machine learning models, deep learning models trained for specific purposes, simulation models, system dynamic models, and statistics.</p>
+<p>Asking the right question, and knowing how to get the correct answer, is more important than ever.</p>
+</section>
+<section id="borges" class="level1">
+<h1>Borges</h1>
+<p>Two quotes from the author Jorge Luis Borges that got me thinking about this more:</p>
+<blockquote class="blockquote">
+<p>“A man sets out to draw the world. As the years go by, he peoples a space with images of provinces, kingdoms, mountains, bays, ships, islands, fishes, rooms, instruments, stars, horses, and individuals. A short time before he dies, he discovers that the patient labyrinth of lines traces the lineaments of his own face.” (<a href="https://www.goodreads.com/quotes/4490-a-man-sets-out-to-draw-the-world-as-the">The Aleph and Other Stories</a>).</p>
+</blockquote>
+<p>And the short story, <a href="https://kwarc.info/teaching/TDM/Borges.pdf">On Exactitude in science</a>:</p>
+<blockquote class="blockquote">
+<p>“…In that Empire, the Art of Cartography attained such Perfection that the map of a single Province occupied the entirety of a City, and the map of the Empire, the entirety of a Province. In time, those Unconscionable Maps no longer satisfied, and the Cartographers Guilds struck a Map of the Empire whose size was that of the Empire, and which coincided point for point with it. The following Generations, who were not so fond of the Study of Cartography as their Forebears had been, saw that that vast Map was Useless, and not without some Pitilessness was it, that they delivered it up to the Inclemencies of Sun and Winters. In the Deserts of the West, still today, there are Tattered Ruins of that Map, inhabited by Animals and Beggars; in all the Land there is no other Relic of the Disciplines of Geography.”</p>
+</blockquote>
 
-<div class="quarto-listing quarto-listing-container-grid" id="listing-listing">
-<div class="listing-actions-group">
-   <div class="input-group input-group-sm quarto-listing-sort">
-    <span class="input-group-text"><i class="bi bi-sort-down"></i></span>
-    <select id="listing-listing-sort" class="form-select" aria-label="Order By" onchange="window['quarto-listings']['listing-listing'].sort(this.options[this.selectedIndex].value, { order: this.options[this.selectedIndex].getAttribute('data-direction')})">
-      <option value="" disabled="" selected="" hidden="">Order By</option>
-      <option value="index" data-direction="asc">Default</option>
-      <option value="listing-title" data-direction="asc">
-        Title
-      </option>
-      <option value="listing-date-sort" data-direction="asc">
-        Date - Oldest
-      </option>
-      <option value="listing-date-sort" data-direction="desc">
-        Date - Newest
-      </option>
-    </select>
-  </div>
-    <div class="input-group input-group-sm quarto-listing-filter">
-      <span class="input-group-text"><i class="bi bi-search"></i></span>
-      <input type="text" class="search form-control" placeholder="Filter">
-    </div>
-</div>
-<div class="list grid quarto-listing-cols-3">
-<div class="g-col-1" data-index="0" data-categories="cHJvamVjdHM=" data-listing-date-sort="1776052800000" data-listing-file-modified-sort="1776107471531" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="11" data-listing-word-count-sort="2035">
-<a href="./posts/2026-04-13_book_embedding_meaning/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top"><img loading='lazy' src="posts/2026-04-13_book_embedding_meaning/Word_embedding_illustration.svg.png" style="height: 200px;"  class="thumbnail-image card-img"/></p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-How machines ‘know’ what you ‘mean’
-</h5>
-<div class="listing-reading-time card-text text-muted">11 min</div>
-<div class="listing-categories">
 
-<div class="listing-category" onclick="window.quartoListingCategory('cHJvamVjdHM='); return false;">projects</div>
+</section>
 
-</div>
-<div class="card-text listing-description delink">
-When you send a message to an AI model, how does it “know” what your words “mean”? It should go without saying that it is quite complicated, and the specific layers within a…
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Apr 13, 2026
-</div>
-</div>
-</div>
-</div></a>
-</div>
-<div class="g-col-1" data-index="1" data-categories="Z2VuZXJhbA==" data-listing-date-sort="1774497600000" data-listing-file-modified-sort="1774532293518" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="932">
-<a href="./posts/2026-03-23_black_box_models_plus.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top"><img loading='lazy' src="posts/images/AI-ML-DL.svg.png" style="height: 200px;"  class="thumbnail-image card-img"/></p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Looking into the Black Box
-</h5>
-<div class="listing-reading-time card-text text-muted">5 min</div>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('Z2VuZXJhbA=='); return false;">general</div>
-
-</div>
-<div class="card-text listing-description delink">
-I have been reading a bit more about deep learning recently (future post to come), and was trying to connect it to the bigger picture of how we use computers to learn from…
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Mar 26, 2026
-</div>
-</div>
-</div>
-</div></a>
-</div>
-<div class="g-col-1" data-index="2" data-categories="cHJvamVjdHM=" data-listing-date-sort="1772427600000" data-listing-file-modified-sort="1773748516014" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="17" data-listing-word-count-sort="3387">
-<a href="./posts/2026-03-02_subway_local_express/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top"><img loading='lazy' src="posts/2026-03-02_subway_local_express/index_files/figure-html/unnamed-chunk-4-1.png" style="height: 200px;"  class="thumbnail-image card-img"/></p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Should You Wait? Solving a Niche NYC Problem
-</h5>
-<div class="listing-reading-time card-text text-muted">17 min</div>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('cHJvamVjdHM='); return false;">projects</div>
-
-</div>
-<div class="card-text listing-description delink">
-Here is a common problem I face: I live near a subway stop in New York City that has both express and local trains. If they arrive at the same time, it’s much faster to take…
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Mar 2, 2026
-</div>
-</div>
-</div>
-</div></a>
-</div>
-<div class="g-col-1" data-index="3" data-categories="Z2VuZXJhbCUyQ3N0YXRpc3RpY3M=" data-listing-date-sort="1771477200000" data-listing-file-modified-sort="1776033495574" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="21" data-listing-word-count-sort="4045">
-<a href="./posts/2026-02-16_reviews_of_reviews.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img loading="lazy" src="./posts/images/mamas_too_slice.jpg" class="thumbnail-image card-img" style="height: 200px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-⭐️⭐️⭐️⭐️⭐️ 5 Stars: Reviewing Online Reviews
-</h5>
-<div class="listing-reading-time card-text text-muted">21 min</div>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('Z2VuZXJhbA=='); return false;">general</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('c3RhdGlzdGljcw=='); return false;">statistics</div>
-
-</div>
-<div class="card-text listing-description delink">
-“Mama’s Too” is an amazing pizza restaurant, not far from where I live in New York City. It was recently listed as one of the best slices in the world, and I seriously…
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Feb 19, 2026
-</div>
-</div>
-</div>
-</div></a>
-</div>
-<div class="g-col-1" data-index="4" data-categories="Z2VuZXJhbA==" data-listing-date-sort="1770613200000" data-listing-file-modified-sort="1770665027591" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="877">
-<a href="./posts/2026-02-09_desk_job_AI.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img loading="lazy" src="./posts/images/adarc_office.jpeg" class="thumbnail-image card-img" style="height: 200px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-On Desk Jobs and AI
-</h5>
-<div class="listing-reading-time card-text text-muted">5 min</div>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('Z2VuZXJhbA=='); return false;">general</div>
-
-</div>
-<div class="card-text listing-description delink">
-When I was a kid, I wanted to be an astronomer. Not an astronaut to be clear; I did not want to go to space. I wanted to be the one behind the telescope, exploring the…
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Feb 9, 2026
-</div>
-</div>
-</div>
-</div></a>
-</div>
-<div class="g-col-1" data-index="5" data-categories="Z2VuZXJhbA==" data-listing-date-sort="1769576400000" data-listing-file-modified-sort="1769629825285" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1389">
-<a href="./posts/2026-01-26_my_antivax_story/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img loading="lazy" src="./posts/2026-01-26_my_antivax_story/covid_vaccine_pic.jpg" class="thumbnail-image card-img" style="height: 200px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-My Vaccine Story
-</h5>
-<div class="listing-reading-time card-text text-muted">7 min</div>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('Z2VuZXJhbA=='); return false;">general</div>
-
-</div>
-<div class="card-text listing-description delink">
-When I was 17, I drove myself to the pediatrician for the first time, without my parents. After most of the physical exam had concluded, my doctor asked me if I wanted to…
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Jan 28, 2026
-</div>
-</div>
-</div>
-</div></a>
-</div>
-<div class="g-col-1" data-index="6" data-categories="cHJvamVjdHM=" data-listing-date-sort="1769058000000" data-listing-file-modified-sort="1769099432366" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1104">
-<a href="./posts/2026-01-22_past_projects_and_pubs/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img loading="lazy" src="./posts/2026-01-22_past_projects_and_pubs/COVID_care_plot.png" class="thumbnail-image card-img" style="height: 200px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Past Projects and Publications
-</h5>
-<div class="listing-reading-time card-text text-muted">6 min</div>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('cHJvamVjdHM='); return false;">projects</div>
-
-</div>
-<div class="card-text listing-description delink">
-These are a few of the projects I have worked on in some of my past public health jobs. This is a sampling of final products, since there were plenty of other interesting…
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Jan 22, 2026
-</div>
-</div>
-</div>
-</div></a>
-</div>
-<div class="g-col-1" data-index="7" data-categories="cHJvamVjdHM=" data-listing-date-sort="1768194000000" data-listing-file-modified-sort="1768247310203" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="820">
-<a href="./posts/2026-01-12_grad_school_projects/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img loading="lazy" src="./posts/2026-01-12_grad_school_projects/lane_dist.png" class="thumbnail-image card-img" style="height: 200px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Grad School Project Highlights
-</h5>
-<div class="listing-reading-time card-text text-muted">5 min</div>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('cHJvamVjdHM='); return false;">projects</div>
-
-</div>
-<div class="card-text listing-description delink">
-These are 3 projects I have completed for classes as part of my masters degree. There are links to the final presentation, poster, and reports I wrote for each of these, as…
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Jan 12, 2026
-</div>
-</div>
-</div>
-</div></a>
-</div>
-<div class="g-col-1" data-index="8" data-categories="Z2VuZXJhbA==" data-listing-date-sort="1767589200000" data-listing-file-modified-sort="1770652577950" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="401">
-<a href="./posts/2026-01-05_welcome_intro.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img loading="lazy" src="./posts/images/maggie_sunset.jpeg" class="thumbnail-image card-img" style="height: 200px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-About me and this blog
-</h5>
-<div class="listing-reading-time card-text text-muted">3 min</div>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('Z2VuZXJhbA=='); return false;">general</div>
-
-</div>
-<div class="card-text listing-description delink">
-Welcome to the blog section of my website!
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Jan 5, 2026
-</div>
-</div>
-</div>
-</div></a>
-</div>
-</div>
-<div class="listing-no-matching d-none">No matching items</div>
-</div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
