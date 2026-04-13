@@ -1,0 +1,246 @@
+---
+title: "How machines 'know' what you 'mean'"
+author: "Ravi Brenner"
+date: "2026-04-13"
+categories: [projects]
+execute: 
+  warning: false
+  message: false
+  echo: false
+---
+
+When you send a message to an AI model, how does it "know" what your words "mean"? It should go without saying that it is quite complicated, and the specific layers within a particular large language model (LLM) can vary a bit. I am not an expert on large language models, but I know they are a specific type of neural network. They use an architecture called a transformer and a technique called attention (this super [cool graphic](https://poloclub.github.io/transformer-explainer/) walks through some of the details).
+
+The first (or maybe second) step in this kind of neural network is called embedding. An embedding layer or embedding matrix allows the model to convert categorical or text-like inputs into numbers. For example, with an LLM, there may be hundreds of thousands of possible input words. With the embedding layer, the model convert each word to a list of 200 numbers (for example). Each word can then be [compared to another](https://youtu.be/wjZofJX0v4M?t=747&si=4w36iWRWXraYx7rF), so similar words will have similar lists (called vectors) in this high dimensional space.
+
+This allows you to do vector math, adding and subtracting words to get new meanings. You may have seen examples like this before: King + Female = Queen. Or maybe something like France + Capital = Paris. Here is an example from wikipedia:
+
+![A toy example of word embeddings from [wikipedia](https://en.wikipedia.org/wiki/Word_embedding)](Word_embedding_illustration.svg.png){width=50%}
+
+In this post, I will dive a bit deeper on embedding layers, how they are constructed, and what you can do with them. I will use an embedding layer I trained using a book review dataset. 
+
+If you're interested in more technical details about that, you can check it out [here](https://github.com/ravibrenner/embedding_basics). I have simplified things here to make this subject approachable for *anyone*.
+
+## How are embeddings trained?
+
+As mentioned earlier, embeddings are one possible "layer" of a neural network mode. LLMs are a [type of neural network](../../docs/posts/2026-03-23_black_box_models_plus.html), with many layers all playing different, sometimes opaque roles. The layers are just really big lists or matrices of numbers, and most neural networks just do some simple math (multiplication and addition) for the majority of the calculations to give you a prediction.
+
+To make this a bit more concrete, I created a very simple collaborative filtering recommendation system using book reviews. Put simply, I created a simple model to predict what rating different users gave to different books.
+
+Here is an example of what the data looked like. In reality there were millions of rows, now just 5.
+
+```{r}
+library(tidyverse)
+
+tibble(
+  user_id = c(1, 2, 3, 3, 4),
+  book_id = c(1, 2, 2, 3, 1),
+  rating = c(3, 5, 4, 3, 2)
+) |>
+  knitr::kable()
+```
+
+Here's how I setup the model. I created two embedding matrices, one for users and one for books. Each embedding matrix has 32 columns, and one row for each book/user. To get a prediction of the rating for a given book-user pair, you just take the dot product between the corresponding row of the embedding matrix. In this case, the dot product just functions as a measure of *similarity*: users and books that are similar (read: user rates the book high) will have a high dot product. Users and books that are different (user rates the book low) will have a low dot product. There's some adjusting to make the math work but that's all--just seeing how similar different rows of these 32 column matrices are.
+
+The values for those matrices come from the training process. You let the model try a bunch of random numbers, see how close it gets, and have it try to improve. With a few minutes on a standard laptop, you can get the error down to less than 1 star.
+
+What you get out the other side are these embedding matrices. Goodreads or Amazon might use this type of information to recommend you new books: They take your 32 numbers, and see which books most closely match up. 
+
+In other words, it's just data being input and output. There's no direct meaning being encoded about the authors, the genres, the publication year, or the user's demographics. It's just looking at what books users liked, and if similar users would like similar books. 
+
+## What can you do with embeddings?
+
+```{r}
+df <- read_csv("keras_books_with_metadata.csv")
+```
+
+### 1. Find closely related books
+
+One interesting thing you can do with this data is find closely related books. We can start with a book we know, and then find the top 5 or 10 most closely related books.
+
+```{r}
+emb_df <- df |>
+  select(book_id, title, starts_with("v")) |>
+  pivot_longer(cols = starts_with("v")) |>
+  mutate(
+    .by = book_id,
+    value_sq = value**2,
+    norm = sqrt(sum(value_sq)),
+    value_norm = value / norm
+  ) |>
+  select(-value_sq, -norm, -value) |>
+  pivot_wider(names_from = name, values_from = value_norm)
+
+get_recommendations <- function(target_title, n = 5) {
+  idx <- emb_df |>
+    filter(title == target_title) |>
+    pull(book_id) |>
+    min() ## make sure we just get 1 value
+
+  if (length(idx) == 0) {
+    return("Title not found")
+  }
+
+  emb_matrix <- emb_df |>
+    select(starts_with("v")) |>
+    as.matrix()
+
+  target_vector <- emb_matrix[idx, , drop = FALSE]
+
+  similarities <- as.vector(emb_matrix %*% t(target_vector))
+
+  ## get top matches
+  df |>
+    mutate(similarity = similarities) |>
+    filter(book_id != idx) |>
+    arrange(desc(similarity)) |>
+    select(title, authors, similarity) |>
+    head(n)
+}
+
+get_recommendations("The Hobbit") |>
+  knitr::kable(
+    col.names = c("Title", "Author", "Similarity"),
+    caption = "Top 5 most similar books to 'The Hobbit'"
+  )
+
+
+```
+
+### 2. Look at specific embedding values
+We can actually look at the specific 32 embedding values and visualize how similar they are. Here are the top 10 books similar to Harry Potter and the Sorcerer's Stone:
+
+```{r}
+plot_similarities <- function(target_title, n = 5) {
+  idx <- emb_df |>
+    filter(title == target_title) |>
+    pull(book_id) |>
+    min() ## make sure we just get 1 value
+
+  if (length(idx) == 0) {
+    return("Title not found")
+  }
+
+  emb_matrix <- emb_df |>
+    select(starts_with("v")) |>
+    as.matrix()
+
+  target_vector <- emb_matrix[idx, , drop = FALSE]
+
+  similarities <- as.vector(emb_matrix %*% t(target_vector))
+
+  ## get top matches
+  df |>
+    mutate(similarity = similarities) |>
+    filter(book_id != idx) |>
+    arrange(desc(similarity)) |>
+    head(n) |>
+    ## plot
+    pivot_longer(cols = starts_with("v")) |>
+    mutate(name = str_remove(name, "v"), name = as.numeric(name)) |>
+    ggplot(aes(y = factor(name), x = value, color = title, group = title)) +
+    geom_point() +
+    labs(
+      x = "Embedding value",
+      y = "Embedding dimension",
+      color = "Book title",
+      title = str_c("Top ", n, " most similar books to ", target_title)
+    ) +
+    theme_minimal()
+}
+
+plot_similarities("Harry Potter and the Sorcerer's Stone (Harry Potter, #1)")
+```
+
+### 3. Create a 2D representation
+
+Since looking at 32 values at once can be kind of tricky, we can use some statistical techniques to compress it down to a 2 dimensional space. 
+
+Here is the 2-D version of all of the books' embedding values. It's interesting to see that there are distinct shapes and clusters:
+
+```{r}
+library(umap)
+
+set.seed(2409501)
+umap_res <- umap(
+  emb_df |>
+    select(starts_with("v")) |>
+    as.matrix()
+)
+
+
+umap_res$layout |>
+  as_tibble() |>
+  bind_cols(df |> select(!starts_with("v"))) |>
+  rename(dim1 = V1, dim2 = V2) |>
+  ggplot(aes(x = dim1, y = dim2)) +
+  geom_point(color = "forestgreen", alpha = 0.6) +
+  theme_minimal() +
+  labs(title = "Visual of all books")
+```
+ 
+
+Then, we can look at how some of the top author cluster together. Here are the top 5 authors by number of ratings. You can see that the Young Adult authors like J.K. Rowling, Suzanne Collins, and Stephanie Meyer are closer together toward the top. Stephen King has an area in the middle, and Tolkien is on the bottom left, quite far from the modern fantasy/YA authors.
+
+```{r}
+top_authors <- df |>
+  summarize(.by = authors, total_ratings = sum(ratings_count)) |>
+  arrange(desc(total_ratings)) |>
+  head(5) |>
+  pull(authors)
+
+umap_res$layout |>
+  as_tibble() |>
+  bind_cols(df |> select(!starts_with("v"))) |>
+  rename(dim1 = V1, dim2 = V2) |>
+  filter(authors %in% top_authors) |>
+  ggplot(aes(x = dim1, y = dim2, color = authors, )) +
+  geom_point(alpha = 0.6) +
+  theme_minimal() +
+  labs(title = "Visual of top 5 authors")
+
+```
+
+### 4. Try to discern what different values mean
+
+This is somewhat more of an art than a science, but here is an example. We can compare the embedding values for The Hobbit and The Hobbit: Graphic Novel. You can see that most of the values are very similar, but some (like dimension 2, highlighted with red arrow) are very far apart. You could, in theory, analyze differences like this to discern whether certain dimensions themselves have a meaning. In this case, maybe a higher value of dimension 2 indicates "graphic novel" while a low value indicates "text only". Or it could just be a chance difference.
+```{r}
+df |>
+  filter(title %in% c("The Hobbit", "The Hobbit: Graphic Novel")) |>
+  pivot_longer(cols = starts_with("v")) |>
+  mutate(name = str_remove(name, "v"), name = as.numeric(name)) |>
+  mutate(.by = name, diff = abs(value - lag(value))) |>
+  ggplot(aes(y = factor(name), x = value, color = title, group = title)) +
+  geom_point() +
+  annotate(
+    "segment",
+    x = 0.3,
+    y = 2, ## Arrow start
+    xend = 0.1,
+    yend = 2, ## Arrow end (the point)
+    color = "red",
+    linewidth = 1,
+    arrow = arrow(length = unit(0.3, "cm"), type = "closed")
+  ) +
+  labs(
+    x = "Embedding value",
+    y = "Embedding dimension",
+    color = "Book title"
+  ) +
+  theme_minimal() +
+  theme(text = element_text(size = 14))
+```
+
+### 5. Predicting books to read next
+
+Finally, you can predict what books you should read next. I don't have an example for this one, because it requires putting together a listing of books I have read and rated. I read plenty but I did not take the time to cross-reference with the books in my dataset here.
+
+## Does AI know what our words mean?
+
+So does a machine learning model, neural network, or large language model know what our words mean? In a way maybe. That first embedding layer of an LLM works in much the same way as this one, but with words instead of books. The words are translated into (even bigger) vectors (lists of numbers) that embed some meaning in their values.
+
+At the same time, these are just numbers used to do math. The relationships we observe in the embedding layers, while sometimes meaningful, are the result of meaning we already give them. In the books example, there could be a value for graphic numbers or one for genre--but there also might not be.
+
+Embeddings are also used for things like images. Image recognition networks sometimes develop specific layers that can recognize things like faces, animals, or shapes. But sometimes we can't understand what the layer is doing. If there is some discernable meaning, it's probably because there's such a strong relationship in the data, not because the model actaully "understands" anything.
+
+In the end, it's just data and math. Still, I find it impressive and even somewhat magical that machines can create a semblance of meaning just being fed our words, images, and preferences.
