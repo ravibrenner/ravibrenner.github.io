@@ -2,6 +2,7 @@
   {
     "listing": "/blog.html",
     "items": [
+      "/posts/2026-04-20_croi_abstract_2026.html",
       "/posts/2026-04-13_book_embedding_meaning/index.html",
       "/posts/2026-03-23_black_box_models_plus.html",
       "/posts/2026-03-02_subway_local_express/index.html",
@@ -9,6 +10,7 @@
       "/posts/2026-02-09_desk_job_AI.html",
       "/posts/2026-01-26_my_antivax_story/index.html",
       "/posts/2026-01-22_past_projects_and_pubs/index.html",
+      "/posts/thoughts_on_AI_draft.html",
       "/posts/2026-01-12_grad_school_projects/index.html",
       "/posts/2026-01-05_welcome_intro.html"
     ]

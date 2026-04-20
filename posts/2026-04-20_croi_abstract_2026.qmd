@@ -1,0 +1,50 @@
+---
+title: "Real-World Outcomes of Injectable CAB/RPV: Poster from CROI 2026"
+author: "Ravi Brenner"
+date: "2026-04-20"
+categories: [projects]
+image: images/croi_logo.png
+---
+
+I was recently the co-first author on a poster presented at the CROI Conference in February 2026! Our poster was titled: "Clinical Outcomes among Patients on Injectable CAB/RPV With and Without Viremia at 8 US Clinics".
+
+If you are not familiar, CROI is the Conference on Retroviruses and Opportunistic Infections, one of the premier meetings in the field of HIV medicine and research. Other diseases like tuberculosis, COVID-19, and viral hepatitis are also frequent topics.
+
+# Our poster
+
+Our poster was one of several that sought to report real-world data on the use of injectable cabotegravir/rilpivirine (iCAB/RPV). Injectable treatments are relatively new, and they are a big deal because patients only need to get injections every 1 or 2 months, as opposed to taking daily oral medication which can be a challenge for some patients. 
+
+<iframe
+    src="images/croi_poster_528-2026.pdf"
+    width="100%"
+    height="600px"
+    style="border: none;">
+</iframe>
+
+Our study was specifically focused on clinics serving underserved populations outside of clinical trials and academic medical centers. We also included a number of patients who initiated iCAB/RPV with viremia (an elevated HIV viral load). We addressed four questions using the data we collected through 2 years of follow-up.
+
+1.  How long does it take to achieve viral suppression, if initiating with viremia?
+    -   In other words, for those patients who were prescribed iCAB/RPV with viremia, how long did it take for the treatment to work?
+    -   We found about 80% achieved viral suppression by 12 weeks, in line with other studies.
+
+2.  How common is treatment failure while on iCAB/RPV?
+    -   Treatment failure was a very rare outcome in our cohort, less than 3% overall by 1 year.
+
+3.  How common are late injections?
+    -   This was more of a process and safety outcome, rather than a clinical outcome. We wanted to know how the clinics and patients were doing with the monthly and bimonthly scheduling.
+    -   98% of injections were early or on time.
+
+4.  How common are discontinuations? Why do people discontinue iCAB/RPV?
+    -   These were more qualitative questions. Discontinuation isn't necessarily a bad thing if the patient does not like the injectable treatment for any reason.
+    -   14% discontinued overall, so it is not uncommon.
+    -   The top reason was that patients were lost to follow-up, so it is important to monitor carefully and perform outreach if possible.
+
+Overall, we found that clinics caring for underserved populations with health-related social needs can successfully deliver iCAB/RPV to patients with and without viremia and achieve clinical outcomes comparable to clinical trials and demonstration projects at academic medical centers.
+
+The abstract is available in the February 2026 issue of [Topics in Antiretroviral Medicine](https://www.iasusa.org/wp-content/uploads/2026/03/february-2026.pdf), and the poster and abstract are also on the [CROI Conference website](https://www.croiconference.org/abstract/1546-2026/).
+
+# Next steps
+
+We are planning to update this analysis with additional patients and data through 3 years of follow-up. Hopefully that will be submitted for publication in the next few months.
+
+I have also done some adjacent work under the same grant, creating dashboards and data preparation tools so that clinics can monitor their injectable programs on their own. Looking forward to sharing that work when it's complete.
