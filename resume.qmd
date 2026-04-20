@@ -12,9 +12,13 @@ format: html
 
 #### Meyers Lab, Aaron Diamond AIDS Research Center, Columbia University, May 2025-Present
 
-- Conduct data cleaning and analysis of injectable HIV treatment using real world data from 8 clinics as part of the ALAI UP project 
+-	Lead data management and analysis for a multi-site study, using R and reproducible workflows to monitor real-world implementation of long-acting injectable HIV treatment to thousands of patients
+-   Develop and deploy interactive R Shiny dashboards on AWS to disseminate outcomes to 8 participating clinics, supporting data-driven decision-making 
+-   Use machine learning to predict missed care opportunities, monitor for health equity, and ensure optimal outcomes across all patients
+-   Create reusable data processing and visualization tools with thorough documentation to support cross-functional teams and non-technical stakeholders
+-   Consult on study designs, statistical analysis plans, and power analyses for new studies
+-   Implement AI-assisted workflows to accelerate dashboard and tool development from weeks to hours
 
-- Create R Shiny dashboard to enhance monitoring, evaluation, and learning efforts
 
 ### Program Research Specialist II/Data Analyst
 
@@ -82,10 +86,8 @@ format: html
 -   Corresponded with senior camp staff to address camper and counselor issues
 
 # Education
-### Columbia Mailman School of Public Health, New York, NY
+### Columbia Mailman School of Public Health, New York, NY, May 2026
 <img src="images/CUIMC_Horizontal_Blue.png" style="width:50%">
-
-Expected graduation: May, 2026
 
 Masters of Science in Biostatistics
 
@@ -101,9 +103,10 @@ Major: Biological Physics (with Distinction) | Minor: Religious Studies
 
 # Skills and interests
 
-Technical skills: R/Rstudio, Python, SQL, SAS, MATLAB, Excel, Git/Github, Linear Algebra, Ordinary and Partial Differential Equations
+Software and programming: R, Python, SQL, SAS, MATLAB, Excel, Git/Github, QGIS
 
-Language: Fluent in Hebrew
+Statistical modeling and machine learning: LMs/GLMs, mixed-effects models, survival analysis, simulation modeling, network science, GIS analysis, supervised/unsupervised learning, deep learning/neural networks
 
 Interests: Rock climbing, Guitar, Cooking, Running, Cycling
+
 
