@@ -3,6 +3,7 @@
 .RData
 .Ruserdata
 .DS_Store
+.vscode
 /.quarto/
 
 **/*.quarto_ipynb
