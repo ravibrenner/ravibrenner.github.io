@@ -1,0 +1,129 @@
+---
+title: "Table 2 Fallacy"
+author: "Ravi Brenner"
+date: "2026-05-14"
+categories: [general,statistics]
+execute: 
+  echo: false
+  warning: false
+  message: false
+format: html
+---
+
+We all learn correlation does not equal causation, but actually, sometimes it does. Figuring out when it does is the topic of an entire field that spans epidemiology, economics, and any other field that can't rely on randomized experiments, called causal inference.
+
+When you read a paper of a study involving humans, usually the first table gives you the population baseline characteristics, and the second table gives you the results of whatever regression analysis the authors did. Interpreting those numbers can be more complicated than it seems, due to something called the [table 2 fallacy](https://pubmed.ncbi.nlm.nih.gov/23371353/).
+
+The table 2 fallacy occurs when you treat every effect as if it is the total causal effect, when in reality, it is often only a partial effect that passes through other variables. Depending on what we want to know, we may need to change our model.
+
+# How to read a regression table
+
+As a recap, a regression analysis tells you to what extent your outcome of interest depends on the predictors in your model (predictors are also sometimes called 'covariates' or 'features'). There are two really popular types of regressions: linear regression (predicting a number) and logistic regression (predicting a yes/no outcome). In my experience, linear regression is a bit easier to understand, but logistic regression is much more commonly used in practice.
+
+Below is a table of logistic regression odds ratios for a hypothetical study looking at the relationship between physical activity, BMI, and colorectal cancer risk. These data are totally hypothetical, but are representative of what you might see in a real study.
+
+```{r}
+library(tidyverse)
+library(gtsummary)
+
+set.seed(2395109)
+n <- 5000
+
+df <- tibble(
+  activity = rpois(n, 5),
+  BMI = truncnorm::rtruncnorm(n, mean = 23, sd = 7, a = 17) - 1.2 * activity,
+  log_odds = -6 - (0.01 * activity) + (0.3 * BMI),
+  cancer = rbinom(n, 1, prob = plogis(log_odds))
+)
+
+fit_table2 <- glm(cancer ~ BMI + activity, data = df, family = "binomial")
+
+fit_table2 |>
+  tbl_regression(
+    exponentiate = TRUE,
+    estimate_fun = label_style_number(digits = 2)
+  ) |>
+  as_gt() |>
+  gt::tab_source_note(gt::md("*This data is simulated*"))
+```
+
+Each number (called an odds ratio) shows the increase (if greater than 1) or decrease (if less than 1) in odds for colorectal cancer for a 1 unit increase in BMI or physical activity, *holding all other predictors constant*. An odds ratio of exactly 1 would mean no effect at all.
+
+This is sort of the magic trick of regression. It isolates each variable from the other, so that you get the effect of that variable alone on your outcome of interest. The p-value tells you whether this effect is statistically significant in the model. P-values range between 0 and 1, and a small number is considered more "significant." In this case BMI is significant and activity is not.
+
+You can also understand the level of certainty via the 95% confidence interval (CI). This gives you a likely range for the true odds ratio. If the CI includes 1, then the p-value will likely be large.
+
+The odds ratios can be read loosely as the percentage increase or decrease relative to the baseline of 1. In this case we would say: each additional unit increase in BMI is associated with 38% higher odds of colorectal cancer, holding physical activity constant (low p-value = high confidence). Each additional unit increase in physical activity is associated with 0.99 times the odds (or 1% lower odds) of colorectal cancer, holding BMI constant (high p-value = low confidence).
+
+In theory, this is how you "adjust" for confounders. In our example above, physical activity is a confounder for the relationship between BMI and colorectal cancer, because it likely influences both of them. 
+
+# Table 2 fallacy
+
+How do you actually interpret the odds ratios though? 
+
+The situation described above can be visualized with the following diagram (called a DAG, or directed acyclic graph):
+
+```{r}
+library(ggdag)
+
+dag <- dagify(
+  cancer ~ activity,
+  cancer ~ BMI,
+  BMI ~ activity
+)
+
+dag |>
+  tidy_dagitty() |>
+  mutate(
+    x = case_when(
+      name == "cancer" ~ 0.5,
+      name == "BMI" ~ -0.5,
+      name == "activity" ~ 0
+    ),
+    y = case_when(
+      name == "cancer" ~ -0.289,
+      name == "BMI" ~ -0.289,
+      name == "activity" ~ 0.579
+    ),
+    xend = case_when(name == "BMI" & to == "cancer" ~ 0.5,
+    name == "activity" & to == "BMI" ~ -0.5,
+    name == "activity" & to == "cancer" ~ 0.5),
+    yend = case_when(
+        name == "BMI" & to == "cancer" ~ -0.289,
+    name == "activity" & to == "BMI" ~ -0.289,
+    name == "activity" & to == "cancer" ~ -0.289)
+  ) |>
+  ggdag() +
+  theme_void()
+```
+
+In a DAG like this, physical activity is a confounder for BMI and cancer, because it influences both (points to them both). However the key thing to keep in mind is that for any relationship like this, BMI is a *mediator* for the relationship between physical activity and cancer, because some of the activity effect goes through BMI.
+
+Because we adjusted for the confounder, physical activity, our model output gives us the total effect of BMI on colorectal cancer risk: the odds ratio 1.38 as discussed earlier, or a 38% increase in the odds of colorectal cancer.
+
+What about the odds ratio for physical activity? Here we have to be very careful. The odds ratio for physical activity tells you the increase in odds of colorectal cancer for increasing physical activity, *holding BMI constant*. Statistically, this is totally valid, but this could be totally meaningless in the real world.
+
+The benefits of physical activity may flow through reduced BMI (and the impact it has on other, unmeasured, biological markers and processes). In other words, the odds ratio we found of 0.99 doesn't really tell you the total effect that exercise has on colorectal cancer risk. It tells you the effect of exercise *conditional* on BMI.
+
+In fact, we can fit a different model with just activity as a predictor to show the total effect of activity on cancer risk:
+
+```{r}
+fit_activity <- glm(cancer ~ activity, data = df, family = "binomial")
+
+fit_activity |>
+  tbl_regression(
+    exponentiate = TRUE,
+    estimate_fun = label_style_number(digits = 2)
+  ) |>
+  as_gt() |>
+  gt::tab_source_note(gt::md("*This data is simulated*"))
+
+```
+
+Now, the total effect of activity on cancer risk is an odds ratio of 0.76, or 24% lower odds of cancer, and the p-value is significant. If we had just read the odds ratio of 0.99 off of the earlier table, we would have been committing the table 2 fallacy, and would have vastly underestimated the benefits of exercise.
+
+# Takeaway
+
+A regression coefficient or odds ratio is always the *conditional* effect, holding all other variables constant. Oftentimes, that's what you want. But if you adjust for a mediator, you’re no longer describing the total effect you probably care about.
+
+Causal inference is a complicated topic, but subtle interpretation mistakes like this crop up all over the scientific literature, especially when it comes to observational studies and real-world data. It's important to think clearly about what effect you're really looking for, and what the confounders might be, before making any conclusions.
